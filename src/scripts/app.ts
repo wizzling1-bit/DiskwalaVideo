@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const processingStatusRow = document.getElementById('processing-status-row') as HTMLElement | null;
   const telegramReadyCard = document.getElementById('telegram-ready-card') as HTMLElement | null;
   const readyOpenBotBtn = document.getElementById('ready-open-bot-btn') as HTMLAnchorElement | null;
-  const unlockWebPlayerBtn = document.getElementById('unlock-web-player-btn') as HTMLButtonElement | null;
 
   // Feedback pills
   const providerPill = document.getElementById('provider-pill') as HTMLElement | null;
@@ -233,22 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       processLinkFlow();
-    });
-  }
-
-  // Unlock in-browser player action (Stream Directly in Browser)
-  if (unlockWebPlayerBtn && resultPanel) {
-    unlockWebPlayerBtn.addEventListener('click', () => {
-      const isFlezen = currentUrl.toLowerCase().includes('flezen.com');
-      if (resultProviderTag) {
-        resultProviderTag.textContent = isFlezen ? 'Flezen Cloud' : 'Diskwala Cloud';
-      }
-      if (resultVideoTitle) {
-        resultVideoTitle.textContent = 'Demo preview — your file opens via the Telegram bot';
-      }
-
-      resultPanel.style.display = 'block';
-      resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }
 

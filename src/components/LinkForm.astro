@@ -155,14 +155,6 @@ import { APP_CONFIG } from '../utils/config';
             <span>Open in Telegram Bot</span>
           </a>
         </div>
-
-        <!-- Secondary Option: In-Browser Player Unlock -->
-        <div class="ready-footer-row">
-          <button type="button" class="ready-web-unlock-btn" id="unlock-web-player-btn">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            <span>Want a preview? Open demo In-Browser Player</span>
-          </button>
-        </div>
       </div>
     </div>
 
@@ -667,32 +659,6 @@ import { APP_CONFIG } from '../utils/config';
     transform: scale(0.97);
   }
 
-  .ready-footer-row {
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    padding-top: 16px;
-    margin-top: 6px;
-  }
-
-  .ready-web-unlock-btn {
-    background: none;
-    border: none;
-    color: var(--color-amber);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: color 0.15s, transform 0.15s;
-  }
-
-  .ready-web-unlock-btn:hover {
-    color: var(--color-amber-hover);
-    text-decoration: underline;
-    transform: translateY(-1px);
-  }
-
   /* ======================================================== */
   /* Two Feature Cards Below Input                            */
   /* ======================================================== */
@@ -971,12 +937,6 @@ import { APP_CONFIG } from '../utils/config';
       height: 46px;
       font-size: 0.92rem;
       border-radius: 10px;
-    }
-
-    .ready-web-unlock-btn {
-      font-size: var(--text-xs);
-      line-height: 1.4;
-      text-align: center;
     }
 
     .hero-feature-cards {
