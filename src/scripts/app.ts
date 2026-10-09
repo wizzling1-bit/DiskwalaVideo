@@ -215,7 +215,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const fileId = idMatch ? idMatch[1].slice(0, 8) : 'shared_link';
 
         if (readyOpenBotBtn) {
-          readyOpenBotBtn.href = `${APP_CONFIG.telegramBotUrl}?start=${encodeURIComponent(fileId)}`;
+          readyOpenBotBtn.href = APP_CONFIG.telegramBotUrl.includes('?start=')
+            ? APP_CONFIG.telegramBotUrl
+            : `${APP_CONFIG.telegramBotUrl}?start=${encodeURIComponent(fileId)}`;
         }
 
         // Reveal Video Ready Telegram Hub (Matching Screenshot 4)

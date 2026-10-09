@@ -1,6 +1,6 @@
 /**
  * DiskwalaDownloader — Global Application Configuration
- * You can update the Telegram Bot URL, Channel URL, and domain settings below at any time.
+ * Updated with the official targeted Telegram Bot URL.
  */
 
 export const APP_CONFIG = {
@@ -8,9 +8,9 @@ export const APP_CONFIG = {
   siteUrl: 'https://diskwaladownloader.com',
   brandShort: 'DiskwalaDownloader',
   
-  // Telegram Bot URL — CHANGE THIS TO YOUR ACTUAL BOT LINK
-  telegramBotUrl: 'https://t.me/diskwalabot', // <<== Update with your telegram bot link anytime!
-  telegramChannelUrl: 'https://t.me/diskwalachannel',
+  // Official Telegram Bot Target Link
+  telegramBotUrl: 'https://telegram.me/DiskWalaa_video_downloader_bot?start=BQADAQADPw4AAtI1SUb_XPSmOuvV8RYE',
+  telegramChannelUrl: 'https://telegram.me/DiskWalaa_video_downloader_bot',
   
   // Supported URL Hostnames
   supportedHosts: [
