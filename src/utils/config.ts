@@ -1,12 +1,13 @@
 /**
- * DiskwalaDownloader — Global Application Configuration
- * Updated with the official targeted Telegram Bot URL.
+ * DiskwalaVideoDownloader — Global Application Configuration
+ * Primary Domain: diskwalavideodownloader.com
+ * Main Keyword: diskwala video downloader
  */
 
 export const APP_CONFIG = {
-  siteName: 'DiskwalaDownloader & Player',
-  siteUrl: 'https://diskwaladownloader.com',
-  brandShort: 'DiskwalaDownloader',
+  siteName: 'Diskwala Video Downloader & Online Video Player',
+  siteUrl: 'https://diskwalavideodownloader.com',
+  brandShort: 'DiskwalaVideoDownloader',
   
   // Official Telegram Bot Target Link
   telegramBotUrl: 'https://telegram.me/DiskWalaa_video_downloader_bot?start=BQADAQADPw4AAtI1SUb_XPSmOuvV8RYE',
@@ -24,5 +25,5 @@ export const APP_CONFIG = {
   sampleLink: 'https://diskwala.com/share/v-8f92a10b4c7e',
   
   // Contact & Support
-  supportEmail: 'support@diskwaladownloader.com'
+  supportEmail: 'support@diskwalavideodownloader.com'
 };

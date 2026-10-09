@@ -13,10 +13,26 @@ interface Props {
 }
 
 const {
-  title = "DiskwalaDownloader — Watch or Download Supported Links Online",
-  description = "Open a supported Diskwala or Flezen share link to check browser playback and download options. 100% Free with DiskwalaDownloader.",
-  canonicalUrl = "https://diskwaladownloader.com/"
+  title = "Diskwala Video Downloader & Online Video Player — Free HD Stream",
+  description = "Free Diskwala video downloader and online video player. Stream HD Diskwala link video player online, convert Diskwala telegram links, and download videos with zero ads.",
+  canonicalUrl = "https://diskwalavideodownloader.com/"
 } = Astro.props;
+
+// Targeted SEO keywords
+const metaKeywords = [
+  "diskwala video downloader",
+  "diskwala online video player",
+  "diskwala downloader",
+  "diskwala video download",
+  "diskwala video player",
+  "diskwala video player online",
+  "diskwala telegram link",
+  "diskwala to terabox link converter online",
+  "diskwala link video player online",
+  "diskwala link video player",
+  "diskwala link downloader",
+  "diskwala link video downloader"
+].join(", ");
 
 // JSON-LD Structured Data
 const structuredData = {
@@ -24,17 +40,31 @@ const structuredData = {
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://diskwaladownloader.com/#website",
-      "url": "https://diskwaladownloader.com/",
-      "name": "DiskwalaDownloader",
+      "@id": "https://diskwalavideodownloader.com/#website",
+      "url": "https://diskwalavideodownloader.com/",
+      "name": "Diskwala Video Downloader",
+      "alternateName": [
+        "Diskwala Online Video Player",
+        "Diskwala Downloader",
+        "Diskwala Link Video Player Online",
+        "Diskwala Video Download"
+      ],
       "description": description,
-      "inLanguage": "en-US"
+      "inLanguage": "en-US",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://diskwalavideodownloader.com/#tools"
+        },
+        "query-input": "required name=search_term_string"
+      }
     },
     {
       "@type": "WebApplication",
-      "@id": "https://diskwaladownloader.com/#webapp",
-      "url": "https://diskwaladownloader.com/",
-      "name": "DiskwalaDownloader & Player",
+      "@id": "https://diskwalavideodownloader.com/#webapp",
+      "url": "https://diskwalavideodownloader.com/",
+      "name": "Diskwala Video Downloader & Online Video Player",
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "All",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
@@ -42,34 +72,90 @@ const structuredData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-      }
+      },
+      "featureList": [
+        "Diskwala Video Downloader",
+        "Diskwala Online Video Player",
+        "Diskwala Link Video Player Online",
+        "Diskwala Telegram Link Resolution",
+        "Diskwala to Terabox Link Converter Online",
+        "Ad-Free HD Streaming Pipeline"
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "@id": "https://diskwalavideodownloader.com/#howto",
+      "name": "How to Use Diskwala Video Downloader & Online Video Player",
+      "description": "Step-by-step instructions to stream or download Diskwala videos online without intrusive ads.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Copy Diskwala Video Link",
+          "text": "Locate and copy your Diskwala or Flezen video share link from Telegram channels or messaging apps."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Paste Link into Diskwala Downloader",
+          "text": "Paste your link into the Diskwala video downloader input field at the top of the page."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Click Play & Download",
+          "text": "Click the Play & Download button to validate the link and prepare your video stream."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Stream or Download in HD",
+          "text": "Open the official Telegram bot link to stream or download your video file at maximum speed."
+        }
+      ]
     },
     {
       "@type": "FAQPage",
-      "@id": "https://diskwaladownloader.com/#faq",
+      "@id": "https://diskwalavideodownloader.com/#faq",
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Can I watch videos on Diskwala without downloading them?",
+          "name": "What is Diskwala Video Downloader?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Paste your Diskwala or Flezen link above, click Unlock Video, then open the demo preview. Your actual file streams or downloads through the Telegram bot option."
+            "text": "Diskwala Video Downloader is a free web-based utility and online video player that allows users to validate, stream, and download Diskwala and Flezen video links without intrusive popups or forced app installations."
           }
         },
         {
           "@type": "Question",
-          "name": "Is DiskwalaDownloader free to use?",
+          "name": "Can I watch Diskwala videos online without downloading?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, our tool is 100% free with no subscription tiers or fees."
+            "text": "Yes, our Diskwala online video player allows you to check links and view video options directly in modern web browsers without downloading large files to your local storage."
           }
         },
         {
           "@type": "Question",
-          "name": "Do I need to install any app to check a Diskwala link?",
+          "name": "How does the Diskwala telegram link bot work?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No app install is needed to check a link on this page. You will still need Telegram to receive the actual file."
+            "text": "After validating your Diskwala link, our tool provides a direct handoff link to the official Diskwala Telegram bot where you can stream or download your MP4 files at uncapped speeds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there a Diskwala to Terabox link converter online?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, our platform helps users convert and resolve Diskwala links to compatible cloud playback options, enabling smooth cross-platform access across popular services."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Diskwala Video Downloader free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, our Diskwala downloader and link video player is 100% free with no subscription tiers, hidden costs, or download quotas."
           }
         }
       ]
@@ -85,35 +171,47 @@ const structuredData = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#050606" />
 
-    <!-- SEO Meta Tags -->
+    <!-- SEO Primary Meta Tags -->
     <title>{title}</title>
+    <meta name="title" content={title} />
     <meta name="description" content={description} />
+    <meta name="keywords" content={metaKeywords} />
     <link rel="canonical" href={canonicalUrl} />
-    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="DiskwalaDownloader" />
+    <meta property="og:site_name" content="Diskwala Video Downloader" />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content="https://diskwaladownloader.com/favicon.svg" />
+    <meta property="og:image" content="https://diskwalavideodownloader.com/og-image.png" />
+    <meta property="og:image:secure_url" content="https://diskwalavideodownloader.com/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Diskwala Video Downloader and Online Video Player Interface" />
+    <meta property="og:locale" content="en_US" />
 
-    <!-- Twitter -->
+    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalUrl} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://diskwaladownloader.com/favicon.svg" />
+    <meta name="twitter:image" content="https://diskwalavideodownloader.com/og-image.png" />
+    <meta name="twitter:image:alt" content="Diskwala Video Downloader and Online Video Player" />
 
-    <!-- Favicon -->
+    <!-- Favicon & PWA Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- Google Fonts Inter & Plus Jakarta Sans -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;850&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-    <!-- Structured Data -->
+    <!-- Structured Data JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
   <body>

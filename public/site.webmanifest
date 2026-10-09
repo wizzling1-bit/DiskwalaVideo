@@ -1,11 +1,11 @@
 {
-  "name": "Diskwala Downloader & Player",
-  "short_name": "PlayDiskWala",
-  "description": "Check Diskwala or Flezen links and open Telegram bot playback and download options",
+  "name": "Diskwala Video Downloader & Online Video Player",
+  "short_name": "DiskwalaDownloader",
+  "description": "Fast free Diskwala video downloader and online video player to stream or download videos with zero ads.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#050606",
-  "theme_color": "#15c99a",
+  "theme_color": "#10b981",
   "icons": [
     {
       "src": "/favicon.svg",
