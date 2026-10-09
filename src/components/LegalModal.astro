@@ -1,0 +1,351 @@
+---
+import { APP_CONFIG } from '../utils/config';
+---
+
+<!-- Slide-over Legal & Policy Modal -->
+<div 
+  class="legal-modal-overlay" 
+  id="legal-modal-overlay" 
+  role="dialog" 
+  aria-modal="true" 
+  aria-labelledby="legal-modal-title" 
+  aria-hidden="true"
+  style="display: none;"
+>
+  <div class="legal-modal-container">
+    <div class="legal-modal-header">
+      <div class="legal-tab-triggers">
+        <button type="button" class="legal-tab-btn active" data-tab="privacy">Privacy</button>
+        <button type="button" class="legal-tab-btn" data-tab="terms">Terms</button>
+        <button type="button" class="legal-tab-btn" data-tab="dmca">DMCA</button>
+        <button type="button" class="legal-tab-btn" data-tab="about">About</button>
+        <button type="button" class="legal-tab-btn" data-tab="contact">Contact</button>
+      </div>
+
+      <button type="button" class="legal-close-btn" id="legal-close-btn" aria-label="Close dialog">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="legal-modal-body">
+      <!-- Privacy Policy Tab -->
+      <div class="legal-tab-content active" id="tab-privacy">
+        <h3 class="legal-section-title" id="legal-modal-title">Privacy Policy</h3>
+        <p class="legal-updated">Last Updated: October 2026</p>
+        
+        <h4>1. Information We Do Not Collect</h4>
+        <p>Diskwala Downloader & Player does not require user accounts, registration, or logins. We do not store your name, email address, password, or browsing habits.</p>
+        
+        <h4>2. Link Processing</h4>
+        <p>URLs submitted through our input field are processed strictly in temporary serverless execution memory to resolve direct video media addresses. Once the session terminates, the URL is cleared from RAM and is never stored in persistent databases.</p>
+
+        <h4>3. Cookies and Analytics</h4>
+        <p>We do not use invasive tracking cookies, third-party advertising cookies, or browser fingerprinting technologies. Your privacy is respected unconditionally.</p>
+      </div>
+
+      <!-- Terms of Service Tab -->
+      <div class="legal-tab-content" id="tab-terms">
+        <h3 class="legal-section-title">Terms of Service</h3>
+        <p class="legal-updated">Last Updated: October 2026</p>
+
+        <h4>1. Permitted Use</h4>
+        <p>Diskwala Downloader & Player is provided as an open tool for personal media playback and file backup purposes. Users agree to access and download only materials they own or have explicit legal authorization to use.</p>
+
+        <h4>2. Third-Party Platforms</h4>
+        <p>Our service provides compatibility resolution for links hosted on independent third-party platforms. We do not host, store, or manage any videos on our own servers. Media files originate directly from the third-party providers.</p>
+
+        <h4>3. Disclaimer of Warranty</h4>
+        <p>The platform is provided "as is" without warranty of continuous uptime or speed. We reserve the right to update or restrict compatibility without prior notice.</p>
+      </div>
+
+      <!-- DMCA Policy Tab -->
+      <div class="legal-tab-content" id="tab-dmca">
+        <h3 class="legal-section-title">DMCA & Copyright Notice</h3>
+        <p class="legal-updated">Last Updated: October 2026</p>
+
+        <h4>Copyright Compliance</h4>
+        <p>Diskwala Downloader & Player respects the intellectual property rights of creators and copyright holders. Because our service functions as a browser-based URL decoder and does not host or store any media files, we cannot delete files from third-party hosting providers.</p>
+
+        <h4>Takedown Requests</h4>
+        <p>If you believe a link processed by our tool infringes on your copyright, please first contact the primary hosting service (such as Diskwala) where the content is hosted. You may also notify us at <strong>{APP_CONFIG.supportEmail}</strong> to block specific URL patterns from being resolved through our gateway.</p>
+      </div>
+
+      <!-- About Us Tab -->
+      <div class="legal-tab-content" id="tab-about">
+        <h3 class="legal-section-title">About Diskwala Downloader</h3>
+        <p>Diskwala Downloader & Player was built to solve a simple problem: making cloud video links fast, clean, and accessible on mobile and desktop browsers.</p>
+        <p>Rather than dealing with popups, aggressive adware, or clunky external apps, our platform gives creators, students, and professionals a distraction-free way to watch tutorials and archive presentations.</p>
+      </div>
+
+      <!-- Contact Tab -->
+      <div class="legal-tab-content" id="tab-contact">
+        <h3 class="legal-section-title">Contact & Support</h3>
+        <p>Have questions, partnership inquiries, or need support? Reach out to our technical team:</p>
+        <div class="contact-card-box">
+          <p><strong>Email Support:</strong> <a href={`mailto:${APP_CONFIG.supportEmail}`} class="contact-email-link">{APP_CONFIG.supportEmail}</a></p>
+          <p><strong>Telegram Support:</strong> <a href={APP_CONFIG.telegramBotUrl} target="_blank" rel="noopener noreferrer" class="contact-email-link">@DiskwalaSupportBot</a></p>
+          <p><strong>Response Time:</strong> Typically within 24 to 48 hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .legal-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(3, 5, 5, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .legal-modal-overlay.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .legal-modal-container {
+    background: linear-gradient(180deg, rgba(14, 20, 22, 0.98) 0%, rgba(8, 12, 13, 0.98) 100%);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), var(--shadow-modal);
+    overflow: hidden;
+  }
+
+  .legal-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--color-border);
+    background: #0b1011;
+  }
+
+  .legal-tab-triggers {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+  }
+
+  .legal-tab-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--color-text-secondary);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .legal-tab-btn:hover {
+    color: var(--color-text);
+    background: var(--color-surface-2);
+  }
+
+  .legal-tab-btn.active {
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+    border-color: var(--color-primary-border);
+  }
+
+  .legal-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .legal-close-btn:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+  }
+
+  .legal-modal-body {
+    padding: 24px 28px;
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+
+  .legal-tab-content {
+    display: none;
+  }
+
+  .legal-tab-content.active {
+    display: block;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .legal-section-title {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: var(--color-text);
+  }
+
+  .legal-updated {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-bottom: 18px;
+  }
+
+  .legal-tab-content h4 {
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-top: 16px;
+    margin-bottom: 6px;
+  }
+
+  .legal-tab-content p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  .contact-card-box {
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    margin-top: 14px;
+  }
+
+  .contact-email-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 480px) {
+    .legal-modal-overlay {
+      padding: 10px;
+    }
+
+    .legal-modal-container {
+      border-radius: var(--radius-xl);
+      max-height: 90vh;
+    }
+
+    .legal-modal-header {
+      padding: 12px 14px;
+    }
+
+    .legal-modal-body {
+      padding: 18px 14px;
+    }
+
+    .legal-section-title {
+      font-size: var(--text-lg);
+    }
+
+    .legal-tab-btn {
+      padding: 5px 10px;
+      font-size: var(--text-xs);
+    }
+  }
+</style>
+
+<script>
+  // Tab Switching & Modal Open/Close Logic
+  const overlay = document.getElementById('legal-modal-overlay');
+  const closeBtn = document.getElementById('legal-close-btn');
+  const tabBtns = document.querySelectorAll('.legal-tab-btn');
+  const tabContents = document.querySelectorAll('.legal-tab-content');
+  const modalOpenTriggers = document.querySelectorAll('[data-open-modal]');
+
+  function openTab(tabName: string) {
+    tabBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
+    });
+
+    tabContents.forEach(content => {
+      content.classList.toggle('active', content.id === `tab-${tabName}`);
+    });
+  }
+
+  function openModal(tabName = 'privacy') {
+    if (!overlay) return;
+    openTab(tabName);
+    overlay.style.display = 'flex';
+    document.body.classList.add('modal-open');
+    setTimeout(() => {
+      overlay.classList.add('is-active');
+      overlay.setAttribute('aria-hidden', 'false');
+    }, 10);
+  }
+
+  function closeModal() {
+    if (!overlay) return;
+    overlay.classList.remove('is-active');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    setTimeout(() => {
+      overlay.style.display = 'none';
+    }, 250);
+  }
+
+  modalOpenTriggers.forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const tab = trigger.getAttribute('data-open-modal') || 'privacy';
+      openModal(tab);
+    });
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeModal);
+  }
+
+  if (overlay) {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closeModal();
+      }
+    });
+  }
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.getAttribute('data-tab');
+      if (tab) openTab(tab);
+    });
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay?.classList.contains('is-active')) {
+      closeModal();
+    }
+  });
+</script>

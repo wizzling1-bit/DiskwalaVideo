@@ -1,0 +1,184 @@
+---
+---
+
+<footer class="site-footer">
+  <div class="container footer-container">
+    <!-- Brand Mark Centered -->
+    <a href="/" class="footer-brand" aria-label="DiskwalaDownloader Home">
+      <div class="footer-double-bezel">
+        <div class="footer-brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" class="play-svg" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 5V19L18 12L7 5Z" fill="#ffffff" />
+          </svg>
+        </div>
+      </div>
+      <span class="footer-brand-text">Diskwala<span class="brand-accent">Downloader</span></span>
+    </a>
+
+    <!-- Non-Affiliation Disclaimer -->
+    <p class="footer-disclaimer">
+      We are not affiliated with Diskwala or Flezen. All trademarks, registered logos, and brand names are the property of their respective holders. DiskwalaDownloader is an independent online utility designed for authorized media playback and permitted personal file backups.
+    </p>
+
+    <!-- Footer Policy Links -->
+    <div class="footer-links-row">
+      <button type="button" class="footer-link-btn" data-open-modal="privacy">Privacy Policy</button>
+      <span class="footer-sep">•</span>
+      <button type="button" class="footer-link-btn" data-open-modal="about">About Us</button>
+      <span class="footer-sep">•</span>
+      <button type="button" class="footer-link-btn" data-open-modal="terms">Terms of Service</button>
+      <span class="footer-sep">•</span>
+      <button type="button" class="footer-link-btn" data-open-modal="contact">Contact</button>
+      <span class="footer-sep">•</span>
+      <button type="button" class="footer-link-btn" data-open-modal="dmca">DMCA</button>
+      <span class="footer-sep">•</span>
+      <a href="/sitemap.xml" class="footer-link-btn">Sitemap</a>
+    </div>
+
+    <!-- Copyright -->
+    <div class="footer-copyright">
+      <p>© 2026 DiskwalaDownloader. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: #030505;
+    border-top: 1px solid var(--color-border-subtle);
+    padding: 60px 0 40px;
+    margin-top: 50px;
+    text-align: center;
+  }
+
+  .footer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: var(--text-xl);
+    font-weight: 850;
+    color: var(--color-text);
+    margin-bottom: 20px;
+    text-decoration: none;
+  }
+
+  .footer-double-bezel {
+    padding: 2px;
+    background: var(--color-primary-soft);
+    border: 1px solid var(--color-primary-border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+  }
+
+  .footer-brand-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .play-svg {
+    width: 14px;
+    height: 14px;
+    margin-left: 2px;
+  }
+
+  .brand-accent {
+    color: var(--color-primary);
+  }
+
+  .footer-disclaimer {
+    max-width: 680px;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin-bottom: 26px;
+  }
+
+  .footer-links-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .footer-link-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s;
+    padding: 4px 6px;
+    text-decoration: none;
+  }
+
+  .footer-link-btn:hover {
+    color: var(--color-primary-hover);
+  }
+
+  .footer-sep {
+    color: var(--color-border-strong);
+    font-size: var(--text-xs);
+  }
+
+  .footer-copyright {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border-subtle);
+    padding-top: 24px;
+    width: 100%;
+    max-width: 680px;
+  }
+
+  @media (max-width: 768px) {
+    .site-footer {
+      padding: 36px 0 28px;
+      margin-top: 36px;
+    }
+
+    .footer-brand {
+      font-size: var(--text-lg);
+      margin-bottom: 14px;
+    }
+
+    .footer-disclaimer {
+      font-size: var(--text-xs);
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+
+    .footer-links-row {
+      gap: 8px 14px;
+      margin-bottom: 20px;
+    }
+
+    .footer-sep {
+      display: none;
+    }
+
+    .footer-link-btn {
+      font-size: var(--text-xs);
+      padding: 4px 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius-sm);
+    }
+
+    .footer-copyright {
+      padding-top: 18px;
+      font-size: var(--text-xs);
+    }
+  }
+</style>

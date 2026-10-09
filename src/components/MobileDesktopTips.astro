@@ -1,0 +1,218 @@
+---
+---
+
+<section class="section">
+  <div class="container">
+    <div class="platform-grid">
+      <!-- Mobile Card (Cyan) -->
+      <div class="platform-card platform-card-cyan">
+        <div class="platform-header">
+          <div class="platform-icon platform-icon-cyan">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+              <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+          </div>
+          <h3 class="platform-title">Diskwala on Mobile</h3>
+        </div>
+        <p class="platform-desc">
+          The checker page works in Android Chrome and iOS Safari. Use the form above to validate a link, then open the bot result.
+        </p>
+        <ul class="platform-bullets">
+          <li>
+            <span class="bullet-dot bullet-cyan"></span>
+            <span>Form and demo preview adapt to small screens</span>
+          </li>
+          <li>
+            <span class="bullet-dot bullet-cyan"></span>
+            <span>Works in stock mobile browsers, no extra app for the check</span>
+          </li>
+          <li>
+            <span class="bullet-dot bullet-cyan"></span>
+            <span>Bot link opens in the Telegram app or Telegram Web</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- PC & Desktop Card (Amber) -->
+      <div class="platform-card platform-card-amber">
+        <div class="platform-header">
+          <div class="platform-icon platform-icon-amber">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h3 class="platform-title">Diskwala on PC & Desktop</h3>
+        </div>
+        <p class="platform-desc">
+          On Windows, macOS, and Linux, use the same checker in Chrome, Edge, Firefox, or Safari, then follow the bot link.
+        </p>
+        <ul class="platform-bullets">
+          <li>
+            <span class="bullet-dot bullet-amber"></span>
+            <span>Paste links with keyboard shortcuts (Ctrl/Cmd + V)</span>
+          </li>
+          <li>
+            <span class="bullet-dot bullet-amber"></span>
+            <span>Demo player supports standard fullscreen controls</span>
+          </li>
+          <li>
+            <span class="bullet-dot bullet-amber"></span>
+            <span>Keep the bot chat open while you fetch your file</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .platform-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+  }
+
+  .platform-card {
+    background: linear-gradient(180deg, rgba(16, 20, 24, 0.9) 0%, rgba(9, 11, 14, 0.96) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 38px 40px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+  }
+
+  .platform-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .platform-card-cyan {
+    border-color: rgba(56, 189, 248, 0.22);
+  }
+
+  .platform-card-cyan:hover {
+    border-color: var(--color-cyan-border);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.12);
+  }
+
+  .platform-card-amber {
+    border-color: rgba(245, 158, 11, 0.22);
+  }
+
+  .platform-card-amber:hover {
+    border-color: var(--color-amber-border);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(245, 158, 11, 0.12);
+  }
+
+  .platform-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .platform-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .platform-icon-cyan {
+    background: var(--color-cyan-soft);
+    color: var(--color-cyan);
+    border: 1px solid var(--color-cyan-border);
+  }
+
+  .platform-icon-amber {
+    background: var(--color-amber-soft);
+    color: var(--color-amber);
+    border: 1px solid var(--color-amber-border);
+  }
+
+  .platform-title {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+  }
+
+  .platform-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: 22px;
+  }
+
+  .platform-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin-top: auto;
+  }
+
+  .platform-bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .bullet-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-pill);
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  .bullet-cyan {
+    background: var(--color-cyan);
+    box-shadow: 0 0 8px var(--color-cyan);
+  }
+
+  .bullet-amber {
+    background: var(--color-amber);
+    box-shadow: 0 0 8px var(--color-amber);
+  }
+
+  @media (max-width: 768px) {
+    .platform-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .platform-card {
+      padding: 22px 14px;
+      border-radius: var(--radius-xl);
+    }
+
+    .platform-title {
+      font-size: var(--text-lg);
+    }
+
+    .platform-desc {
+      font-size: var(--text-sm);
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+
+    .platform-bullets {
+      font-size: var(--text-xs);
+      gap: 8px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .platform-card {
+      padding: 16px 12px;
+    }
+  }
+</style>

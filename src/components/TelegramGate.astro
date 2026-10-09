@@ -1,0 +1,352 @@
+---
+import { APP_CONFIG } from '../utils/config';
+---
+
+<!-- Telegram Gate Modal Popup -->
+<div 
+  class="telegram-modal-overlay" 
+  id="telegram-gate-modal" 
+  role="dialog" 
+  aria-modal="true" 
+  aria-labelledby="modal-title" 
+  aria-hidden="true"
+  style="display: none;"
+>
+  <div class="telegram-modal-card" id="modal-card">
+    <!-- Close button -->
+    <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close Telegram Gate">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Glowing Telegram Badge Icon -->
+    <div class="modal-bot-icon-wrapper">
+      <div class="bot-icon-glow"></div>
+      <div class="bot-icon-circle">
+        <svg viewBox="0 0 24 24" width="38" height="38" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06-.01.19-.03.26z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Modal Content -->
+    <h2 class="modal-title" id="modal-title">
+      Open Telegram Bot to <span class="text-gradient-green">Get Your File</span>
+    </h2>
+
+    <p class="modal-desc">
+      The bot delivers your file's streaming and download links. Starting it is free and takes a few seconds — then return here and continue.
+    </p>
+
+    <!-- Two-step Action Flow -->
+    <div class="modal-steps-box">
+      <!-- Step 1: Open Bot Button -->
+      <a 
+        href={APP_CONFIG.telegramBotUrl} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="modal-btn modal-btn-bot"
+        id="modal-open-bot-btn"
+      >
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06-.01.19-.03.26z"/>
+        </svg>
+        <span>1. Start Official Telegram Bot</span>
+      </a>
+
+      <!-- Step 2: Unlock / Continue Button -->
+      <button 
+        type="button" 
+        class="modal-btn modal-btn-unlock" 
+        id="modal-verify-btn"
+      >
+        <span class="unlock-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </span>
+        <span id="modal-continue-btn-text">2. I've Started the Bot — Continue</span>
+      </button>
+    </div>
+
+    <!-- Status message / verification progress -->
+    <div class="modal-status-msg" id="modal-status-msg" style="display: none;">
+      <span class="status-spinner"></span>
+      <span id="status-text">Opening bot... return here to continue.</span>
+    </div>
+
+    <!-- Trust Footer -->
+    <div class="modal-trust-footer">
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span>100% Free Forever</span>
+      </div>
+      <span class="trust-divider">•</span>
+      <div class="trust-badge">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>Bot Handoff</span>
+      </div>
+      <span class="trust-divider">•</span>
+      <div class="trust-badge">
+        <span>No Login Required</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .telegram-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(3, 5, 5, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .telegram-modal-overlay.is-active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .telegram-modal-card {
+    background: linear-gradient(180deg, rgba(14, 20, 22, 0.98) 0%, rgba(7, 11, 12, 0.98) 100%);
+    border: 1px solid var(--color-primary-border);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 480px;
+    padding: 36px 30px;
+    text-align: center;
+    box-shadow: 
+      0 30px 80px rgba(0, 0, 0, 0.85),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      0 0 50px rgba(16, 185, 129, 0.18);
+    position: relative;
+    transform: scale(0.95);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .telegram-modal-overlay.is-active .telegram-modal-card {
+    transform: scale(1);
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .modal-close-btn:hover {
+    background: var(--color-surface-3);
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+  }
+
+  .modal-bot-icon-wrapper {
+    position: relative;
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 20px;
+  }
+
+  .bot-icon-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-pill);
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%);
+    animation: glowPulse 2s infinite ease-in-out;
+  }
+
+  @keyframes glowPulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.2); opacity: 0.3; }
+  }
+
+  .bot-icon-circle {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-cyan));
+    border-radius: var(--radius-pill);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-inverse);
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+  }
+
+  .modal-title {
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+  }
+
+  .modal-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+    margin-bottom: 26px;
+  }
+
+  .modal-steps-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .modal-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+  }
+
+  .modal-btn-bot {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    color: #ffffff;
+    border: 1px solid rgba(14, 165, 233, 0.4);
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+  }
+
+  .modal-btn-bot:hover {
+    background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
+  }
+
+  .modal-btn-unlock {
+    background: linear-gradient(135deg, var(--color-primary-hover), var(--color-primary));
+    color: var(--color-text-inverse);
+    border: 1px solid var(--color-primary-border);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  }
+
+  .modal-btn-unlock:hover {
+    background: linear-gradient(135deg, #6ee7b7, var(--color-primary-hover));
+    transform: translateY(-1px);
+    box-shadow: 0 6px 22px rgba(16, 185, 129, 0.5);
+  }
+
+  .modal-status-msg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: var(--text-sm);
+    color: var(--color-primary);
+  }
+
+  .status-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--color-primary-soft);
+    border-top-color: var(--color-primary);
+    border-radius: var(--radius-pill);
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .modal-trust-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+    padding-top: 18px;
+  }
+
+  .trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .trust-divider {
+    color: var(--color-border-strong);
+  }
+
+  @media (max-width: 480px) {
+    .telegram-modal-overlay {
+      padding: 12px;
+    }
+
+    .telegram-modal-card {
+      padding: 26px 16px 20px;
+      border-radius: var(--radius-xl);
+    }
+
+    .modal-bot-icon-wrapper {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 14px;
+    }
+
+    .modal-title {
+      font-size: var(--text-xl);
+      margin-bottom: 8px;
+    }
+
+    .modal-desc {
+      font-size: var(--text-xs);
+      line-height: 1.5;
+      margin-bottom: 18px;
+    }
+
+    .modal-btn {
+      padding: 12px 14px;
+      font-size: var(--text-xs);
+    }
+
+    .modal-trust-footer {
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      font-size: var(--text-xs);
+      padding-top: 14px;
+    }
+  }
+</style>

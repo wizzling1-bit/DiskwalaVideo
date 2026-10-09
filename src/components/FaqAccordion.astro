@@ -1,0 +1,260 @@
+---
+const faqs = [
+  {
+    num: '1',
+    question: 'Can I watch videos on Diskwala without downloading them?',
+    answer: 'Yes. Paste your Diskwala or Flezen link above and click Unlock Video, then open the demo preview. Your actual file streams or downloads through the Telegram bot option we show you.'
+  },
+  {
+    num: '2',
+    question: 'Where is Diskwala video stored after downloading?',
+    answer: 'Downloaded files are saved directly to your browser default download location. On Windows and macOS, this is typically your "Downloads" directory. On Android devices, videos are saved to your "Download" folder, and on iPhones/iPads, they appear in the "Files" app under Downloads or your Camera Roll.'
+  },
+  {
+    num: '3',
+    question: 'Do I need to install any app to check a Diskwala link?',
+    answer: 'No app install is needed to check a link on this page. Paste your URL in Chrome, Safari, Firefox, or Edge. You will still need Telegram to receive the actual file.'
+  },
+  {
+    num: '4',
+    question: 'Why is my Diskwala video buffering or running slowly?',
+    answer: 'Buffering is usually caused by your network or the source host. Try a stronger connection, or use the Telegram bot option which may stream better on mobile data.'
+  },
+  {
+    num: '5',
+    question: 'How does the Diskwala Telegram Bot work?',
+    answer: 'Open the bot link shown after you submit a link, tap Start, then send your Diskwala or Flezen URL there. The bot replies with streaming and download options.'
+  },
+  {
+    num: '6',
+    question: 'Can I download Diskwala videos on my mobile phone?',
+    answer: 'Yes, the page works in mobile browsers like Chrome on Android and Safari on iOS. Your actual file is still delivered through Telegram.'
+  },
+  {
+    num: '7',
+    question: 'How do I fix broken Diskwala links?',
+    answer: 'If a link fails to resolve, make sure the URL begins with http:// or https:// and belongs to an approved provider (diskwala.com or flezen.com). If the original file was deleted or made private by its uploader, the link cannot be retrieved.'
+  },
+  {
+    num: '8',
+    question: 'Does using this player/downloader affect quality?',
+    answer: 'The demo player on this page uses a sample file. Your own file quality depends on the original upload and the option the Telegram bot provides.'
+  },
+  {
+    num: '9',
+    question: 'Is Diskwala Downloader free to use?',
+    answer: 'Yes, 100% free! There are no hidden subscription fees, VIP accounts, or paid download limits. We keep our service open and accessible to everyone.'
+  }
+];
+---
+
+<section class="section section-emerald" id="faq">
+  <div class="container container-hero">
+    <div class="section-header">
+      <div class="eyebrow eyebrow-green">FAQ</div>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-desc">
+        Find clear answers to common questions about using our Diskwala downloader and player.
+      </p>
+    </div>
+
+    <!-- Accordion List -->
+    <div class="faq-accordion-list" id="faq-list">
+      {faqs.map((faq, index) => (
+        <div class="faq-item" data-faq-index={index}>
+          <button 
+            type="button" 
+            class="faq-trigger" 
+            aria-expanded="false" 
+            aria-controls={`faq-panel-${index}`}
+            id={`faq-btn-${index}`}
+          >
+            <span class="faq-num-badge">{faq.num}</span>
+            <span class="faq-question-text">{faq.question}</span>
+            <span class="faq-chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+          </button>
+
+          <div 
+            class="faq-panel" 
+            id={`faq-panel-${index}`} 
+            role="region" 
+            aria-labelledby={`faq-btn-${index}`}
+            hidden
+          >
+            <div class="faq-answer-inner">
+              <p>{faq.answer}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-accordion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .faq-item {
+    background: linear-gradient(180deg, rgba(14, 20, 22, 0.85) 0%, rgba(8, 12, 13, 0.95) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+
+  .faq-item:hover {
+    border-color: var(--color-border-strong);
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+
+  .faq-item.is-open {
+    border-color: var(--color-primary-border);
+    background: linear-gradient(180deg, rgba(16, 26, 25, 0.9) 0%, rgba(9, 15, 15, 0.95) 100%);
+    box-shadow: inset 0 1px 0 rgba(16, 185, 129, 0.25), 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 24px rgba(16, 185, 129, 0.08);
+  }
+
+  .faq-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 28px;
+    text-align: left;
+    background: transparent;
+    color: var(--color-text);
+    font-size: var(--text-lg);
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .faq-trigger:hover .faq-question-text {
+    color: var(--color-primary-hover);
+  }
+
+  .faq-num-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary-soft);
+    border: 1px solid var(--color-primary-border);
+    color: var(--color-primary);
+    font-size: var(--text-sm);
+    font-weight: 850;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .faq-item.is-open .faq-num-badge {
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+  }
+
+  .faq-question-text {
+    flex-grow: 1;
+    line-height: 1.45;
+  }
+
+  .faq-chevron {
+    color: var(--color-text-muted);
+    transition: transform 0.25s ease, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .faq-item.is-open .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-primary);
+  }
+
+  .faq-panel {
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .faq-answer-inner {
+    padding: 20px 28px 26px 82px;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.72;
+  }
+
+  @media (max-width: 768px) {
+    .faq-trigger {
+      padding: 16px 16px;
+      gap: 12px;
+    }
+
+    .faq-num-badge {
+      width: 30px;
+      height: 30px;
+      font-size: var(--text-xs);
+      border-radius: var(--radius-sm);
+    }
+
+    .faq-question-text {
+      font-size: var(--text-sm);
+    }
+
+    .faq-answer-inner {
+      padding: 14px 16px 18px 16px;
+      font-size: var(--text-xs);
+    }
+  }
+
+  @media (max-width: 380px) {
+    .faq-trigger {
+      padding: 14px 12px;
+      gap: 10px;
+    }
+
+    .faq-question-text {
+      font-size: var(--text-xs);
+    }
+
+    .faq-answer-inner {
+      padding: 12px 12px 14px;
+    }
+  }
+</style>
+
+<script>
+  const faqItems = document.querySelectorAll('.faq-item');
+
+  function setItemState(item, open) {
+    const trigger = item.querySelector('.faq-trigger');
+    const panel = item.querySelector('.faq-panel');
+    if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) return;
+    trigger.setAttribute('aria-expanded', String(open));
+    panel.hidden = !open;
+    item.classList.toggle('is-open', open);
+  }
+
+  faqItems.forEach(item => {
+    const trigger = item.querySelector('.faq-trigger');
+
+    if (trigger instanceof HTMLButtonElement) {
+      trigger.addEventListener('click', () => {
+        const willOpen = trigger.getAttribute('aria-expanded') !== 'true';
+        faqItems.forEach(other => setItemState(other, false));
+        setItemState(item, willOpen);
+      });
+    }
+  });
+</script>

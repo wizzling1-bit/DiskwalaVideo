@@ -1,0 +1,233 @@
+---
+import { APP_CONFIG } from '../utils/config';
+---
+
+<section class="section" id="telegram-bot">
+  <div class="container">
+    <div class="bot-guide-card card-obsidian">
+      <div class="eyebrow eyebrow-purple">TELEGRAM AUTOMATION</div>
+      <h2 class="section-title-left">
+        Setting Up the <span class="text-gradient-green">Diskwala Telegram Bot</span>
+      </h2>
+      <p class="section-intro-text">
+        After the checker confirms your link, use the <strong class="highlight-text">Telegram bot</strong> to fetch playback and download options there. The bot chat is where your actual file is handled.
+      </p>
+
+      <!-- Two column cards -->
+      <div class="bot-cards-grid">
+        <!-- Quick Bot Setup -->
+        <div class="bot-feature-card">
+          <div class="bot-card-header">
+            <div class="bot-icon-small">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06-.01.19-.03.26z"/>
+              </svg>
+            </div>
+            <h3 class="bot-card-title">Quick Bot Setup</h3>
+          </div>
+          <ul class="bot-bullet-list">
+            <li>
+              <strong>1. Open Bot:</strong> Click our official bot link or search for the bot username in your Telegram search bar.
+            </li>
+            <li>
+              <strong>2. Send /start:</strong> Tap the blue Start button at the bottom of the chat to activate your session.
+            </li>
+            <li>
+              <strong>3. Send Your Link:</strong> Paste any Diskwala or Flezen URL directly into the message box.
+            </li>
+            <li>
+              <strong>4. Get Options:</strong> The bot replies with the streaming and download options it supports.
+            </li>
+          </ul>
+          <div class="bot-cta-wrap">
+            <a href={APP_CONFIG.telegramBotUrl} target="_blank" rel="noopener noreferrer" class="btn-primary bot-inline-btn">
+              <span>Start Bot Now</span>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06-.01.19-.03.26z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Why Use Bot? -->
+        <div class="bot-feature-card">
+          <div class="bot-card-header">
+            <div class="bot-icon-small bot-icon-star">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </div>
+            <h3 class="bot-card-title">Why Use the Bot?</h3>
+          </div>
+          <ul class="bot-bullet-list">
+            <li>
+              <strong>Cross-Platform Compatibility:</strong> Available on iOS, Android, macOS, Windows, and Telegram Web.
+            </li>
+            <li>
+              <strong>One Place for Links:</strong> Send or forward a supported URL in the chat instead of juggling tabs.
+            </li>
+            <li>
+              <strong>Bot Replies:</strong> The bot answers with the streaming and download options it supports.
+            </li>
+            <li>
+              <strong>Forwarding Support:</strong> Forward a supported link message to the bot to check it there.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bot-guide-card {
+    background: linear-gradient(180deg, rgba(16, 20, 24, 0.9) 0%, rgba(9, 11, 14, 0.96) 100%);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    padding: 44px 48px;
+    border-radius: var(--radius-xl);
+  }
+
+  .section-title-left {
+    font-size: var(--text-3xl);
+    font-weight: 850;
+    margin-bottom: 18px;
+    letter-spacing: -0.025em;
+  }
+
+  .section-intro-text {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.72;
+    margin-bottom: 34px;
+    max-width: 860px;
+  }
+
+  .highlight-text {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .bot-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+  }
+
+  .bot-feature-card {
+    background: rgba(14, 19, 21, 0.8);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 34px 32px;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .bot-feature-card:hover {
+    border-color: var(--color-cyan-border);
+    transform: translateY(-2px);
+  }
+
+  .bot-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .bot-icon-small {
+    width: 38px;
+    height: 38px;
+    background: var(--color-cyan-soft);
+    color: var(--color-cyan);
+    border: 1px solid var(--color-cyan-border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bot-icon-star {
+    background: var(--color-purple-soft);
+    color: var(--color-purple);
+    border-color: var(--color-purple-border);
+  }
+
+  .bot-card-title {
+    font-size: var(--text-lg);
+    font-weight: 750;
+    color: var(--color-text);
+  }
+
+  .bot-bullet-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+  }
+
+  .bot-bullet-list strong {
+    color: var(--color-text);
+  }
+
+  .bot-cta-wrap {
+    margin-top: 22px;
+  }
+
+  .bot-inline-btn {
+    width: 100%;
+    padding: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .bot-guide-card {
+      padding: 22px 14px;
+      border-radius: var(--radius-xl);
+    }
+
+    .section-title-left {
+      font-size: var(--text-2xl);
+      margin-bottom: 12px;
+    }
+
+    .section-intro-text {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .bot-cards-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .bot-feature-card {
+      padding: 20px 14px;
+      border-radius: var(--radius-lg);
+    }
+
+    .bot-card-title {
+      font-size: var(--text-base);
+    }
+
+    .bot-bullet-list {
+      font-size: var(--text-xs);
+      gap: 10px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .bot-guide-card {
+      padding: 16px 12px;
+    }
+
+    .bot-feature-card {
+      padding: 16px 12px;
+    }
+  }
+</style>

@@ -1,0 +1,133 @@
+---
+import { APP_CONFIG } from '../utils/config';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import LegalModal from '../components/LegalModal.astro';
+import TelegramGate from '../components/TelegramGate.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+}
+
+const {
+  title = "DiskwalaDownloader — Watch or Download Supported Links Online",
+  description = "Open a supported Diskwala or Flezen share link to check browser playback and download options. 100% Free with DiskwalaDownloader.",
+  canonicalUrl = "https://diskwaladownloader.com/"
+} = Astro.props;
+
+// JSON-LD Structured Data
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://diskwaladownloader.com/#website",
+      "url": "https://diskwaladownloader.com/",
+      "name": "DiskwalaDownloader",
+      "description": description,
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://diskwaladownloader.com/#webapp",
+      "url": "https://diskwaladownloader.com/",
+      "name": "DiskwalaDownloader & Player",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://diskwaladownloader.com/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Can I watch videos on Diskwala without downloading them?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Paste your Diskwala or Flezen link above, click Unlock Video, then open the demo preview. Your actual file streams or downloads through the Telegram bot option."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is DiskwalaDownloader free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, our tool is 100% free with no subscription tiers or fees."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to install any app to check a Diskwala link?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No app install is needed to check a link on this page. You will still need Telegram to receive the actual file."
+          }
+        }
+      ]
+    }
+  ]
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#050606" />
+
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DiskwalaDownloader" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content="https://diskwaladownloader.com/favicon.svg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://diskwaladownloader.com/favicon.svg" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Google Fonts Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;850&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <SiteHeader />
+    <main id="main-content">
+      <slot />
+    </main>
+    <SiteFooter />
+
+    <!-- Global Modals -->
+    <TelegramGate />
+    <LegalModal />
+
+    <!-- Client Script -->
+    <script src="../scripts/app.ts"></script>
+  </body>
+</html>

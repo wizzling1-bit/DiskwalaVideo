@@ -1,0 +1,173 @@
+---
+---
+
+<section class="section" id="opener">
+  <div class="container">
+    <div class="link-opener-card card-obsidian">
+      <div class="eyebrow eyebrow-cyan">LINK RESOLUTION ENGINE</div>
+      <h2 class="section-title-left">
+        Understanding the <span class="text-gradient-cyan">Diskwala Link Opener</span>
+      </h2>
+      <p class="section-intro-text">
+        When someone shares a Diskwala or Flezen link, paste it in the checker above. We confirm the host and show a Telegram bot link for the real file — no extra app needed for the check itself.
+      </p>
+
+      <!-- 3 Columns Matching Reference -->
+      <div class="opener-three-col">
+        <div class="opener-item">
+          <div class="opener-item-top">
+            <span class="opener-badge">01</span>
+            <h3 class="opener-item-title">Open Without App</h3>
+          </div>
+          <p class="opener-item-desc">
+            The link check runs in your browser. You only need Telegram when you open the bot for the actual file.
+          </p>
+        </div>
+
+        <div class="opener-item">
+          <div class="opener-item-top">
+            <span class="opener-badge">02</span>
+            <h3 class="opener-item-title">Speed & Ease</h3>
+          </div>
+          <p class="opener-item-desc">
+            Paste your link and click Unlock Video. We validate the host and show the next step right away.
+          </p>
+        </div>
+
+        <div class="opener-item">
+          <div class="opener-item-top">
+            <span class="opener-badge">03</span>
+            <h3 class="opener-item-title">Clean & Safe</h3>
+          </div>
+          <p class="opener-item-desc">
+            No signup and no file upload. Only share links you own or are allowed to use.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .link-opener-card {
+    background: linear-gradient(180deg, rgba(16, 20, 24, 0.9) 0%, rgba(9, 11, 14, 0.96) 100%);
+    border: 1px solid var(--color-cyan-border);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8), 0 0 45px rgba(56, 189, 248, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    padding: 44px 48px;
+    border-radius: var(--radius-xl);
+  }
+
+  .section-title-left {
+    font-size: var(--text-3xl);
+    font-weight: 850;
+    margin-bottom: 18px;
+    letter-spacing: -0.025em;
+  }
+
+  .section-intro-text {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.72;
+    margin-bottom: 34px;
+    max-width: 860px;
+  }
+
+  .highlight-text {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .opener-three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .opener-item {
+    background: rgba(14, 19, 21, 0.8);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .opener-item:hover {
+    border-color: var(--color-cyan-border);
+    transform: translateY(-2px);
+  }
+
+  .opener-item-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .opener-badge {
+    font-size: var(--text-xs);
+    font-weight: 800;
+    color: var(--color-cyan);
+    background: var(--color-cyan-soft);
+    border: 1px solid var(--color-cyan-border);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+  }
+
+  .opener-item-title {
+    font-size: var(--text-lg);
+    font-weight: 800;
+    color: var(--color-text);
+  }
+
+  .opener-item-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+  }
+
+  @media (max-width: 860px) {
+    .opener-three-col {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .link-opener-card {
+      padding: 22px 14px;
+      border-radius: var(--radius-xl);
+    }
+
+    .section-title-left {
+      font-size: var(--text-2xl);
+      margin-bottom: 12px;
+    }
+
+    .section-intro-text {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .opener-item {
+      padding: 20px 16px;
+      border-radius: var(--radius-lg);
+    }
+
+    .opener-item-title {
+      font-size: var(--text-base);
+    }
+
+    .opener-item-desc {
+      font-size: var(--text-xs);
+    }
+  }
+
+  @media (max-width: 380px) {
+    .link-opener-card {
+      padding: 16px 12px;
+    }
+
+    .opener-item {
+      padding: 16px 12px;
+    }
+  }
+</style>

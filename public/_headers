@@ -1,0 +1,25 @@
+# Cloudflare Pages Headers Configuration
+
+# Global Security & Content Headers
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()
+
+# Cache Immutable Static Vite / Astro Chunks
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache Favicons & Static Assets
+/favicon.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/site.webmanifest
+  Cache-Control: public, max-age=86400
+
+/robots.txt
+  Cache-Control: public, max-age=86400
+
+/sitemap.xml
+  Cache-Control: public, max-age=86400

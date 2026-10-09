@@ -1,0 +1,179 @@
+---
+---
+
+<section class="section">
+  <div class="container">
+    <div class="privacy-card card-obsidian">
+      <div class="privacy-header">
+        <div class="privacy-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <h2 class="privacy-title">Your Privacy and Security Come First</h2>
+      </div>
+
+      <p class="privacy-desc">
+        This is a static checker page: pasted links are validated in your browser against the supported host list. We don't ask for accounts, and there is no file upload here. The actual file handling happens in Telegram after you open the bot.
+      </p>
+
+      <div class="privacy-badges-grid">
+        <div class="privacy-badge-box">
+          <div class="badge-icon-dot"></div>
+          <div class="badge-text-wrap">
+            <h3 class="badge-headline">No Accounts</h3>
+            <p class="badge-sub">No signup or login on this page</p>
+          </div>
+        </div>
+
+        <div class="privacy-badge-box">
+          <div class="badge-icon-dot"></div>
+          <div class="badge-text-wrap">
+            <h3 class="badge-headline">HTTPS Page</h3>
+            <p class="badge-sub">Served over HTTPS in your browser</p>
+          </div>
+        </div>
+
+        <div class="privacy-badge-box">
+          <div class="badge-icon-dot"></div>
+          <div class="badge-text-wrap">
+            <h3 class="badge-headline">Use Authorized Links</h3>
+            <p class="badge-sub">Only open files you own or may use</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .privacy-card {
+    background: linear-gradient(180deg, rgba(16, 22, 24, 0.9) 0%, rgba(9, 12, 14, 0.96) 100%);
+    border: 1px solid var(--color-primary-border);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8), 0 0 45px rgba(16, 185, 129, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    padding: 44px 48px;
+    border-radius: var(--radius-xl);
+  }
+
+  .privacy-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .privacy-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--color-primary-soft);
+    border: 1px solid var(--color-primary-border);
+    color: var(--color-primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+  }
+
+  .privacy-title {
+    font-size: var(--text-2xl);
+    font-weight: 850;
+    color: var(--color-text);
+    letter-spacing: -0.015em;
+  }
+
+  .privacy-desc {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    max-width: 860px;
+  }
+
+  .privacy-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .privacy-badge-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(14, 19, 21, 0.8);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 22px 20px;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .privacy-badge-box:hover {
+    border-color: var(--color-primary-border);
+    transform: translateY(-2px);
+  }
+
+  .badge-icon-dot {
+    width: 9px;
+    height: 9px;
+    background: var(--color-primary);
+    border-radius: var(--radius-pill);
+    margin-top: 6px;
+    flex-shrink: 0;
+    box-shadow: 0 0 8px var(--color-primary);
+  }
+
+  .badge-headline {
+    font-size: var(--text-sm);
+    font-weight: 750;
+    color: var(--color-text);
+    margin-bottom: 4px;
+  }
+
+  .badge-sub {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    line-height: 1.45;
+  }
+
+  @media (max-width: 860px) {
+    .privacy-badges-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .privacy-card {
+      padding: 22px 14px;
+      border-radius: var(--radius-xl);
+    }
+
+    .privacy-title {
+      font-size: var(--text-xl);
+    }
+
+    .privacy-desc {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .privacy-badge-box {
+      padding: 16px 14px;
+      border-radius: var(--radius-md);
+    }
+
+    .badge-headline {
+      font-size: var(--text-sm);
+    }
+
+    .badge-sub {
+      font-size: var(--text-xs);
+    }
+  }
+
+  @media (max-width: 380px) {
+    .privacy-card {
+      padding: 16px 12px;
+    }
+  }
+</style>

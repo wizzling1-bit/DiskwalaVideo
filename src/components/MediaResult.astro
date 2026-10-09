@@ -1,0 +1,301 @@
+---
+---
+
+<div class="result-container" id="media-result-panel" style="display: none;" aria-live="polite">
+  <div class="container container-hero">
+    <div class="result-card" id="media-result-card">
+      <!-- Result Card Header -->
+      <div class="result-card-top">
+        <div class="result-status-badge">
+          <span class="status-dot"></span>
+          <span id="result-status-text">Link Checked — Demo Preview</span>
+        </div>
+        <span class="provider-tag" id="result-provider-tag">Diskwala Cloud</span>
+      </div>
+
+      <!-- File Details -->
+      <div class="result-meta-info">
+        <h2 class="result-video-title" id="result-video-title">
+          Demo preview
+        </h2>
+
+        <p class="result-demo-note">Sample video — your link's file opens through the Telegram bot.</p>
+
+        <div class="meta-badges-row">
+          <span class="meta-pill">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+            <span id="meta-format">MP4 Video</span>
+          </span>
+
+          <span class="meta-pill meta-pill-green">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+              <line x1="7" y1="2" x2="7" y2="22"></line>
+              <line x1="17" y1="2" x2="17" y2="22"></line>
+            </svg>
+            <span id="meta-resolution">Demo Preview</span>
+          </span>
+
+          <span class="meta-pill">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            </svg>
+            <span id="meta-size">Demo file</span>
+          </span>
+
+          <span class="meta-pill">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span id="meta-speed">Demo player</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- In-Browser Video Player Section -->
+      <div class="video-player-wrapper">
+        <video 
+          id="embedded-video-player" 
+          class="embedded-video-player" 
+          controls 
+          playsinline 
+          preload="metadata"
+          poster="https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=1200&q=80"
+        >
+          <!-- Safe high-quality public test video for demonstration -->
+          <source id="video-source" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+          Your browser does not support HTML5 video streaming.
+        </video>
+      </div>
+
+      <!-- Action Buttons Row -->
+      <div class="result-actions-grid">
+        <!-- Direct Download Button -->
+        <a 
+          href="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" 
+          download="Diskwala_Video_Download.mp4" 
+          class="btn-primary result-btn-download"
+          id="direct-download-btn"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Download Demo File</span>
+        </a>
+
+        <!-- Copy Direct Link Button -->
+        <button type="button" class="btn-secondary result-btn-copy" id="copy-stream-link-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+          </svg>
+          <span id="copy-btn-label">Copy Direct Link</span>
+        </button>
+
+        <!-- Reset Button -->
+        <button type="button" class="btn-secondary result-btn-reset" id="reset-result-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          <span>Process Another Link</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .result-container {
+    padding-top: 20px;
+    padding-bottom: 40px;
+    animation: fadeInSlide 0.4s ease forwards;
+  }
+
+  @keyframes fadeInSlide {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .result-card {
+    background: linear-gradient(180deg, rgba(14, 20, 22, 0.95) 0%, rgba(8, 12, 13, 0.98) 100%);
+    border: 1px solid var(--color-primary-border);
+    border-radius: var(--radius-xl);
+    padding: 36px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 24px 70px rgba(0, 0, 0, 0.75), 0 0 45px rgba(16, 185, 129, 0.14);
+  }
+
+  .result-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .result-status-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .status-dot {
+    width: 9px;
+    height: 9px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--color-primary);
+  }
+
+  .provider-tag {
+    background: var(--color-primary-soft);
+    border: 1px solid var(--color-primary-border);
+    color: var(--color-primary);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+  }
+
+  .result-meta-info {
+    margin-bottom: 26px;
+  }
+
+  .result-video-title {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: 8px;
+    word-break: break-all;
+  }
+
+  .result-demo-note {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: 14px;
+  }
+
+  .meta-badges-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: var(--radius-sm);
+  }
+
+  .meta-pill-green {
+    color: var(--color-primary);
+    border-color: var(--color-primary-border);
+    background: var(--color-primary-soft);
+  }
+
+  .video-player-wrapper {
+    position: relative;
+    width: 100%;
+    background: #000000;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--color-border-strong);
+  }
+
+  .embedded-video-player {
+    width: 100%;
+    max-height: 480px;
+    aspect-ratio: 16 / 9;
+    display: block;
+    background: #000;
+  }
+
+  .result-actions-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1fr;
+    gap: 12px;
+  }
+
+  .result-btn-download {
+    padding: 14px 20px;
+    font-size: var(--text-sm);
+  }
+
+  .result-btn-copy, .result-btn-reset {
+    padding: 14px 18px;
+    font-size: var(--text-sm);
+  }
+
+  @media (max-width: 768px) {
+    .result-container {
+      padding-top: 10px;
+      padding-bottom: 24px;
+    }
+
+    .result-card {
+      padding: 18px 14px;
+      border-radius: var(--radius-xl);
+    }
+
+    .result-video-title {
+      font-size: var(--text-lg);
+    }
+
+    .result-actions-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .result-btn-download,
+    .result-btn-copy,
+    .result-btn-reset {
+      width: 100%;
+      justify-content: center;
+      padding: 13px 16px;
+    }
+
+    .meta-badges-row {
+      gap: 6px;
+    }
+
+    .meta-pill {
+      font-size: var(--text-xs);
+      padding: 4px 8px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .result-card {
+      padding: 14px 10px;
+    }
+
+    .result-video-title {
+      font-size: var(--text-base);
+    }
+  }
+</style>

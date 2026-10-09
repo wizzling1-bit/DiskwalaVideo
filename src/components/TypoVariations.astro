@@ -1,0 +1,124 @@
+---
+const tags = [
+  'diskwala',
+  'discwala',
+  'disk wala',
+  'diskwala bot',
+  'diskwala player',
+  'diskwala downloader',
+  'diskwala video download',
+  'diskwala link opener',
+  'playdiskwala',
+  'flezen player',
+  'flezen downloader',
+  'diskwala online'
+];
+---
+
+<section class="section">
+  <div class="container">
+    <div class="typo-card card-obsidian">
+      <div class="eyebrow eyebrow-cyan">SEARCH HELP</div>
+      <h2 class="section-title-left">
+        Common Misspellings & <span class="text-gradient-cyan">Typing Variations</span>
+      </h2>
+      <p class="section-intro-text">
+        When searching for online video tools, search engines often encounter spelling variations. Whether you typed <span class="tag-inline">diskwala</span>, <span class="tag-inline">discwala</span>, <span class="tag-inline">disk wala</span>, or <span class="tag-inline">flezen</span>, paste your link above to check it.
+      </p>
+
+      <!-- Tag cloud Matching Reference -->
+      <div class="typo-tag-cloud">
+        {tags.map(tag => (
+          <a class="typo-tag-pill" href="#tools" data-typo-tag={tag}>{tag}</a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .typo-card {
+    background: linear-gradient(180deg, rgba(16, 20, 24, 0.9) 0%, rgba(9, 11, 14, 0.96) 100%);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    padding: 40px 44px;
+    border-radius: var(--radius-xl);
+  }
+
+  .section-title-left {
+    font-size: var(--text-2xl);
+    font-weight: 850;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .section-intro-text {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    margin-bottom: 24px;
+    max-width: 820px;
+  }
+
+  .tag-inline {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .typo-tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .typo-tag-pill {
+    display: inline-block;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    padding: 7px 16px;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .typo-tag-pill:hover {
+    border-color: var(--color-primary-border);
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+  }
+
+  @media (max-width: 768px) {
+    .typo-card {
+      padding: 22px 14px;
+      border-radius: var(--radius-xl);
+    }
+
+    .section-title-left {
+      font-size: var(--text-xl);
+    }
+
+    .section-intro-text {
+      font-size: var(--text-xs);
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .typo-tag-cloud {
+      gap: 8px;
+    }
+
+    .typo-tag-pill {
+      padding: 6px 12px;
+      font-size: var(--text-xs);
+    }
+  }
+
+  @media (max-width: 380px) {
+    .typo-card {
+      padding: 16px 12px;
+    }
+  }
+</style>

@@ -1,0 +1,16 @@
+{
+  "name": "Diskwala Downloader & Player",
+  "short_name": "PlayDiskWala",
+  "description": "Check Diskwala or Flezen links and open Telegram bot playback and download options",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050606",
+  "theme_color": "#15c99a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
