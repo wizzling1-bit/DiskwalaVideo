@@ -1,60 +1,118 @@
 ---
-const faqs = [
+interface FaqItem {
+  num: string;
+  question: string;
+  paragraphs: string[];
+}
+
+const faqs: FaqItem[] = [
   {
-    num: '1',
-    question: 'What is Diskwala Video Downloader and how does it work?',
-    answer: 'Diskwala Video Downloader is a free online utility and link video player that validates Diskwala and Flezen video links. It gives you an instant ad-free preview and connects you to our high-speed Telegram bot for direct MP4 downloads.'
+    num: '01',
+    question: 'How to convert Diskwala link to Terabox link?',
+    paragraphs: [
+      'To convert a Diskwala link to a Terabox link online, copy your Diskwala or Flezen video URL and paste it into our converter box at DiskwalaVideoDownloader.com.',
+      'Click "Play & Download" to parse the media parameters and resolve the direct cloud file stream. This bridges Diskwala and Flezen links with Terabox cloud storage lockers, letting you stream or download media across platforms without installing third-party converters or risky mobile apps.'
+    ]
   },
   {
-    num: '2',
-    question: 'Can I use Diskwala online video player without downloading the file?',
-    answer: 'Yes! Our Diskwala online video player and Diskwala link video player online allow you to inspect and stream videos directly inside your browser without filling up your phone or computer storage.'
+    num: '02',
+    question: 'How to download Diskwala videos without app?',
+    paragraphs: [
+      'You can download Diskwala videos without installing any APK or mobile application directly through your web browser. Open DiskwalaVideoDownloader.com on Chrome, Safari, Edge, or Firefox from any Android, iPhone, Windows, or Mac device.',
+      'Paste the Diskwala link into the search box and click "Play & Download". Our system extracts the raw MP4 video stream so you can save the file straight to your local device storage completely ad-free and without bloatware.'
+    ]
   },
   {
-    num: '3',
-    question: 'How do I use the Diskwala to Terabox link converter online feature?',
-    answer: 'Simply paste your Diskwala or Flezen URL into the search box. Our converter engine standardizes cloud locker links, making it easy to stream or download media across Diskwala, Flezen, and Terabox collections.'
+    num: '03',
+    question: 'How to download Diskwala videos?',
+    paragraphs: [
+      'Downloading Diskwala videos takes only three easy steps: (1) Copy the Diskwala or Flezen video URL from your Telegram channel or chat. (2) Paste the URL into DiskwalaVideoDownloader.com and click "Play & Download". (3) Choose your preferred video resolution (1080p Full HD, 720p HD, or 480p SD) to download the MP4 file instantly.',
+      'You can also choose the direct Telegram Bot handoff for uncapped download speeds with automatic pause and resume support.'
+    ]
   },
   {
-    num: '4',
-    question: 'How does the Diskwala telegram link bot pipeline work?',
-    answer: 'After you validate your link with our Diskwala link downloader, click "Open in Telegram Bot". The official bot receives your Diskwala telegram link and delivers direct, high-speed MP4 video downloads with automatic resume support.'
+    num: '04',
+    question: 'How to watch Diskwala videos without app?',
+    paragraphs: [
+      'To watch Diskwala videos without installing an app, use our built-in Diskwala online video player. Paste your video URL into the input field on DiskwalaVideoDownloader.com and tap "Play & Download".',
+      'Our responsive HTML5 web player launches immediately with fullscreen support, playback speed controls, and picture-in-picture streaming right in your browser, eliminating the need for MX Player or the Diskwala mobile APK.'
+    ]
   },
   {
-    num: '5',
-    question: 'Where is my Diskwala video stored after downloading?',
-    answer: 'Downloaded files are saved directly to your device default download folder. On Android and PC/Mac, check your "Downloads" directory. On iPhone/iPad, files appear in the "Files" app under Downloads.'
+    num: '05',
+    question: 'How to open Diskwala link without app?',
+    paragraphs: [
+      'Standard Diskwala links typically force users through deceptive redirect loops and aggressive app install prompts. To open a Diskwala link without the app, bypass those barriers by pasting the URL into DiskwalaVideoDownloader.com.',
+      'Our cloud resolver opens the link in an isolated environment, extracts the media parameters, and gives you clean, immediate access to stream or download the file directly in your browser.'
+    ]
   },
   {
-    num: '6',
-    question: 'Do I need to install any apps to check a Diskwala link?',
-    answer: 'No app installation is required. Our Diskwala video player online works completely in your web browser (Chrome, Safari, Firefox, Edge). You only need Telegram when you choose to download the full file through the bot.'
+    num: '06',
+    question: 'Is Diskwala safe?',
+    paragraphs: [
+      'Direct Diskwala websites can carry security risks due to third-party ad networks, intrusive popups, and untrusted APK download prompts that could compromise device security.',
+      'Using DiskwalaVideoDownloader.com is completely safe: we strip dangerous redirects, never ask you to install suspicious apps, enforce a strict zero-log privacy policy, and route all file traffic through encrypted HTTPS and verified Telegram bot connections.'
+    ]
   },
   {
-    num: '7',
-    question: 'Can I download Diskwala videos on Android and iPhone?',
-    answer: 'Yes, our Diskwala link video downloader is fully responsive and optimized for mobile devices. You can paste links and trigger bot downloads smoothly on smartphones and tablets.'
+    num: '07',
+    question: 'How to play Diskwala video online without app?',
+    paragraphs: [
+      'Playing a Diskwala video online without an app is fast and simple: copy your Diskwala video URL, paste it into the Diskwala link video player on DiskwalaVideoDownloader.com, and click "Play & Download".',
+      'The video starts streaming instantly in your browser with zero buffer delay, no mandatory signups, and full compatibility across iOS, Android, macOS, and Windows.'
+    ]
   },
   {
-    num: '8',
-    question: 'Why is my Diskwala video buffering or failing to load?',
-    answer: 'Slow buffering usually stems from high traffic on the host server or network congestion. Using our official Telegram bot route often resolves buffering issues by streaming directly through Telegram global server nodes.'
+    num: '08',
+    question: 'How to download video from Diskwala?',
+    paragraphs: [
+      'To download a video from Diskwala, copy the link from your Telegram channel or group, open DiskwalaVideoDownloader.com, and paste the URL into the search box.',
+      'Click "Play & Download" to parse the media file. You can then download the original high-definition MP4 video file directly to your smartphone, tablet, or desktop with uncapped bandwidth.'
+    ]
   },
   {
-    num: '9',
-    question: 'Is Diskwala Video Downloader 100% free to use?',
-    answer: 'Yes, our Diskwala downloader is completely free forever. There are no subscriptions, VIP paywalls, or daily download limits.'
+    num: '09',
+    question: 'Why Diskwala is not working?',
+    paragraphs: [
+      'If Diskwala is not working, the most common causes include: (1) ISP DNS blocking of Diskwala hosting domains, (2) temporary host server downtime or overload, (3) expired or invalid media tokens, or (4) ad-blockers interfering with site scripts.',
+      'You can solve this by pasting your link into DiskwalaVideoDownloader.com or utilizing our official Telegram Bot handoff, which bypasses local ISP bans and retrieves the file from active cloud mirrors.'
+    ]
+  },
+  {
+    num: '10',
+    question: 'How to watch Diskwala videos?',
+    paragraphs: [
+      'You can watch Diskwala videos in two convenient ways: stream directly in your browser using our Diskwala online video player for an ad-free viewing experience, or use our official Telegram Bot to stream videos inside Telegram with cloud media caching.',
+      'Both options allow seamless playback across mobile phones, tablets, and computers without requiring local file downloads.'
+    ]
   }
 ];
+
+// JSON-LD Structured Data for FAQ SEO (Google Rich Results)
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((faq) => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.paragraphs.map((p) => `<p>${p}</p>`).join("")
+    }
+  }))
+};
 ---
+
+<!-- SEO JSON-LD FAQPage Schema -->
+<script type="application/ld+json" set:html={JSON.stringify(faqJsonLd, null, 2)} />
 
 <section class="section section-emerald" id="faq">
   <div class="container container-hero">
     <div class="section-header">
-      <div class="eyebrow eyebrow-green">FAQ</div>
+      <div class="eyebrow eyebrow-green">HELP & FAQ</div>
       <h2 class="section-title">Frequently Asked Questions</h2>
       <p class="section-desc">
-        Find clear answers to common questions about using our Diskwala downloader and player.
+        Everything you need to know about downloading, watching, and converting Diskwala video links online safely without apps.
       </p>
     </div>
 
@@ -86,7 +144,9 @@ const faqs = [
             hidden
           >
             <div class="faq-answer-inner">
-              <p>{faq.answer}</p>
+              {faq.paragraphs.map((para) => (
+                <p class="faq-paragraph">{para}</p>
+              ))}
             </div>
           </div>
         </div>
@@ -144,8 +204,8 @@ const faqs = [
   }
 
   .faq-num-badge {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: var(--radius-sm);
     background: var(--color-primary-soft);
     border: 1px solid var(--color-primary-border);
@@ -157,6 +217,7 @@ const faqs = [
     justify-content: center;
     flex-shrink: 0;
     transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    letter-spacing: -0.02em;
   }
 
   .faq-item.is-open .faq-num-badge {
@@ -189,10 +250,18 @@ const faqs = [
   }
 
   .faq-answer-inner {
-    padding: 20px 28px 26px 82px;
+    padding: 20px 28px 26px 84px;
     font-size: var(--text-sm);
     color: var(--color-text-secondary);
     line-height: 1.72;
+  }
+
+  .faq-paragraph {
+    margin: 0 0 12px;
+  }
+
+  .faq-paragraph:last-child {
+    margin-bottom: 0;
   }
 
   @media (max-width: 768px) {
@@ -202,8 +271,8 @@ const faqs = [
     }
 
     .faq-num-badge {
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       font-size: var(--text-xs);
       border-radius: var(--radius-sm);
     }
@@ -224,6 +293,12 @@ const faqs = [
       gap: 10px;
     }
 
+    .faq-num-badge {
+      width: 28px;
+      height: 28px;
+      font-size: 11px;
+    }
+
     .faq-question-text {
       font-size: var(--text-xs);
     }
@@ -237,7 +312,7 @@ const faqs = [
 <script>
   const faqItems = document.querySelectorAll('.faq-item');
 
-  function setItemState(item, open) {
+  function setItemState(item: Element, open: boolean) {
     const trigger = item.querySelector('.faq-trigger');
     const panel = item.querySelector('.faq-panel');
     if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) return;
