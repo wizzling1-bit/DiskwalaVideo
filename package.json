@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "tsc --noEmit",
-    "deploy": "wrangler pages deploy dist"
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "astro": "^5.4.2"
