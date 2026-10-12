@@ -1,7 +1,7 @@
 {
-  "name": "Diskwala Video Downloader & Online Video Player",
-  "short_name": "DiskwalaDownloader",
-  "description": "Fast free Diskwala video downloader and online video player to stream or download videos with zero ads.",
+  "name": "TeraWala — Terabox & Diskwala Video Downloader & Online Player",
+  "short_name": "TeraWala",
+  "description": "Fast free Terabox & Diskwala video downloader and online video player to stream or download videos with zero ads.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#050606",
@@ -11,6 +11,21 @@
       "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }

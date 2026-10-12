@@ -1,0 +1,123 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "DMCA Policy", href: "/dmca/" }
+];
+---
+
+<BaseLayout
+  title="DMCA & Copyright Policy — TeraWala"
+  description="TeraWala DMCA and copyright policy. Learn how to submit takedown requests and how we handle copyright compliance as a link processing tool."
+  canonicalUrl="https://terawala.com/dmca/"
+>
+  <section class="legal-page section">
+    <div class="container container-narrow">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="legal-header">
+        <span class="eyebrow eyebrow-green">COPYRIGHT</span>
+        <h1 class="section-title-left">DMCA & Copyright <span class="text-gradient-green">Policy</span></h1>
+        <p class="legal-updated">Last Updated: October 2026</p>
+      </div>
+
+      <article class="legal-content">
+        <h2>Copyright Compliance</h2>
+        <p>
+          TeraWala respects the intellectual property rights of creators, copyright holders, and content owners. We are committed to complying with the Digital Millennium Copyright Act (DMCA) and equivalent international copyright laws.
+        </p>
+
+        <h2>How TeraWala Works</h2>
+        <p>
+          TeraWala functions as a browser-based URL analyzer and media stream resolver. We <strong>do not host, store, cache, or distribute any media files</strong> on our servers. All video content is hosted on and served directly from third-party cloud storage platforms (TeraBox, Diskwala, Flezen). Our service processes links to resolve direct stream endpoints — similar to how a search engine indexes and links to content hosted elsewhere.
+        </p>
+
+        <h2>Submitting a Takedown Request</h2>
+        <p>
+          Because we do not host any content, we cannot directly remove files from third-party servers. However, we take the following actions:
+        </p>
+        <ul>
+          <li><strong>Primary Action:</strong> Contact the hosting platform (TeraBox, Diskwala, or Flezen) directly to request content removal at the source.</li>
+          <li><strong>Secondary Action:</strong> Notify TeraWala at <a href="mailto:support@terawala.com" class="inline-link">support@terawala.com</a> to request blocking specific URL patterns from being resolved through our tool.</li>
+        </ul>
+
+        <h2>What to Include in a DMCA Notice</h2>
+        <p>
+          To submit a valid DMCA takedown notice, please include the following:
+        </p>
+        <ul>
+          <li>Your full legal name and contact information</li>
+          <li>A description of the copyrighted work being infringed</li>
+          <li>The specific URL(s) that you believe infringe your copyright</li>
+          <li>A statement that you have a good-faith belief that the use is not authorized</li>
+          <li>A statement under penalty of perjury that the information is accurate and that you are the copyright owner or authorized representative</li>
+          <li>Your physical or electronic signature</li>
+        </ul>
+
+        <h2>Response Timeline</h2>
+        <p>
+          We respond to valid DMCA notices within <strong>48 to 72 hours</strong>. URL pattern blocking is implemented within the same timeframe upon verification.
+        </p>
+
+        <h2>Counter-Notification</h2>
+        <p>
+          If you believe your content was blocked in error, you may submit a counter-notification to <a href="mailto:support@terawala.com" class="inline-link">support@terawala.com</a> with your contact information, identification of the blocked URL, and a statement under penalty of perjury that you believe the block was a result of mistake or misidentification.
+        </p>
+
+        <h2>Repeat Infringers</h2>
+        <p>
+          TeraWala reserves the right to permanently block URL patterns associated with repeat copyright infringement. We cooperate fully with legitimate rights holders to protect intellectual property.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          DMCA Agent: <a href="mailto:support@terawala.com" class="inline-link">support@terawala.com</a><br>
+          Please include "DMCA" in the subject line for priority handling.
+        </p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-page { padding-top: 40px; padding-bottom: 60px; }
+  .legal-header { margin-bottom: 36px; }
+  .legal-updated { font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 8px; }
+
+  .legal-content {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.78;
+  }
+
+  .legal-content h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: 36px;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .legal-content p { margin-bottom: 18px; }
+
+  .legal-content ul {
+    margin: 14px 0 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .legal-content li { line-height: 1.7; }
+
+  .inline-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .inline-link:hover { color: var(--color-primary-hover); }
+</style>

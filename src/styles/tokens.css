@@ -1,92 +1,111 @@
 :root {
   color-scheme: dark;
 
-  /* Surface & Background Palette */
-  --color-bg: #030507;
-  --color-bg-translucent: rgba(3, 5, 7, 0.88);
-  --color-surface-1: #070b0e;
-  --color-surface-2: #0b1115;
-  --color-surface-3: #10181d;
-  --color-surface-card: #080d10;
+  /* Surface & Background Palette (Section 8 Design Tokens) */
+  --color-bg: #070A09;
+  --color-bg-translucent: rgba(7, 10, 9, 0.92);
+  --color-surface-1: #0D1211;
+  --color-surface-2: #121A18;
+  --color-surface-3: #182320;
+  --color-surface-card: #0D1211;
   
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-subtle: rgba(255, 255, 255, 0.05);
-  --color-border-strong: rgba(255, 255, 255, 0.14);
-  --color-border-focus: #10b981;
+  --color-border: #24332D;
+  --color-border-subtle: rgba(36, 51, 45, 0.6);
+  --color-border-strong: rgba(16, 214, 160, 0.28);
+  --color-border-focus: #10D6A0;
 
-  /* Standardized Semantic Text Palette (Under 8 text colors) */
-  --color-text: #ffffff;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
+  /* Standardized Semantic Text Palette */
+  --color-text: #F4F8F6;
+  --color-text-secondary: #A3B2AC;
+  --color-text-muted: #73847E;
   --color-text-inverse: #031510;
-  --color-text-btn: #ffffff;
-  --color-text-emerald: #6ee7b7;
+  --color-text-btn: #070A09;
+  --color-text-emerald: #10D6A0;
 
   /* Primary Luminous Emerald Accent */
-  --color-primary: #10b981;
-  --color-primary-hover: #34d399;
-  --color-primary-pressed: #059669;
-  --color-primary-glow: rgba(16, 185, 129, 0.2);
-  --color-primary-soft: rgba(16, 185, 129, 0.1);
-  --color-primary-border: rgba(16, 185, 129, 0.32);
+  --color-primary: #10D6A0;
+  --color-primary-hover: #1cf0b5;
+  --color-primary-pressed: #0ba87c;
+  --color-primary-glow: rgba(16, 214, 160, 0.18);
+  --color-primary-soft: rgba(16, 214, 160, 0.08);
+  --color-primary-border: rgba(16, 214, 160, 0.28);
 
-  /* Secondary Accents */
+  /* Secondary Provider Accents */
+  --color-terabox: #10D6A0;       /* TeraBox Emerald */
+  --color-diskwala: #38bdf8;      /* Diskwala Cyan */
+  --color-flezen: #a855f7;        /* Flezen Purple */
+
   --color-cyan: #38bdf8;
   --color-cyan-hover: #7dd3fc;
-  --color-cyan-soft: rgba(56, 189, 248, 0.12);
-  --color-cyan-border: rgba(56, 189, 248, 0.32);
+  --color-cyan-soft: rgba(56, 189, 248, 0.1);
+  --color-cyan-border: rgba(56, 189, 248, 0.28);
 
   --color-amber: #f59e0b;
   --color-amber-hover: #fbbf24;
-  --color-amber-soft: rgba(245, 158, 11, 0.12);
-  --color-amber-border: rgba(245, 158, 11, 0.32);
+  --color-amber-soft: rgba(245, 158, 11, 0.1);
+  --color-amber-border: rgba(245, 158, 11, 0.28);
 
   --color-purple: #a855f7;
   --color-purple-hover: #c084fc;
-  --color-purple-soft: rgba(168, 85, 247, 0.12);
-  --color-purple-border: rgba(168, 85, 247, 0.32);
+  --color-purple-soft: rgba(168, 85, 247, 0.1);
+  --color-purple-border: rgba(168, 85, 247, 0.28);
 
   --color-blue: #3b82f6;
   --color-blue-hover: #60a5fa;
-  --color-blue-soft: rgba(59, 130, 246, 0.14);
-  --color-blue-border: rgba(59, 130, 246, 0.35);
+  --color-blue-soft: rgba(59, 130, 246, 0.1);
+  --color-blue-border: rgba(59, 130, 246, 0.28);
 
-  --color-error: #f43f5e;
-  --color-error-soft: rgba(244, 63, 94, 0.12);
+  --color-error: #ef4444;
+  --color-error-soft: rgba(239, 68, 68, 0.12);
+  --color-error-border: rgba(239, 68, 68, 0.32);
 
   /* Typography Font Families */
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
-  /* Standardized 8-Step Typographic Scale (Enhanced Prominent Hierarchy) */
+  /* Standardized Typographic Scale */
   --text-xs: 0.8125rem;    /* 13px - Badges, timestamps, small tags */
   --text-sm: 0.9375rem;    /* 15px - Captions, secondary info, inputs */
-  --text-base: 1.0625rem;  /* 17px - Body text, default buttons */
-  --text-lg: 1.2rem;       /* 19.2px - Card titles, subheadings */
+  --text-base: 1rem;       /* 16px - Base body text */
+  --text-lg: 1.1875rem;    /* 19px - Card titles, subheadings */
   --text-xl: 1.375rem;     /* 22px - Section sub-headers */
   --text-2xl: 1.75rem;     /* 28px - Modal headers, feature headers */
   --text-3xl: 2.25rem;     /* 36px - Section titles */
-  --text-display: clamp(2.2rem, 5.5vw, 3.8rem); /* Hero title */
+  --text-display: clamp(2rem, 5vw, 3.25rem); /* Hero title */
 
   /* Standardized 5-Tier Corner Radii Scale */
   --radius-sm: 8px;       /* Chips, small action buttons */
   --radius-md: 12px;      /* Inputs, primary buttons, badges */
   --radius-lg: 16px;      /* Feature cards, preview cards */
-  --radius-xl: 24px;      /* Large containers, obsidian cards, modals */
+  --radius-xl: 20px;      /* Large containers, obsidian cards, modals */
   --radius-pill: 9999px;  /* Pills, circle avatars */
 
-  /* Multi-Layer Shadows & Bevels (Softened Premium Glow) */
+  /* Multi-Layer Shadows & Bevels (Restrained, Premium) */
   --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.45);
-  --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  --shadow-card-hover: 0 30px 75px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.14);
-  --shadow-glow-green: 0 4px 24px rgba(16, 185, 129, 0.18);
-  --shadow-glow-purple: 0 4px 24px rgba(168, 85, 247, 0.16);
-  --shadow-glow-amber: 0 4px 24px rgba(245, 158, 11, 0.16);
-  --shadow-glow-blue: 0 4px 24px rgba(59, 130, 246, 0.16);
-  --shadow-modal: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 35px rgba(16, 185, 129, 0.12);
+  --shadow-card: 0 16px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --shadow-card-hover: 0 20px 50px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  --shadow-glow-green: 0 4px 20px rgba(16, 214, 160, 0.16);
+  --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 30px rgba(16, 214, 160, 0.1);
 
   /* Layout Proportions */
-  --max-width: 1080px;
-  --max-width-narrow: 860px;
+  --max-width: 1140px;
+  --max-width-narrow: 820px;
   --header-height: 72px;
+
+  /* Motion-Web Tokens (Durations, Easings & Springs) */
+  --motion-instant: 90ms;
+  --motion-fast: 180ms;
+  --motion-standard: 320ms;
+  --motion-medium: 480ms;
+  --motion-slow: 750ms;
+  --motion-cinematic: 1100ms;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-circ: cubic-bezier(0, 0.55, 0.45, 1);
+  --ease-in-expo: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --spring-physics: linear(0, 0.32 8%, 0.79 20%, 1.03 30%, 1.01 46%, 1);
+
+  --stagger-step: 0.065s;
 }

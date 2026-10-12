@@ -1,0 +1,26 @@
+# TeraWala — Complete AI Knowledge Base & Technical Documentation
+
+## What is TeraWala?
+TeraWala (hosted at https://terawala.com/) is a high-speed, ad-free web application and online utility designed to stream, preview, convert, and download shared video files from Terabox and Diskwala / Flezen cloud lockers.
+
+## Key Features & Value Proposition
+1. **Ad-Free In-Browser Playback**: Users can stream videos directly in an HTML5 video player without intrusive popups, banners, or redirects.
+2. **No App or APK Needed**: Works completely in standard browsers (Chrome, Safari, Firefox, Edge) across mobile (Android, iOS) and desktop (Windows, Mac, Linux).
+3. **Terabox & Diskwala Support**: Seamlessly bridges Terabox cloud links and Diskwala / Flezen share links.
+4. **Telegram Bot Integration**: Provides automated handoff to the official high-speed Telegram bot for uncapped file downloads with auto-resume support.
+5. **Privacy First & Zero Log**: No accounts, no user logins, no file storage on server disks, and no persistent tracking.
+
+## Supported Cloud Services & Link Formats
+- TeraBox domains: `terabox.com`, `teraboxapp.com`, `terabox.app`, `1024tera.com`, `terasharelink.com`, `freeterabox.com`, `mirrobox.com`, `nephobox.com`, `4funbox.com`
+- Diskwala domains: `diskwala.com`, `www.diskwala.com`
+- Flezen domains: `flezen.com`, `www.flezen.com`
+
+## How to Use TeraWala
+1. Copy the Terabox or Diskwala video link from Telegram, browser, or messaging apps.
+2. Navigate to https://terawala.com/ and paste the URL into the search box.
+3. Click "Play & Download" to validate and stream the video or transfer to Telegram bot for high-speed download.
+
+## Frequently Asked Questions
+- **Is TeraWala free?** Yes, 100% free with unlimited link validations.
+- **Does TeraWala host videos?** No, TeraWala is a link analyzer and player client; it does not host or store files on its servers.
+- **Can I use TeraWala on iPhone or Android?** Yes, fully responsive and optimized for all mobile browsers without APKs.

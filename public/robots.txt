@@ -1,3 +1,43 @@
 User-agent: *
 Allow: /
-Sitemap: https://diskwalavideodownloader.com/sitemap.xml
+Disallow: /404
+Disallow: /500
+Disallow: /404/
+Disallow: /500/
+
+# Major Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# AI Search & Answer Engine Crawlers (AEO / GEO / LLMO)
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://terawala.com/sitemap.xml

@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { APP_CONFIG } from '../utils/config';
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Contact Us", href: "/contact-us/" }
+];
+---
+
+<BaseLayout
+  title="Contact Us — TeraWala | Support & Inquiries"
+  description="Get in touch with the TeraWala team. Contact us for support, feedback, partnership inquiries, or DMCA requests. We respond within 24-48 hours."
+  canonicalUrl="https://terawala.com/contact-us/"
+>
+  <section class="legal-page section">
+    <div class="container container-narrow">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="legal-header">
+        <span class="eyebrow eyebrow-green">GET IN TOUCH</span>
+        <h1 class="section-title-left">Contact <span class="text-gradient-green">TeraWala</span></h1>
+      </div>
+
+      <article class="legal-content">
+        <p>
+          We'd love to hear from you. Whether you have a question about our service, need technical support, want to report a bug, or have a partnership proposal — our team is here to help.
+        </p>
+
+        <div class="contact-cards-grid">
+          <div class="contact-card">
+            <div class="contact-icon-wrap">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <h3 class="contact-card-title">Email Support</h3>
+            <p class="contact-card-desc">For general inquiries, technical support, and feedback.</p>
+            <a href={`mailto:${APP_CONFIG.supportEmail}`} class="contact-card-link">{APP_CONFIG.supportEmail}</a>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-icon-wrap contact-icon-blue">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06-.01.19-.03.26z"/></svg>
+            </div>
+            <h3 class="contact-card-title">Telegram Bot</h3>
+            <p class="contact-card-desc">For instant file processing and video downloads.</p>
+            <a href={APP_CONFIG.telegramBotUrl} target="_blank" rel="noopener noreferrer" class="contact-card-link">Launch Telegram Bot →</a>
+          </div>
+        </div>
+
+        <h2>Response Time</h2>
+        <p>
+          We typically respond to email inquiries within <strong>24 to 48 hours</strong>. For urgent copyright or DMCA matters, please include "DMCA" in your email subject line for priority handling.
+        </p>
+
+        <h2>What to Include in Your Message</h2>
+        <ul>
+          <li><strong>Technical Issues:</strong> Describe the problem, which browser/device you're using, and include the link you were trying to process.</li>
+          <li><strong>DMCA Requests:</strong> Include proof of ownership, the specific URL in question, and your contact information. See our <a href="/dmca/" class="inline-link">DMCA Policy</a> for details.</li>
+          <li><strong>Partnership Inquiries:</strong> Describe your proposal and how you'd like to collaborate.</li>
+          <li><strong>Feedback:</strong> We appreciate both positive feedback and constructive criticism to improve TeraWala.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-page { padding-top: 40px; padding-bottom: 60px; }
+  .legal-header { margin-bottom: 36px; }
+
+  .legal-content {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.78;
+  }
+
+  .legal-content h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: 36px;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .legal-content p { margin-bottom: 18px; }
+
+  .legal-content ul {
+    margin: 14px 0 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .legal-content li { line-height: 1.7; }
+
+  .inline-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .inline-link:hover { color: var(--color-primary-hover); }
+
+  .contact-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin: 28px 0 36px;
+  }
+
+  .contact-card {
+    background: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    transition: border-color 0.2s;
+  }
+
+  .contact-card:hover { border-color: var(--color-border-strong); }
+
+  .contact-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary-soft);
+    border: 1px solid var(--color-primary-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    margin-bottom: 16px;
+  }
+
+  .contact-icon-blue {
+    background: var(--color-cyan-soft);
+    border-color: var(--color-cyan-border);
+    color: var(--color-cyan);
+  }
+
+  .contact-card-title {
+    font-size: var(--text-lg);
+    font-weight: 750;
+    color: var(--color-text);
+    margin-bottom: 8px;
+  }
+
+  .contact-card-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .contact-card-link {
+    font-size: var(--text-sm);
+    font-weight: 650;
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .contact-card-link:hover { color: var(--color-primary-hover); }
+
+  @media (max-width: 768px) {
+    .contact-cards-grid { grid-template-columns: 1fr; }
+  }
+</style>

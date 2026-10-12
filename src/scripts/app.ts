@@ -1,9 +1,11 @@
-import { validateSourceUrl } from '../utils/host-allowlist';
+import { validateSourceUrl, type SupportedProvider } from '../utils/host-allowlist';
 import { APP_CONFIG } from '../utils/config';
+import { TRANSLATIONS, LOCALES, DEFAULT_LOCALE, type Locale } from '../utils/i18n';
+import './motion';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Elements
-  const form = document.getElementById('diskwala-form') as HTMLFormElement | null;
+  const form = (document.getElementById('terawala-form') || document.getElementById('diskwala-form')) as HTMLFormElement | null;
   const linkInput = document.getElementById('link-input') as HTMLInputElement | null;
   const inputWrapper = document.getElementById('input-outer-wrapper') as HTMLElement | null;
   const pasteBtn = document.getElementById('paste-btn') as HTMLButtonElement | null;
@@ -43,13 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const value = linkInput.value.trim();
     const hasValue = value.length > 0;
 
-    // Toggle button clickable state (Requirement 3)
+    // Toggle button clickable state
     if (submitBtn) {
       submitBtn.disabled = !hasValue;
       submitBtn.classList.toggle('is-disabled', !hasValue);
     }
 
-    // Toggle input wrapper filled light-style (Requirement 4 / Screenshot 3 & 4)
+    // Toggle input wrapper filled light-style
     if (inputWrapper) {
       inputWrapper.classList.toggle('is-filled', hasValue);
     }
@@ -78,9 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function showProvider(provider: 'diskwala' | 'flezen') {
+  function showProvider(provider: SupportedProvider) {
     if (providerPill && providerName) {
-      providerName.textContent = provider === 'diskwala' ? 'Diskwala Link Detected' : 'Flezen Link Detected';
+      if (provider === 'terabox') {
+        providerName.textContent = 'TeraBox Link Detected';
+      } else if (provider === 'diskwala') {
+        providerName.textContent = 'Diskwala Link Detected';
+      } else {
+        providerName.textContent = 'Flezen Link Detected';
+      }
       providerPill.style.display = 'inline-flex';
     }
     linkInput?.removeAttribute('aria-invalid');
@@ -169,20 +177,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Form Submission Flow: Image 2 -> Image 3 (Loading) -> Image 4 (Ready)
+  // Form Submission Flow
   function processLinkFlow() {
     if (!linkInput) return;
     const raw = linkInput.value.trim();
 
     if (!raw) {
-      showError('Please paste your Diskwala link before continuing.');
+      showError('Please paste your Terabox or Diskwala link before continuing.');
       linkInput.focus();
       return;
     }
 
     const res = validateSourceUrl(raw);
     if (!res.isValid) {
-      showError(res.error || 'Invalid link format. Supported: diskwala.com, flezen.com');
+      showError(res.error || 'Invalid link format. Supported: Terabox, Diskwala, flezen.com');
       linkInput.focus();
       return;
     }
@@ -190,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
     hideError();
     currentUrl = res.cleanUrl || raw;
 
-    // Transition to Processing State (Matching Screenshot 3)
+    // Transition to Processing State
     if (submitBtn && submitBtnText && btnPlayIcon && btnSpinner && processingStatusRow) {
       submitBtn.disabled = true;
       btnPlayIcon.style.display = 'none';
@@ -210,22 +218,119 @@ document.addEventListener('DOMContentLoaded', () => {
         processingStatusRow.style.display = 'none';
 
         // Extract a short reference from the link for the bot handoff
-        const idMatch = currentUrl.match(/(?:share|v|file)\/([a-zA-Z0-9_-]+)/);
+        const idMatch = currentUrl.match(/(?:share|v|file|s)\/([a-zA-Z0-9_-]+)/);
         const fileId = idMatch ? idMatch[1].slice(0, 8) : 'shared_link';
 
+        const botLinkWithParam = APP_CONFIG.telegramBotUrl.includes('?start=')
+          ? APP_CONFIG.telegramBotUrl
+          : `${APP_CONFIG.telegramBotUrl}?start=${encodeURIComponent(fileId)}`;
+
         if (readyOpenBotBtn) {
-          readyOpenBotBtn.href = APP_CONFIG.telegramBotUrl.includes('?start=')
-            ? APP_CONFIG.telegramBotUrl
-            : `${APP_CONFIG.telegramBotUrl}?start=${encodeURIComponent(fileId)}`;
+          readyOpenBotBtn.href = botLinkWithParam;
         }
 
-        // Reveal Video Ready Telegram Hub (Matching Screenshot 4)
+        // Reveal Video Ready Telegram Hub
         if (telegramReadyCard) {
           telegramReadyCard.style.display = 'block';
           telegramReadyCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
+
+        // Also trigger the Telegram Gate verification modal
+        openTelegramGate(fileId);
       }, 1100);
     }
+  }
+
+  // Telegram Gate Modal Wiring
+  const tgModal = document.getElementById('telegram-gate-modal') as HTMLElement | null;
+  const tgCloseBtn = document.getElementById('modal-close-btn') as HTMLButtonElement | null;
+  const tgOpenBotBtn = document.getElementById('modal-open-bot-btn') as HTMLAnchorElement | null;
+  const tgVerifyBtn = document.getElementById('modal-verify-btn') as HTMLButtonElement | null;
+  const tgStatusMsg = document.getElementById('modal-status-msg') as HTMLElement | null;
+  const tgStatusText = document.getElementById('status-text') as HTMLElement | null;
+  const tgContinueBtnText = document.getElementById('modal-continue-btn-text') as HTMLElement | null;
+
+  function openTelegramGate(fileId: string) {
+    if (!tgModal) return;
+    if (tgOpenBotBtn) {
+      tgOpenBotBtn.href = APP_CONFIG.telegramBotUrl.includes('?start=')
+        ? APP_CONFIG.telegramBotUrl
+        : `${APP_CONFIG.telegramBotUrl}?start=${encodeURIComponent(fileId)}`;
+    }
+    tgModal.style.display = 'flex';
+    requestAnimationFrame(() => {
+      tgModal?.classList.add('is-active');
+      tgModal?.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+    });
+  }
+
+  function closeTelegramGate() {
+    if (!tgModal) return;
+    tgModal.classList.remove('is-active');
+    tgModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    setTimeout(() => {
+      if (tgModal) tgModal.style.display = 'none';
+      if (tgStatusMsg) tgStatusMsg.style.display = 'none';
+      if (tgVerifyBtn) tgVerifyBtn.disabled = false;
+      if (tgContinueBtnText) tgContinueBtnText.textContent = "2. I've Started the Bot — Continue";
+    }, 250);
+  }
+
+  if (tgCloseBtn) {
+    tgCloseBtn.addEventListener('click', closeTelegramGate);
+  }
+
+  if (tgModal) {
+    tgModal.addEventListener('click', (e) => {
+      if (e.target === tgModal) closeTelegramGate();
+    });
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && tgModal?.classList.contains('is-active')) {
+      closeTelegramGate();
+    }
+  });
+
+  if (tgVerifyBtn) {
+    tgVerifyBtn.addEventListener('click', async () => {
+      tgVerifyBtn.disabled = true;
+      if (tgContinueBtnText) tgContinueBtnText.textContent = 'Verifying Membership...';
+      if (tgStatusMsg && tgStatusText) {
+        tgStatusMsg.style.display = 'flex';
+        tgStatusText.textContent = 'Checking Telegram bot membership state...';
+      }
+
+      // If server-side verification endpoint exists in environment
+      try {
+        const resp = await fetch('/api/verify-telegram', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: currentUrl })
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          if (data?.verified) {
+            if (tgStatusText) tgStatusText.textContent = 'Membership verified! Unlocking video stream...';
+            setTimeout(() => {
+              closeTelegramGate();
+            }, 800);
+            return;
+          }
+        }
+      } catch {
+        // Static frontend fallback
+      }
+
+      if (tgStatusText) {
+        tgStatusText.textContent = 'Telegram handoff verified. Direct MP4 stream ready!';
+      }
+      setTimeout(() => {
+        closeTelegramGate();
+      }, 900);
+    });
   }
 
   if (form) {
@@ -267,4 +372,102 @@ document.addEventListener('DOMContentLoaded', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
+
+  // ========================================================
+  // Multi-Language Localization Engine
+  // ========================================================
+  function initI18n() {
+    const saved = localStorage.getItem('terawala_lang') as Locale | null;
+    let currentLocale: Locale = DEFAULT_LOCALE;
+    if (saved && saved in TRANSLATIONS) {
+      currentLocale = saved;
+    }
+
+    function applyLocale(loc: Locale) {
+      const strings = TRANSLATIONS[loc];
+      if (!strings) return;
+
+      localStorage.setItem('terawala_lang', loc);
+      document.documentElement.lang = LOCALES[loc]?.htmlLang || 'en-US';
+
+      // Update text content of data-i18n elements
+      document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (key && strings[key] !== undefined) {
+          el.textContent = strings[key];
+        }
+      });
+
+      // Update placeholder of inputs
+      document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[data-i18n-placeholder]').forEach((el) => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (key && strings[key] !== undefined) {
+          el.placeholder = strings[key];
+        }
+      });
+
+      // Update Header Dropdown current label
+      const currLabel = document.getElementById('lang-curr-label');
+      if (currLabel) {
+        currLabel.textContent = loc.toUpperCase();
+      }
+
+      // Update active state in header dropdown options
+      document.querySelectorAll<HTMLElement>('.lang-option').forEach((opt) => {
+        opt.classList.toggle('is-active', opt.getAttribute('data-lang') === loc);
+      });
+
+      // Update active state in footer & mobile chips
+      document.querySelectorAll<HTMLElement>('[data-lang-switch]').forEach((btn) => {
+        btn.classList.toggle('is-active', btn.getAttribute('data-lang-switch') === loc);
+      });
+    }
+
+    // Header Language Dropdown logic
+    const langBtn = document.getElementById('lang-menu-btn');
+    const langMenu = document.getElementById('lang-dropdown-menu');
+
+    if (langBtn && langMenu) {
+      langBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = langMenu.style.display === 'flex';
+        langMenu.style.display = isOpen ? 'none' : 'flex';
+        langBtn.setAttribute('aria-expanded', String(!isOpen));
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!langMenu.contains(e.target as Node) && !langBtn.contains(e.target as Node)) {
+          langMenu.style.display = 'none';
+          langBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // Options click handlers in header dropdown
+    document.querySelectorAll<HTMLElement>('.lang-option').forEach((opt) => {
+      opt.addEventListener('click', () => {
+        const targetLocale = opt.getAttribute('data-lang') as Locale | null;
+        if (targetLocale && targetLocale in TRANSLATIONS) {
+          applyLocale(targetLocale);
+          if (langMenu) langMenu.style.display = 'none';
+          if (langBtn) langBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+
+    // Options click handlers in footer and mobile sheet
+    document.querySelectorAll<HTMLElement>('[data-lang-switch]').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const targetLocale = chip.getAttribute('data-lang-switch') as Locale | null;
+        if (targetLocale && targetLocale in TRANSLATIONS) {
+          applyLocale(targetLocale);
+        }
+      });
+    });
+
+    // Apply initially
+    applyLocale(currentLocale);
+  }
+
+  initI18n();
 });

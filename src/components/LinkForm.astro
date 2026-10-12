@@ -1,33 +1,47 @@
 ---
 import { APP_CONFIG } from '../utils/config';
+
+interface Props {
+  showHeroHeader?: boolean;
+  placeholder?: string;
+}
+
+const {
+  showHeroHeader = true,
+  placeholder = "Paste your Terabox, Diskwala, or Flezen link here..."
+} = Astro.props;
 ---
 
-<section class="hero-section" id="tools">
-  <div class="container container-hero">
-    <!-- Top Pill Badge -->
-    <div class="hero-badge-wrap">
-      <div class="badge-pill">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="zap-icon">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-        </svg>
-        <span>Premium Speeds • Zero Ads • Instant Links</span>
+{showHeroHeader && (
+  <section class="hero-section" id="tools">
+    <div class="container container-hero">
+      <!-- Top Pill Badge -->
+      <div class="hero-badge-wrap">
+        <div class="badge-pill">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="zap-icon">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span data-i18n="hero.badge">Free · Simple · Online</span>
+        </div>
       </div>
+
+      <!-- Main Headline -->
+      <h1 class="hero-title">
+        <span class="hero-title-prefix" data-i18n="hero.prefix">Terawala — </span>
+        <span class="text-gradient-green hero-title-accent" data-i18n="hero.accent">Video Downloader & Player</span>
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="hero-subtitle" data-i18n="hero.desc">
+        The fast, free online video downloader and player supporting TeraBox, Diskwala, and Flezen. Paste any supported video link below for instant browser streaming or high-speed MP4 downloads with zero ads.
+      </p>
     </div>
+  </section>
+)}
 
-    <!-- Main Headline -->
-    <h1 class="hero-title">
-      <span class="hero-title-prefix">Diskwala Video</span>
-      <span class="text-gradient-green hero-title-accent">Downloader & Player</span>
-    </h1>
-
-    <!-- Subtitle -->
-    <p class="hero-subtitle">
-      The premier free Diskwala video downloader and Diskwala online video player. Paste any Diskwala or Flezen video link below for instant streaming or high-speed MP4 video downloads.
-    </p>
-
-    <!-- Main Interactive Form Section (Wrapped in Sleek Card Box matching Screenshot 2, 3, 4) -->
-    <div class="hero-card-box">
-      <form id="diskwala-form" class="diskwala-form" novalidate>
+<!-- Main Interactive Form Section (Wrapped in Sleek Card Box) -->
+<div class="hero-card-box">
+  <form id="terawala-form" class="diskwala-form" novalidate>
         <div class="form-input-row">
           <!-- Leading Left Input Box (Large & Spacious) -->
           <div class="input-outer-wrapper" id="input-outer-wrapper">
@@ -38,12 +52,13 @@ import { APP_CONFIG } from '../utils/config';
               </svg>
             </div>
 
-            <label for="link-input" class="visually-hidden">Paste your Diskwala link here</label>
+            <label for="link-input" class="visually-hidden">{placeholder}</label>
             <input 
               type="url" 
               id="link-input" 
               class="link-input" 
-              placeholder="Paste your link here..." 
+              placeholder={placeholder}
+              data-i18n-placeholder="form.placeholder"
               autocomplete="off" 
               spellcheck="false" 
               inputmode="url" 
@@ -64,7 +79,7 @@ import { APP_CONFIG } from '../utils/config';
                   <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
                   <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
                 </svg>
-                <span class="action-btn-text">Paste</span>
+                <span class="action-btn-text" data-i18n="form.paste">Paste</span>
               </button>
 
               <button 
@@ -84,19 +99,19 @@ import { APP_CONFIG } from '../utils/config';
           </div>
 
           <!-- Primary Submit Button on Right (Disabled until link is entered) -->
-          <button type="submit" class="submit-btn is-disabled" id="submit-btn" disabled>
+          <button type="submit" class="submit-btn is-disabled" id="submit-btn" disabled data-magnetic>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="play-arrow-icon" id="btn-play-icon">
               <polygon points="6 4 19 12 6 20 6 4"></polygon>
             </svg>
             <span class="spinner-ring" id="btn-spinner" style="display: none;"></span>
-            <span class="btn-text" id="submit-btn-text">Play & Download</span>
+            <span class="btn-text" id="submit-btn-text" data-i18n="form.submit">Play & Download</span>
           </button>
         </div>
 
         <!-- Processing status indicator (Matching Screenshot 3) -->
         <div class="processing-status-row" id="processing-status-row" style="display: none;">
           <span class="status-spinner"></span>
-          <span class="processing-text">Analyzing link & preparing video stream...</span>
+          <span class="processing-text" data-i18n="form.analyzing">Analyzing link & preparing video stream...</span>
         </div>
 
         <!-- Feedback & Detection Row -->
@@ -116,9 +131,9 @@ import { APP_CONFIG } from '../utils/config';
           </div>
 
           <div class="sample-link-hint">
-            <button type="button" class="sample-link-btn" id="try-sample-btn" title="Click to test sample link">
-              <span class="sample-badge">⚡ Try sample:</span>
-              <span class="sample-url">diskwala.com/share/v-8f92a10b4c7e</span>
+            <button type="button" class="sample-link-btn" id="try-sample-btn" title="Click to test sample link" data-magnetic>
+              <span class="sample-badge" data-i18n="form.trySample">⚡ Try sample:</span>
+              <span class="sample-url">terabox / diskwala link</span>
             </button>
           </div>
         </div>
@@ -136,7 +151,7 @@ import { APP_CONFIG } from '../utils/config';
         </div>
 
         <!-- Headline -->
-        <h2 class="ready-title">
+        <h2 class="ready-title" data-i18n="ready.title">
           Your video is ready! Open our official Telegram Bot to watch and download in HD.
         </h2>
 
@@ -148,70 +163,72 @@ import { APP_CONFIG } from '../utils/config';
             rel="noopener noreferrer" 
             class="ready-telegram-btn"
             id="ready-open-bot-btn"
+            data-magnetic
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
               <polygon points="6 4 19 12 6 20 6 4"></polygon>
             </svg>
-            <span>Open in Telegram Bot</span>
+            <span data-i18n="ready.btn">Open in Telegram Bot</span>
           </a>
         </div>
       </div>
     </div>
 
-    <!-- Free Action Cards Below Input -->
-    <div class="hero-feature-cards">
-      <!-- Card 1: Fast Telegram Bot -->
-      <div class="feature-card feature-card-blue">
-        <div class="feature-card-header">
-          <div class="feature-icon-badge icon-blue">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="10" rx="2"></rect>
-              <circle cx="12" cy="5" r="2"></circle>
-              <path d="M12 7v4"></path>
-              <line x1="8" y1="16" x2="8" y2="16"></line>
-              <line x1="16" y1="16" x2="16" y2="16"></line>
-            </svg>
+    {showHeroHeader && (
+      <!-- Free Action Cards Below Input -->
+      <div class="hero-feature-cards">
+        <!-- Card 1: Fast Telegram Bot -->
+        <div class="feature-card feature-card-blue">
+          <div class="feature-card-header">
+            <div class="feature-icon-badge icon-blue">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+                <circle cx="12" cy="5" r="2"></circle>
+                <path d="M12 7v4"></path>
+                <line x1="8" y1="16" x2="8" y2="16"></line>
+                <line x1="16" y1="16" x2="16" y2="16"></line>
+              </svg>
+            </div>
+            <span class="feature-tag tag-blue">FAST TELEGRAM BOT</span>
           </div>
-          <span class="feature-tag tag-blue">FAST TELEGRAM BOT</span>
+          <h2 class="feature-title" data-i18n="card.botTitle">Instant Telegram Downloader</h2>
+          <p class="feature-desc" data-i18n="card.botDesc">
+            Process files instantly inside Telegram. Bypass browser advertisements, download in bulk, and watch on any network.
+          </p>
+          <a href={APP_CONFIG.telegramBotUrl} target="_blank" rel="noopener noreferrer" class="btn-solid-blue card-cta">
+            <span>Launch Telegram Bot</span>
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </a>
         </div>
-        <h2 class="feature-title">Instant Telegram Downloader</h2>
-        <p class="feature-desc">
-          Process files instantly inside Telegram. Bypass browser advertisements, download in bulk, and watch on any network.
-        </p>
-        <a href={APP_CONFIG.telegramBotUrl} target="_blank" rel="noopener noreferrer" class="btn-solid-blue card-cta">
-          <span>Launch Telegram Bot</span>
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="7" y1="17" x2="17" y2="7"></line>
-            <polyline points="7 7 17 7 17 17"></polyline>
-          </svg>
-        </a>
-      </div>
 
-      <!-- Card 2: Priority & Speed Web Player -->
-      <div class="feature-card feature-card-amber">
-        <div class="feature-card-header">
-          <div class="feature-icon-badge icon-amber">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"></path>
-            </svg>
+        <!-- Card 2: Priority & Speed Web Player -->
+        <div class="feature-card feature-card-amber">
+          <div class="feature-card-header">
+            <div class="feature-icon-badge icon-amber">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"></path>
+              </svg>
+            </div>
+            <span class="feature-tag tag-amber">PRIORITY & SPEED</span>
           </div>
-          <span class="feature-tag tag-amber">PRIORITY & SPEED</span>
+          <h2 class="feature-title" data-i18n="card.playerTitle">High-Speed Web Player</h2>
+          <p class="feature-desc" data-i18n="card.playerDesc">
+            Enjoy lightning-fast video previewing, priority buffering speeds, ad-free player experience, and zero registration required.
+          </p>
+          <button type="button" class="btn-solid-amber card-cta" id="hero-sample-trigger">
+            <span>Try Sample Stream</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
         </div>
-        <h2 class="feature-title">High-Speed Web Player</h2>
-        <p class="feature-desc">
-          Enjoy lightning-fast video previewing, priority buffering speeds, ad-free player experience, and zero registration required.
-        </p>
-        <button type="button" class="btn-solid-amber card-cta" id="hero-sample-trigger">
-          <span>Try Sample Stream</span>
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        </button>
       </div>
     </div>
-  </div>
-</section>
+  )}
 
 <style>
   .hero-section {
@@ -273,6 +290,14 @@ import { APP_CONFIG } from '../utils/config';
     margin: 0 auto;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.06);
     text-align: left;
+  }
+
+  :global(.bezel-inner) .hero-card-box {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    max-width: 100%;
   }
 
   .diskwala-form {
@@ -837,6 +862,13 @@ import { APP_CONFIG } from '../utils/config';
       border-radius: 18px;
       background: rgba(8, 13, 15, 0.96);
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(16, 185, 129, 0.05);
+    }
+
+    :global(.bezel-inner) .hero-card-box {
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+      border: none;
     }
 
     .form-input-row {

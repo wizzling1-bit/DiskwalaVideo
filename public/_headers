@@ -11,8 +11,17 @@
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Cache Favicons & Static Assets
+# Cache Favicons, Social Previews & Static Assets
 /favicon.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/favicon.ico
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/*.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/og-image.png
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
 /site.webmanifest
@@ -22,4 +31,13 @@
   Cache-Control: public, max-age=86400
 
 /sitemap.xml
+  Cache-Control: public, max-age=86400
+
+/llms.txt
+  Cache-Control: public, max-age=86400
+
+/llms-full.txt
+  Cache-Control: public, max-age=86400
+
+/pricing.md
   Cache-Control: public, max-age=86400

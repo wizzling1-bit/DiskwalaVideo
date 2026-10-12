@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "diskwala-downloader",
+  "name": "terawala",
   "compatibility_date": "2026-10-09",
   "assets": {
     "directory": "./dist"

@@ -1,6 +1,6 @@
 import { APP_CONFIG } from './config';
 
-export type SupportedProvider = 'diskwala' | 'flezen';
+export type SupportedProvider = 'terabox' | 'diskwala' | 'flezen';
 
 export interface ValidationResult {
   isValid: boolean;
@@ -11,6 +11,7 @@ export interface ValidationResult {
 
 /**
  * Validates a user-submitted URL against the approved host allowlist.
+ * Supports TeraBox domains, Diskwala, and Flezen.
  * Ensures strict security against lookalike domains, non-HTTP(S) schemes, and SSRF attacks.
  */
 export function validateSourceUrl(inputUrl: string): ValidationResult {
@@ -46,21 +47,46 @@ export function validateSourceUrl(inputUrl: string): ValidationResult {
 
   const hostname = parsed.hostname.toLowerCase();
 
-  // Exact allowlist match check
+  // Terabox family host check
+  const isTerabox = [
+    'terabox.com',
+    'www.terabox.com',
+    'teraboxapp.com',
+    'www.teraboxapp.com',
+    'terabox.app',
+    '1024tera.com',
+    'www.1024tera.com',
+    'terasharelink.com',
+    'www.terasharelink.com',
+    'freeterabox.com',
+    'www.freeterabox.com',
+    'mirrobox.com',
+    'www.mirrobox.com',
+    'nephobox.com',
+    'www.nephobox.com',
+    '4funbox.com',
+    'www.4funbox.com'
+  ].includes(hostname);
+
+  // Diskwala & Flezen host checks
   const isDiskwala = hostname === 'diskwala.com' || hostname === 'www.diskwala.com';
   const isFlezen = hostname === 'flezen.com' || hostname === 'www.flezen.com';
 
-  if (!isDiskwala && !isFlezen) {
+  if (!isTerabox && !isDiskwala && !isFlezen) {
     return {
       isValid: false,
       provider: null,
-      error: 'Unsupported host. Supported links are diskwala.com and flezen.com only.'
+      error: 'Unsupported host. Supported links: Terabox, Diskwala, or Flezen.'
     };
   }
 
+  let provider: SupportedProvider = 'terabox';
+  if (isDiskwala) provider = 'diskwala';
+  else if (isFlezen) provider = 'flezen';
+
   return {
     isValid: true,
-    provider: isDiskwala ? 'diskwala' : 'flezen',
+    provider,
     cleanUrl: parsed.toString()
   };
 }

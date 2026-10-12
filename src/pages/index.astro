@@ -2,52 +2,431 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LinkForm from '../components/LinkForm.astro';
 import MediaResult from '../components/MediaResult.astro';
-import GuideSection from '../components/GuideSection.astro';
-import SeoPillarGuide from '../components/SeoPillarGuide.astro';
-import OnlinePlayerSection from '../components/OnlinePlayerSection.astro';
 import StepList from '../components/StepList.astro';
-import TelegramBotGuide from '../components/TelegramBotGuide.astro';
-import LinkOpenerSection from '../components/LinkOpenerSection.astro';
-import MobileDesktopTips from '../components/MobileDesktopTips.astro';
-import TypoVariations from '../components/TypoVariations.astro';
-import PrivacySecurityCard from '../components/PrivacySecurityCard.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
+import { APP_CONFIG } from '../utils/config';
 ---
 
 <BaseLayout>
-  <!-- Hero Section with Form and Action Cards -->
+  <!-- Hero Section with Form -->
   <LinkForm />
 
   <!-- Unlocked Media Player & Download Result -->
   <MediaResult />
 
-  <!-- Content & SEO Guide: The Ultimate Diskwala Guide & Bento Cards -->
-  <GuideSection />
+  <!-- Provider Cards Hub -->
+  <section class="providers-section section" id="tools-hub">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow eyebrow-green">SUPPORTED PLATFORMS</span>
+        <h2 class="section-title" data-i18n="platforms.title">Download Videos From <span class="text-gradient-green">Any Platform</span></h2>
+        <p class="section-desc" data-i18n="platforms.desc">TeraWala supports all major cloud video platforms. Choose your provider below for dedicated guides, tools, and FAQs.</p>
+      </div>
 
-  <!-- Complete 800 - 1200 Words SEO Pillar Article & Technical Guide -->
-  <SeoPillarGuide />
+      <div class="provider-cards-grid">
+        <!-- TeraBox Card -->
+        <a href="/terabox-downloader/" class="provider-card provider-card-green">
+          <div class="provider-icon-badge provider-icon-green">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </div>
+          <h3 class="provider-card-title">TeraBox Downloader</h3>
+          <p class="provider-card-desc">Download & stream TeraBox videos online. Supports terabox.com, teraboxapp.com, 1024tera and 6+ more domains.</p>
+          <span class="provider-card-cta">
+            <span>Open TeraBox Tool</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </a>
 
-  <!-- Online Video Player Features Grid -->
-  <OnlinePlayerSection />
+        <!-- Diskwala Card -->
+        <a href="/diskwala-video-downloader/" class="provider-card provider-card-cyan">
+          <div class="provider-icon-badge provider-icon-cyan">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+          <h3 class="provider-card-title">Diskwala Downloader</h3>
+          <p class="provider-card-desc">Stream & download Diskwala videos ad-free. Convert Diskwala links, bypass popups, play in browser.</p>
+          <span class="provider-card-cta provider-cta-cyan">
+            <span>Open Diskwala Tool</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </a>
 
-  <!-- Step by Step Download Guide -->
+        <!-- Flezen Card -->
+        <a href="/flezen-video-downloader/" class="provider-card provider-card-purple">
+          <div class="provider-icon-badge provider-icon-purple">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="10 8 16 12 10 16 10 8"/>
+            </svg>
+          </div>
+          <h3 class="provider-card-title">Flezen Downloader</h3>
+          <p class="provider-card-desc">Download Flezen videos without the app. Fast, private, browser-based streaming and downloads.</p>
+          <span class="provider-card-cta provider-cta-purple">
+            <span>Open Flezen Tool</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
   <StepList />
 
-  <!-- Telegram Bot Integration Guide -->
-  <TelegramBotGuide />
+  <!-- Benefits Section -->
+  <section class="benefits-section section section-emerald" id="why-terawala">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow eyebrow-green">WHY TERAWALA</span>
+        <h2 class="section-title">The Smarter Way to <span class="text-gradient-green">Access Videos</span></h2>
+      </div>
 
-  <!-- Link Opener Engine Overview -->
-  <LinkOpenerSection />
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3 class="benefit-title">Instant Streaming</h3>
+          <p class="benefit-desc">Videos start playing in under 2 seconds. No buffering delays, no waiting screens.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon benefit-icon-cyan">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3 class="benefit-title">Zero-Log Privacy</h3>
+          <p class="benefit-desc">No accounts, no tracking, no cookies. Your browsing stays completely private.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon benefit-icon-amber">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3 class="benefit-title">Works Everywhere</h3>
+          <p class="benefit-desc">Chrome, Safari, Firefox, Edge — Android, iOS, Windows, Mac. One tool, every device.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon benefit-icon-purple">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="benefit-title">Ad-Free & Safe</h3>
+          <p class="benefit-desc">No popups, no redirects, no malware. HTTPS encrypted with SSRF protection.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <!-- Mobile vs Desktop Platform Usage -->
-  <MobileDesktopTips />
+  <!-- Comprehensive Multi-Cloud SEO Guide -->
+  <section class="editorial-section section" id="about-service">
+    <div class="container container-narrow">
+      <article class="editorial-card card-obsidian">
+        <span class="eyebrow eyebrow-green">ALL-IN-ONE VIDEO SUITE</span>
+        <h2 class="editorial-title">Stream & Download Cloud Videos <span class="text-gradient-green">Without Boundaries</span></h2>
+        
+        <p class="editorial-lead">
+          <strong>TeraWala</strong> is the all-in-one web-based video downloader and online video player designed specifically for links hosted on <strong>TeraBox</strong>, <strong>Diskwala</strong>, and <strong>Flezen</strong>. We remove the clutter, bypass intrusive interstitial ads, eliminate mandatory app installations, and deliver instant media streaming directly in your web browser.
+        </p>
 
-  <!-- Common Search Typo Variations Tag Cloud -->
-  <TypoVariations />
+        <div class="editorial-subsections">
+          <div class="editorial-subcard">
+            <h3 class="editorial-subheading">TeraBox Downloader & Online Player</h3>
+            <p>
+              Looking to watch or download a TeraBox link without downloading an APK? TeraWala automatically resolves links from <code>terabox.com</code>, <code>teraboxapp.com</code>, <code>1024tera.com</code>, and mirror domains. Enjoy full HD browser streaming or one-tap Telegram bot high-speed MP4 downloads. Visit our dedicated <a href="/terabox-downloader/" class="editorial-link">TeraBox Downloader page</a> for complete features and domain guides.
+            </p>
+          </div>
 
-  <!-- Privacy, Zero-Log and Security Commitment -->
-  <PrivacySecurityCard />
+          <div class="editorial-subcard">
+            <h3 class="editorial-subheading">Diskwala Video Downloader & Ad-Free Player</h3>
+            <p>
+              Diskwala links frequently circulate in Telegram and WhatsApp channels but are plagued by aggressive popups and redirect chains. TeraWala strips tracking scripts and isolates the direct media stream, giving you clean HTML5 streaming and instant file downloads. Learn more on our <a href="/diskwala-video-downloader/" class="editorial-link">Diskwala Video Downloader page</a>.
+            </p>
+          </div>
 
-  <!-- Frequently Asked Questions Accordion -->
+          <div class="editorial-subcard">
+            <h3 class="editorial-subheading">Flezen Video Player & Link Converter</h3>
+            <p>
+              Bypass download caps and interstitial ads on <code>flezen.com</code>. TeraWala parses your Flezen video link into an immediate stream with responsive playback controls, speed switching, and picture-in-picture mode. Explore our <a href="/flezen-video-downloader/" class="editorial-link">Flezen Video Downloader page</a> for full details.
+            </p>
+          </div>
+        </div>
+
+        <div class="editorial-callout">
+          <h3 class="callout-title">Converting Diskwala Links to TeraBox Links?</h3>
+          <p class="callout-text">
+            Many users ask how to convert Diskwala links to TeraBox links online. Because Diskwala and TeraBox use distinct server architectures and cryptographic hashes, direct link-to-link conversion without transferring files is not possible. However, <strong>TeraWala eliminates the need for any conversion</strong>: our platform natively supports both services side by side. Simply paste either link into the search box above to play or download instantly!
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Compact FAQ -->
   <FaqAccordion />
 </BaseLayout>
+
+<style>
+  /* Provider Cards Grid */
+  .provider-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .provider-card {
+    background: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 32px 26px;
+    text-decoration: none;
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s, box-shadow 0.25s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .provider-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .provider-card-green:hover { border-color: var(--color-primary-border); }
+  .provider-card-cyan:hover { border-color: var(--color-cyan-border); }
+  .provider-card-purple:hover { border-color: var(--color-purple-border); }
+
+  .provider-icon-badge {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .provider-icon-green {
+    background: var(--color-primary-soft);
+    border: 1px solid var(--color-primary-border);
+    color: var(--color-primary);
+  }
+
+  .provider-icon-cyan {
+    background: var(--color-cyan-soft);
+    border: 1px solid var(--color-cyan-border);
+    color: var(--color-cyan);
+  }
+
+  .provider-icon-purple {
+    background: var(--color-purple-soft);
+    border: 1px solid var(--color-purple-border);
+    color: var(--color-purple);
+  }
+
+  .provider-card-title {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+
+  .provider-card-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: 1.65;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+
+  .provider-card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--color-primary);
+    transition: gap 0.2s;
+  }
+
+  .provider-cta-cyan { color: var(--color-cyan); }
+  .provider-cta-purple { color: var(--color-purple); }
+
+  .provider-card:hover .provider-card-cta { gap: 12px; }
+
+  /* Benefits Grid */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  .benefit-card {
+    background: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 28px 22px;
+    transition: border-color 0.2s;
+  }
+
+  .benefit-card:hover { border-color: var(--color-border-strong); }
+
+  .benefit-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary-soft);
+    border: 1px solid var(--color-primary-border);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .benefit-icon-cyan {
+    background: var(--color-cyan-soft);
+    border-color: var(--color-cyan-border);
+    color: var(--color-cyan);
+  }
+
+  .benefit-icon-amber {
+    background: var(--color-amber-soft);
+    border-color: var(--color-amber-border);
+    color: var(--color-amber);
+  }
+
+  .benefit-icon-purple {
+    background: var(--color-purple-soft);
+    border-color: var(--color-purple-border);
+    color: var(--color-purple);
+  }
+
+  .benefit-title {
+    font-size: var(--text-sm);
+    font-weight: 750;
+    color: var(--color-text);
+    margin-bottom: 8px;
+  }
+
+  .benefit-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .provider-cards-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .benefits-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Editorial Guide */
+  .editorial-card {
+    background: linear-gradient(180deg, rgba(14, 20, 22, 0.9) 0%, rgba(8, 12, 13, 0.96) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 44px 40px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  }
+
+  .editorial-title {
+    font-size: var(--text-2xl);
+    font-weight: 850;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+  }
+
+  .editorial-lead {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+    margin-bottom: 32px;
+  }
+
+  .editorial-subsections {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .editorial-subcard {
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.68;
+  }
+
+  .editorial-subcard code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    color: var(--color-primary);
+  }
+
+  .editorial-subheading {
+    font-size: var(--text-base);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: 10px;
+  }
+
+  .editorial-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 600;
+  }
+
+  .editorial-link:hover {
+    color: var(--color-primary-hover);
+  }
+
+  .editorial-callout {
+    background: rgba(16, 214, 160, 0.06);
+    border: 1px solid rgba(16, 214, 160, 0.22);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+
+  .callout-title {
+    font-size: var(--text-base);
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-bottom: 8px;
+  }
+
+  .callout-text {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.68;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .editorial-card {
+      padding: 28px 18px;
+    }
+
+    .editorial-subcard {
+      padding: 18px 16px;
+    }
+  }
+</style>

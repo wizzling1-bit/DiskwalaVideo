@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Terms & Conditions", href: "/terms-and-conditions/" }
+];
+---
+
+<BaseLayout
+  title="Terms & Conditions — TeraWala | Usage Agreement"
+  description="Terms and conditions for using TeraWala video downloader and online player. Read our usage policy, liability disclaimers, and intellectual property guidelines."
+  canonicalUrl="https://terawala.com/terms-and-conditions/"
+>
+  <section class="legal-page section">
+    <div class="container container-narrow">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="legal-header">
+        <span class="eyebrow eyebrow-green">LEGAL</span>
+        <h1 class="section-title-left">Terms & <span class="text-gradient-green">Conditions</span></h1>
+        <p class="legal-updated">Last Updated: October 2026</p>
+      </div>
+
+      <article class="legal-content">
+        <p>
+          By accessing and using TeraWala (terawala.com), you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please discontinue use of our service immediately.
+        </p>
+
+        <h2>1. Service Description</h2>
+        <p>
+          TeraWala is a free, browser-based utility that processes cloud video share links from supported platforms (TeraBox, Diskwala, Flezen) to provide direct media stream access and Telegram bot download handoffs. We do not host, store, or distribute any media files on our own servers.
+        </p>
+
+        <h2>2. Permitted Use</h2>
+        <p>
+          TeraWala is provided for personal media playback and file backup purposes. Users agree to access and download only materials they own or have explicit legal authorization to use. You may not use TeraWala to:
+        </p>
+        <ul>
+          <li>Download or distribute copyrighted content without authorization</li>
+          <li>Circumvent any digital rights management (DRM) protections</li>
+          <li>Use our service for any illegal purpose under applicable law</li>
+          <li>Attempt to exploit, reverse-engineer, or interfere with our systems</li>
+          <li>Use automated scripts or bots to abuse our service</li>
+        </ul>
+
+        <h2>3. Third-Party Platforms</h2>
+        <p>
+          Our service provides compatibility resolution for links hosted on independent third-party platforms. We do not host, store, or manage any videos on our own servers. Media files originate directly from the third-party cloud providers. We are not responsible for the content, availability, or terms of service of these third-party platforms.
+        </p>
+
+        <h2>4. Intellectual Property</h2>
+        <p>
+          The TeraWala brand name, logo, website design, and original content are the intellectual property of TeraWala. All third-party trademarks (including TeraBox, Diskwala, and Flezen) belong to their respective owners. TeraWala claims no ownership or affiliation with these platforms.
+        </p>
+
+        <h2>5. Disclaimer of Warranty</h2>
+        <p>
+          The platform is provided "as is" and "as available" without warranty of any kind, express or implied. We do not guarantee continuous uptime, download speeds, file availability, or uninterrupted service. We reserve the right to update, modify, or restrict compatibility without prior notice.
+        </p>
+
+        <h2>6. Limitation of Liability</h2>
+        <p>
+          To the maximum extent permitted by law, TeraWala shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of our service, including but not limited to loss of data, loss of profits, or damages resulting from unauthorized access to your devices.
+        </p>
+
+        <h2>7. Indemnification</h2>
+        <p>
+          You agree to indemnify and hold harmless TeraWala and its operators from any claims, damages, losses, or expenses (including legal fees) arising from your use of the service or violation of these Terms.
+        </p>
+
+        <h2>8. Modifications</h2>
+        <p>
+          We reserve the right to modify these Terms and Conditions at any time. Updated terms will be posted on this page with a new revision date. Continued use of TeraWala after modifications constitutes acceptance of the updated terms.
+        </p>
+
+        <h2>9. Governing Law</h2>
+        <p>
+          These Terms shall be governed by and construed in accordance with applicable international laws. Any disputes shall be resolved through negotiation, and if necessary, binding arbitration.
+        </p>
+
+        <h2>10. Contact</h2>
+        <p>
+          For questions about these Terms, contact us at <a href="mailto:support@terawala.com" class="inline-link">support@terawala.com</a>.
+        </p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-page { padding-top: 40px; padding-bottom: 60px; }
+  .legal-header { margin-bottom: 36px; }
+  .legal-updated { font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 8px; }
+
+  .legal-content {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.78;
+  }
+
+  .legal-content h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: 36px;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .legal-content p { margin-bottom: 18px; }
+
+  .legal-content ul {
+    margin: 14px 0 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .legal-content li { line-height: 1.7; }
+
+  .inline-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .inline-link:hover { color: var(--color-primary-hover); }
+</style>

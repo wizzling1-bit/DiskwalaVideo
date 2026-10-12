@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Privacy Policy", href: "/privacy-policy/" }
+];
+---
+
+<BaseLayout
+  title="Privacy Policy — TeraWala | Zero-Log Video Downloader"
+  description="TeraWala privacy policy. We do not collect personal data, store links, or track browsing activity. Learn about our zero-log commitment and data handling practices."
+  canonicalUrl="https://terawala.com/privacy-policy/"
+>
+  <section class="legal-page section">
+    <div class="container container-narrow">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="legal-header">
+        <span class="eyebrow eyebrow-green">PRIVACY & DATA</span>
+        <h1 class="section-title-left">Privacy <span class="text-gradient-green">Policy</span></h1>
+        <p class="legal-updated">Last Updated: October 2026</p>
+      </div>
+
+      <article class="legal-content">
+        <h2>1. Information We Do Not Collect</h2>
+        <p>
+          TeraWala does not require user accounts, passwords, or personal registrations. We do not store your name, email address, IP address, browser fingerprint, or browsing history. Our service is designed to be fully anonymous.
+        </p>
+
+        <h2>2. Link Processing</h2>
+        <p>
+          URLs submitted through our input field are processed strictly in temporary serverless execution memory to resolve direct video addresses. Once the session terminates, the URL is cleared from RAM and is never stored in persistent databases, log files, or backup systems.
+        </p>
+
+        <h2>3. Cookies and Tracking</h2>
+        <p>
+          TeraWala does not use invasive tracking cookies, third-party advertising cookies, browser fingerprinting technologies, or any form of cross-site tracking. We do not participate in ad networks or data broker ecosystems.
+        </p>
+
+        <h2>4. Third-Party Services</h2>
+        <p>
+          When you use our Telegram bot integration, your interaction is governed by Telegram's own privacy policy. TeraWala does not receive, store, or process your Telegram user data. The bot handoff is a direct link to Telegram's platform.
+        </p>
+
+        <h2>5. Analytics</h2>
+        <p>
+          We may use privacy-respecting, cookie-free analytics (such as Cloudflare Web Analytics) to understand aggregate traffic patterns. These tools do not collect personal data, do not use cookies, and do not track individual users across sessions.
+        </p>
+
+        <h2>6. Data Security</h2>
+        <p>
+          All connections to TeraWala are encrypted using HTTPS/TLS. Our domain validation system prevents phishing URLs and SSRF attacks from being processed through our tool. We implement Content Security Policy (CSP) headers and other security measures to protect against XSS and injection attacks.
+        </p>
+
+        <h2>7. Children's Privacy</h2>
+        <p>
+          TeraWala does not knowingly collect information from children under the age of 13. Our service does not require age verification because we do not collect any personal information from any users.
+        </p>
+
+        <h2>8. Changes to This Policy</h2>
+        <p>
+          We may update this Privacy Policy periodically. Changes will be posted on this page with an updated revision date. Continued use of TeraWala after changes are posted constitutes acceptance of the updated policy.
+        </p>
+
+        <h2>9. Contact</h2>
+        <p>
+          If you have questions about this Privacy Policy, please contact us at <a href="mailto:support@terawala.com" class="inline-link">support@terawala.com</a>.
+        </p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-page { padding-top: 40px; padding-bottom: 60px; }
+  .legal-header { margin-bottom: 36px; }
+  .legal-updated { font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 8px; }
+
+  .legal-content {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.78;
+  }
+
+  .legal-content h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: 36px;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .legal-content p { margin-bottom: 18px; }
+
+  .inline-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .inline-link:hover { color: var(--color-primary-hover); }
+</style>

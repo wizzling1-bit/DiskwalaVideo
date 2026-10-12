@@ -1,0 +1,923 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LinkForm from '../components/LinkForm.astro';
+import MediaResult from '../components/MediaResult.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { APP_CONFIG } from '../utils/config';
+
+const pageTitle = "TeraBox Downloader — Play & Download TeraBox Video Online | TeraWala";
+const pageDescription = "Free TeraBox downloader & online video player. Download TeraBox link videos without app, stream TeraBox video online in HD, bypass ads. 100% free for mobile & PC.";
+const canonicalUrl = "https://terawala.com/terabox-downloader/";
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "TeraBox Downloader", href: "/terabox-downloader/" }
+];
+
+// Target Keyword Variations Pill Matrix
+const keywordPills = [
+  "terabox downloader",
+  "terabox player",
+  "terabox online player",
+  "terabox link downloader",
+  "terabox video player",
+  "terabox online",
+  "terabox download",
+  "terabox link download",
+  "terabox video download",
+  "terabox online video player",
+  "terabox link player",
+  "terabox videos"
+];
+
+// Complete 13 User-Requested TeraBox FAQs with exact search queries
+const faqs = [
+  {
+    q: "What is TeraBox?",
+    a: "TeraBox is a cloud storage service operated by Flextech Inc. (formerly known as Dubox) that provides up to 1024 GB (1 TB) of free cloud backup space for users to store, manage, and share videos, photos, and files across the web."
+  },
+  {
+    q: "What is the TeraBox app? (what is terabox app / terabox app kya hai)",
+    a: "The TeraBox app (in Hindi queries: 'terabox app kya hai') is the official mobile application available for Android and iOS devices. It allows users to upload mobile media, view cloud storage files, and share download links. However, installing the mobile app is not required when you use TeraWala to stream or download videos."
+  },
+  {
+    q: "Is TeraBox safe to use? (is terabox safe / terabox is safe or not)",
+    a: "TeraBox employs standard industry SSL/TLS encryption for data transmission and server-side encryption for stored media. For public link sharing, it is safe to stream or download shared files. When using TeraWala, safety is maximized because our tool strips unwanted tracking tokens, popup ads, and third-party redirect scripts."
+  },
+  {
+    q: "Is TeraBox app safe? (terabox app is safe)",
+    a: "The official TeraBox app from Google Play and Apple App Store complies with respective app security baselines. However, like many free storage utilities, the mobile app requests device permissions (photos, storage, network telemetry) and serves heavy in-app advertisements. If you want to view or download a video without granting phone permissions, TeraWala's browser tool is the safer, lighter alternative."
+  },
+  {
+    q: "How to watch TeraBox without app? (how to watch terabox without app)",
+    a: "To watch TeraBox videos without installing the app, simply copy the shared TeraBox URL and paste it into the search box on TeraWala. Click 'Play & Download' to launch our embedded HTML5 TeraBox video player online. You can stream in full HD with speed controls, scrubbing, and picture-in-picture mode directly in Chrome, Safari, Edge, or Firefox."
+  },
+  {
+    q: "How to download TeraBox link video without app?",
+    a: "To download a TeraBox video without installing any mobile application or APK: (1) Copy your TeraBox video link, (2) Paste it into TeraWala's input field above, (3) Click 'Play & Download', and (4) Tap 'Open in Telegram Bot'. Our official bot delivers the uncapped, original MP4 file directly to your Telegram chat for high-speed offline saving."
+  },
+  {
+    q: "How to download TeraBox link video?",
+    a: "You can download any valid TeraBox link video by copying the link (from Telegram, WhatsApp, Discord, or the web), entering it into TeraWala, and selecting your preferred download path. TeraWala resolves the direct CDN media stream so you can save the original file to your device."
+  },
+  {
+    q: "How to convert Diskwala link to TeraBox link? (how to convert diskwala link to terabox link)",
+    a: "Diskwala and TeraBox operate on separate cloud infrastructures with different file servers, so direct URL-to-URL conversion does not technically exist. However, you do not need to convert anything: TeraWala natively supports both Diskwala and TeraBox links on this same platform. Simply paste either link to stream or download immediately."
+  },
+  {
+    q: "How to delete TeraBox account? (how to delete terabox account)",
+    a: "To delete your official TeraBox account: Open the official TeraBox mobile app or web portal, log into your profile, navigate to 'Settings' → 'Account and Security' (or 'Security Center') → select 'Delete Account', and follow the identity verification prompts. Note that TeraWala is an independent tool and does not manage or store your third-party credentials."
+  },
+  {
+    q: "What is the difference between TeraBox player and TeraBox downloader?",
+    a: "A TeraBox player lets you preview and stream the video in real-time inside your web browser without downloading the full file to your local disk. A TeraBox downloader saves the complete MP4 video file to your phone or computer storage so you can watch it offline anytime. TeraWala provides both capabilities in one seamless interface."
+  },
+  {
+    q: "What domains work with TeraBox link download?",
+    a: "TeraWala supports all domains across the TeraBox ecosystem, including terabox.com, teraboxapp.com, terabox.app, 1024tera.com, terasharelink.com, freeterabox.com, mirrobox.com, nephobox.com, and 4funbox.com."
+  },
+  {
+    q: "Can I play and download TeraBox videos on mobile and desktop?",
+    a: "Yes. TeraWala is 100% mobile-responsive and works seamlessly on Android, iOS (iPhone/iPad), Windows, macOS, Linux, and Chromebook. You only need a modern web browser."
+  },
+  {
+    q: "Is TeraWala TeraBox online player 100% free with zero ads?",
+    a: "Yes. TeraWala is completely free with no registration, no subscription fees, no credit card requirements, and zero intrusive popup advertisements."
+  }
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://terawala.com/terabox-downloader/#faq",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.q,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.a
+    }
+  }))
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalUrl={canonicalUrl}
+>
+  <!-- Hero Section with Double-Bezel Design Architecture -->
+  <section class="provider-hero section section-emerald" id="tools">
+    <div class="container container-hero">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="hero-badge-wrap">
+        <div class="badge-pill">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" class="zap-icon"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <span>Free · No App Required · Instant HD Stream</span>
+        </div>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="hero-title-prefix">TeraBox Downloader &</span>
+        <span class="text-gradient-green hero-title-accent">Online Video Player</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Stream, preview, and download <strong>TeraBox videos online</strong> without installing the TeraBox app or APK. Paste any <strong>terabox.com</strong>, <strong>teraboxapp.com</strong>, or <strong>1024tera.com</strong> link below for instant playback and high-speed MP4 downloads.
+      </p>
+
+      <!-- Interactive Input Form (Double-Bezel Container) -->
+      <div class="bezel-outer">
+        <div class="bezel-inner">
+          <LinkForm showHeroHeader={false} placeholder="Paste your TeraBox, TeraBoxApp, or 1024tera video link here..." />
+          <MediaResult />
+        </div>
+      </div>
+
+      <!-- Keyword Matrix Pill Cloud -->
+      <div class="keyword-pills-row" aria-label="Supported TeraBox capabilities">
+        <span class="pills-label">Quick Tools:</span>
+        {keywordPills.map((pill) => (
+          <span class="keyword-pill">
+            <span class="pill-dot"></span>
+            {pill}
+          </span>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-Feature Bento Grid -->
+  <section class="bento-section section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow eyebrow-green">NEXT-GEN PERFORMANCE</span>
+        <h2 class="section-title">Built for Faster, Safer <span class="text-gradient-green">TeraBox Playback</span></h2>
+        <p class="section-desc">Experience lightning-fast video previews and uncapped downloads without intrusive popups or bloatware.</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="bento-card bento-card-green">
+          <div class="bento-icon-wrapper">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </div>
+          <h3 class="bento-title">In-Browser TeraBox Video Player</h3>
+          <p class="bento-desc">Watch videos directly inside Chrome, Safari, or Firefox. Fullscreen playback, responsive scrubbing, adjustable speed, and picture-in-picture with zero buffer lag.</p>
+        </div>
+
+        <div class="bento-card bento-card-emerald">
+          <div class="bento-icon-wrapper">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <h3 class="bento-title">High-Speed TeraBox Link Downloader</h3>
+          <p class="bento-desc">Save the original MP4 video in full upload quality (720p, 1080p, or 4K). Leverage our high-throughput Telegram bot CDN pipeline for unthrottled file delivery.</p>
+        </div>
+
+        <div class="bento-card bento-card-cyan">
+          <div class="bento-icon-wrapper">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h3 class="bento-title">Zero App & Zero Permission Model</h3>
+          <p class="bento-desc">No APK downloads, no app installations, and no intrusive device access. TeraWala processes links in ephemeral memory with complete zero-log privacy protection.</p>
+        </div>
+
+        <div class="bento-card bento-card-dark">
+          <div class="bento-icon-wrapper">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </div>
+          <h3 class="bento-title">Universal Multi-Domain Ecosystem</h3>
+          <p class="bento-desc">Automatic resolution for terabox.com, teraboxapp.com, 1024tera.com, freeterabox, mirrobox, and nephobox. One master tool handles all aliases seamlessly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3-Step Interactive Walkthrough -->
+  <section class="steps-section section section-emerald">
+    <div class="container container-narrow">
+      <div class="section-header">
+        <span class="eyebrow eyebrow-green">SIMPLE 3-STEP WORKFLOW</span>
+        <h2 class="section-title">How to Download & Stream <span class="text-gradient-green">TeraBox Videos</span></h2>
+      </div>
+
+      <div class="stepper-grid">
+        <div class="stepper-card">
+          <div class="stepper-num">01</div>
+          <h3 class="stepper-title">Copy TeraBox Link</h3>
+          <p class="stepper-desc">Find your video link in Telegram channels, WhatsApp messages, or web forums. Copy the full link starting with <code>terabox.com</code>, <code>teraboxapp.com</code>, or <code>1024tera.com</code>.</p>
+        </div>
+
+        <div class="stepper-card">
+          <div class="stepper-num">02</div>
+          <h3 class="stepper-title">Paste & Click Play</h3>
+          <p class="stepper-desc">Paste the link into the TeraWala search box above and press 'Play & Download'. Our cloud sanitizer filters out tracking tags and resolves the origin media stream.</p>
+        </div>
+
+        <div class="stepper-card">
+          <div class="stepper-num">03</div>
+          <h3 class="stepper-title">Watch Online or Download</h3>
+          <p class="stepper-desc">Stream immediately in our HTML5 online player or click 'Open in Telegram Bot' to receive the full-quality MP4 video file straight to your device storage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Grid: Official TeraBox App vs TeraWala -->
+  <section class="compare-section section">
+    <div class="container container-narrow">
+      <div class="section-header">
+        <span class="eyebrow eyebrow-green">TRANSPARENT COMPARISON</span>
+        <h2 class="section-title">Why Users Switch from the <span class="text-gradient-green">Official TeraBox App</span></h2>
+      </div>
+
+      <div class="compare-grid">
+        <div class="compare-card compare-card-app">
+          <div class="compare-card-header">
+            <span class="compare-badge compare-badge-red">Official TeraBox App</span>
+            <h3 class="compare-name">Mobile Application / APK</h3>
+          </div>
+          <ul class="compare-points">
+            <li><span class="cross">✕</span> Requires 180MB+ storage & installation</li>
+            <li><span class="cross">✕</span> Mandatory registration or social login</li>
+            <li><span class="cross">✕</span> Requests phone contacts, storage & telemetry</li>
+            <li><span class="cross">✕</span> Interstitial video ads & aggressive redirects</li>
+            <li><span class="cross">✕</span> Throttled download speeds on free tier</li>
+          </ul>
+        </div>
+
+        <div class="compare-card compare-card-terawala">
+          <div class="compare-card-header">
+            <span class="compare-badge compare-badge-green">TeraWala Online Tool</span>
+            <h3 class="compare-name">Browser Downloader & Player</h3>
+          </div>
+          <ul class="compare-points">
+            <li><span class="check">✓</span> 100% web-based — zero storage installation</li>
+            <li><span class="check">✓</span> No account, no email, no login required</li>
+            <li><span class="check">✓</span> Zero device permissions requested</li>
+            <li><span class="check">✓</span> Completely clean, ad-free video player</li>
+            <li><span class="check">✓</span> Uncapped high-speed Telegram bot downloads</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comprehensive SEO Long-form Editorial Guide -->
+  <section class="provider-guide section" id="guide">
+    <div class="container container-narrow">
+      <article class="guide-article">
+        <h2 class="guide-title">Understanding TeraBox Video Downloading & Online Playback</h2>
+
+        <p>
+          TeraBox (originally introduced as Dubox) has rapidly emerged as one of the most prominent cloud file storage platforms globally, famous for granting users 1 TB (1024 GB) of complimentary storage. As a direct result, millions of video creators, educators, and file sharers distribute content via TeraBox share links across Telegram channels, WhatsApp groups, and digital forums.
+        </p>
+
+        <h3>What the TeraWala TeraBox Downloader Does</h3>
+        <p>
+          Standard TeraBox links often present significant friction for everyday viewers. When you open an official share URL on mobile or desktop, you are typically met with aggressive redirects urging you to download an APK, install mobile software, create an account, or navigate intrusive advertisements before accessing your media.
+        </p>
+        <p>
+          <strong>TeraWala</strong> was engineered to solve this friction entirely. Functioning as an independent <strong>TeraBox online video player</strong> and <strong>TeraBox link downloader</strong>, TeraWala extracts the clean video address from the provider's Content Delivery Network (CDN). This allows you to play TeraBox videos directly in your browser or receive the original MP4 file through our verified Telegram bot.
+        </p>
+
+        <h3>How to Open & Watch TeraBox Videos in Your Browser</h3>
+        <p>
+          Opening a TeraBox video link in your browser without the app requires just three clicks:
+        </p>
+        <ol class="guide-ordered-list">
+          <li><strong>Extract the Link:</strong> Copy the full URL from your source message (e.g., <code>https://teraboxapp.com/s/1xyz...</code> or <code>https://1024tera.com/s/...</code>).</li>
+          <li><strong>Submit to TeraWala:</strong> Paste the URL into our input field at the top of this page and click 'Play & Download'.</li>
+          <li><strong>Stream or Save:</strong> Watch the video immediately inside our responsive player, or hand off the file token to our official Telegram bot for an uncapped MP4 file download.</li>
+        </ol>
+
+        <h3>Supported TeraBox Domain Ecosystem</h3>
+        <p>
+          TeraBox distributes traffic across a diverse network of regional domain names and mirror services. TeraWala's intelligent link resolver automatically identifies and normalizes every authorized domain in the ecosystem:
+        </p>
+        <div class="domain-badge-grid">
+          <span class="domain-chip">terabox.com</span>
+          <span class="domain-chip">teraboxapp.com</span>
+          <span class="domain-chip">terabox.app</span>
+          <span class="domain-chip">1024tera.com</span>
+          <span class="domain-chip">terasharelink.com</span>
+          <span class="domain-chip">freeterabox.com</span>
+          <span class="domain-chip">mirrobox.com</span>
+          <span class="domain-chip">nephobox.com</span>
+          <span class="domain-chip">4funbox.com</span>
+        </div>
+
+        <h3>Mobile vs Desktop: Seamless Cross-Platform Experience</h3>
+        <p>
+          Whether you are browsing on an iPhone running Safari, an Android device on Chrome, or a desktop workstation running Windows, macOS, or Linux, TeraWala adapts dynamically. Our media player supports full native hardware acceleration, picture-in-picture streaming, volume controls, and responsive touch gestures, ensuring you never encounter platform-specific incompatibilities.
+        </p>
+
+        <h3>Privacy, Safety, and Responsible Usage</h3>
+        <p>
+          TeraWala operates under a stringent <strong>zero-log privacy architecture</strong>. We do not maintain databases of the links you submit, do not log personal IP addresses, and do not track your viewing sessions. All transactions utilize HTTPS encryption. TeraWala is intended solely for authorized personal media playback, backups, and publicly available files.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 13 Complete FAQs Section -->
+  <section class="provider-faq section" id="faq">
+    <div class="container container-narrow">
+      <div class="section-header">
+        <span class="eyebrow eyebrow-green">FREQUENTLY ASKED QUESTIONS</span>
+        <h2 class="section-title">TeraBox Downloader & Player <span class="text-gradient-green">FAQ</span></h2>
+        <p class="section-desc">Clear, honest answers to the most common questions about streaming, safety, and downloading TeraBox videos.</p>
+      </div>
+
+      <div class="faq-list">
+        {faqs.map((faq, index) => (
+          <div class="faq-item">
+            <button
+              type="button"
+              class="faq-trigger"
+              aria-expanded="false"
+              aria-controls={`faq-panel-tb-${index}`}
+              id={`faq-btn-tb-${index}`}
+            >
+              <span class="faq-num">{String(index + 1).padStart(2, '0')}</span>
+              <span class="faq-question">{faq.q}</span>
+              <svg class="faq-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div
+              class="faq-panel"
+              id={`faq-panel-tb-${index}`}
+              role="region"
+              aria-labelledby={`faq-btn-tb-${index}`}
+              hidden
+            >
+              <p class="faq-answer">{faq.a}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ JSON-LD Structured Data -->
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
+  <!-- Related Tools Hub -->
+  <section class="related-tools section">
+    <div class="container container-narrow">
+      <div class="related-box">
+        <h3 class="related-title">Explore Other Compatible Downloaders</h3>
+        <p class="related-desc">Need to stream or download videos from other popular cloud platforms? TeraWala offers dedicated tools for each service:</p>
+        <div class="related-links-grid">
+          <a href="/diskwala-video-downloader/" class="related-card related-card-cyan">
+            <span class="related-tag">DISKWALA</span>
+            <span class="related-name">Diskwala Video Downloader →</span>
+            <span class="related-hint">Stream & download Diskwala videos online without app</span>
+          </a>
+          <a href="/flezen-video-downloader/" class="related-card related-card-purple">
+            <span class="related-tag">FLEZEN</span>
+            <span class="related-name">Flezen Video Downloader →</span>
+            <span class="related-hint">Browser player & fast download for flezen.com links</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="cta-banner section">
+    <div class="container" style="text-align: center;">
+      <h2 class="section-title">Ready to Stream & Download <span class="text-gradient-green">TeraBox Videos</span>?</h2>
+      <p class="section-desc" style="margin-bottom: 28px;">Paste your TeraBox link above or use our Telegram bot for instant high-speed downloads.</p>
+      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+        <a href="#tools" class="btn-primary" data-magnetic>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><polygon points="6 4 19 12 6 20 6 4"></polygon></svg>
+          <span>Paste TeraBox Link</span>
+        </a>
+        <a href={APP_CONFIG.telegramBotUrl} target="_blank" rel="noopener noreferrer" class="btn-secondary" data-magnetic>
+          <span>Open Telegram Bot</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .provider-hero {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    text-align: center;
+  }
+
+  .hero-badge-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-size: var(--text-display);
+    font-weight: 850;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 18px;
+    text-wrap: balance;
+  }
+
+  .hero-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    max-width: 780px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+    text-wrap: balance;
+  }
+
+  /* Double-Bezel Architecture */
+  .bezel-outer {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: calc(var(--radius-xl) + 6px);
+    padding: 6px;
+    max-width: 890px;
+    margin: 0 auto 32px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+  }
+
+  .bezel-inner {
+    background: #080d0f;
+    border: 1px solid rgba(16, 214, 160, 0.16);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  }
+
+  /* Keyword Pill Matrix */
+  .keyword-pills-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 10px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .pills-label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 4px;
+  }
+
+  .keyword-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--color-text-secondary);
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-xs);
+    font-weight: 550;
+    transition: all 0.2s ease;
+  }
+
+  .keyword-pill:hover {
+    background: var(--color-primary-soft);
+    border-color: var(--color-primary-border);
+    color: var(--color-primary);
+  }
+
+  .pill-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: var(--radius-pill);
+    background: var(--color-primary);
+  }
+
+  /* Bento Grid */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+  }
+
+  .bento-card {
+    background: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 32px 28px;
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s, box-shadow 0.25s;
+    box-shadow: var(--shadow-card);
+  }
+
+  .bento-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary-border);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .bento-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary-soft);
+    border: 1px solid var(--color-primary-border);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .bento-title {
+    font-size: var(--text-lg);
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--color-text);
+  }
+
+  .bento-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+  }
+
+  /* 3-Step Stepper */
+  .stepper-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 36px;
+  }
+
+  .stepper-card {
+    background: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    position: relative;
+  }
+
+  .stepper-num {
+    font-size: var(--text-2xl);
+    font-weight: 900;
+    color: var(--color-primary);
+    margin-bottom: 14px;
+    letter-spacing: -0.03em;
+  }
+
+  .stepper-title {
+    font-size: var(--text-base);
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--color-text);
+  }
+
+  .stepper-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .stepper-desc code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    color: var(--color-primary);
+  }
+
+  /* Comparison Grid */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+    margin-top: 36px;
+  }
+
+  .compare-card {
+    border-radius: var(--radius-xl);
+    padding: 30px 26px;
+    border: 1px solid var(--color-border);
+  }
+
+  .compare-card-app {
+    background: linear-gradient(180deg, rgba(20, 10, 10, 0.8) 0%, rgba(10, 6, 6, 0.95) 100%);
+    border-color: rgba(239, 68, 68, 0.25);
+  }
+
+  .compare-card-terawala {
+    background: linear-gradient(180deg, rgba(10, 24, 18, 0.85) 0%, rgba(6, 14, 11, 0.98) 100%);
+    border-color: var(--color-primary-border);
+    box-shadow: 0 0 30px rgba(16, 214, 160, 0.12);
+  }
+
+  .compare-badge {
+    font-size: var(--text-xs);
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .compare-badge-red { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+  .compare-badge-green { background: var(--color-primary-soft); color: var(--color-primary); border: 1px solid var(--color-primary-border); }
+
+  .compare-name {
+    font-size: var(--text-lg);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: 20px;
+  }
+
+  .compare-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .compare-points li {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+  }
+
+  .cross { color: #f87171; font-weight: bold; flex-shrink: 0; }
+  .check { color: var(--color-primary); font-weight: bold; flex-shrink: 0; }
+
+  /* Guide Editorial Article */
+  .guide-article {
+    background: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 44px 38px;
+    line-height: 1.78;
+    color: var(--color-text-secondary);
+    font-size: var(--text-base);
+  }
+
+  .guide-title {
+    font-size: var(--text-2xl);
+    font-weight: 850;
+    color: var(--color-text);
+    margin-bottom: 22px;
+    letter-spacing: -0.02em;
+  }
+
+  .guide-article h3 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: 36px;
+    margin-bottom: 14px;
+    letter-spacing: -0.015em;
+  }
+
+  .guide-article p {
+    margin-bottom: 18px;
+  }
+
+  .guide-ordered-list {
+    margin: 14px 0 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .guide-ordered-list code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    color: var(--color-primary);
+  }
+
+  .domain-badge-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 26px;
+  }
+
+  .domain-chip {
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 6px 14px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 600;
+  }
+
+  /* FAQ List */
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .faq-item {
+    background: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .faq-item:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .faq-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: var(--color-text);
+    font-size: var(--text-base);
+    font-weight: 700;
+    line-height: 1.45;
+  }
+
+  .faq-num {
+    font-size: var(--text-xs);
+    font-weight: 900;
+    color: var(--color-primary);
+    min-width: 28px;
+    flex-shrink: 0;
+  }
+
+  .faq-question {
+    flex: 1;
+  }
+
+  .faq-chevron {
+    flex-shrink: 0;
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
+    color: var(--color-text-muted);
+  }
+
+  .faq-trigger[aria-expanded="true"] .faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  .faq-panel {
+    padding: 0 24px 22px 66px;
+  }
+
+  .faq-answer {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+
+  /* Related Tools Hub */
+  .related-box {
+    background: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 34px 30px;
+    text-align: center;
+  }
+
+  .related-title {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: 8px;
+  }
+
+  .related-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: 24px;
+  }
+
+  .related-links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    text-align: left;
+  }
+
+  .related-card {
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-decoration: none;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .related-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .related-card-cyan:hover { border-color: rgba(56, 189, 248, 0.4); }
+  .related-card-purple:hover { border-color: rgba(168, 85, 247, 0.4); }
+
+  .related-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--color-primary);
+  }
+
+  .related-card-cyan .related-tag { color: var(--color-cyan); }
+  .related-card-purple .related-tag { color: var(--color-purple); }
+
+  .related-name {
+    font-size: var(--text-base);
+    font-weight: 800;
+    color: var(--color-text);
+  }
+
+  .related-hint {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 768px) {
+    .bento-grid,
+    .stepper-grid,
+    .compare-grid,
+    .related-links-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-title {
+      font-size: clamp(1.75rem, 6vw, 2.5rem);
+    }
+
+    .bezel-inner {
+      padding: 16px 12px;
+    }
+
+    .guide-article {
+      padding: 28px 18px;
+    }
+
+    .faq-panel {
+      padding-left: 24px;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.faq-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      const panelId = btn.getAttribute('aria-controls');
+      const panel = panelId ? document.getElementById(panelId) : null;
+
+      btn.closest('.faq-list')?.querySelectorAll('.faq-trigger').forEach(otherBtn => {
+        if (otherBtn !== btn) {
+          otherBtn.setAttribute('aria-expanded', 'false');
+          const otherId = otherBtn.getAttribute('aria-controls');
+          if (otherId) {
+            const otherPanel = document.getElementById(otherId);
+            if (otherPanel) otherPanel.hidden = true;
+          }
+        }
+      });
+
+      btn.setAttribute('aria-expanded', String(!expanded));
+      if (panel) panel.hidden = expanded;
+    });
+  });
+</script>

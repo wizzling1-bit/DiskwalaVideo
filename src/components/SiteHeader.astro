@@ -5,39 +5,89 @@ import { APP_CONFIG } from '../utils/config';
 <header class="header-wrapper">
   <div class="floating-nav-island" id="nav-island">
     <!-- Brand Logo -->
-    <a href="/" class="brand" aria-label="DiskwalaDownloader Home">
+    <a href="/" class="brand" aria-label="TeraWala Home">
       <div class="brand-double-bezel">
         <div class="brand-icon-inner">
           <svg viewBox="0 0 24 24" fill="none" class="brand-svg" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 5V19L18 12L7 5Z" fill="#ffffff" />
+            <path d="M4 6H20M12 6V20M12 11L18 15L12 19" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
       </div>
-      <span class="brand-text">Diskwala<span class="brand-accent">Downloader</span></span>
+      <span class="brand-text">Tera<span class="brand-accent">Wala</span></span>
     </a>
 
-    <!-- Desktop Navigation Links matching Screenshot -->
+    <!-- Desktop Navigation Links -->
     <nav class="desktop-nav" aria-label="Main Navigation">
-      <a href="#tools" class="nav-pill-link">Home</a>
-      <a href="#how-to-download" class="nav-pill-link">Diskwala Player</a>
-      <a href="#telegram-bot" class="nav-pill-link">Video Downloader</a>
-      <button type="button" class="nav-pill-link nav-btn" data-open-modal="about">About Us</button>
-      <button type="button" class="nav-pill-link nav-btn" data-open-modal="contact">Contact Us</button>
+      <a href="/" class="nav-pill-link" data-i18n="nav.home">Home</a>
+      <a href="/terabox-downloader/" class="nav-pill-link" data-i18n="nav.terabox">TeraBox</a>
+      <a href="/diskwala-video-downloader/" class="nav-pill-link" data-i18n="nav.diskwala">Diskwala</a>
+      <a href="/flezen-video-downloader/" class="nav-pill-link" data-i18n="nav.flezen">Flezen</a>
+      <a href="/about-us/" class="nav-pill-link" data-i18n="nav.about">About</a>
+      <a href="/contact-us/" class="nav-pill-link" data-i18n="nav.contact">Contact</a>
     </nav>
 
-    <!-- Header Actions: Join Telegram -->
+    <!-- Header Actions: Join Telegram + Multi-Language Switcher -->
     <div class="header-actions">
+      <!-- Multi-Language Switcher Dropdown -->
+      <div class="lang-selector-wrapper" id="lang-selector-wrapper">
+        <button 
+          type="button" 
+          class="lang-selector-btn" 
+          id="lang-menu-btn" 
+          aria-label="Select Language" 
+          aria-expanded="false" 
+          aria-haspopup="listbox"
+        >
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" class="lang-globe-icon" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span class="lang-curr-label" id="lang-curr-label">EN</span>
+          <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" class="lang-chevron" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+        <div class="lang-dropdown-menu" id="lang-dropdown-menu" role="listbox" aria-label="Language options" style="display: none;">
+          <button type="button" role="option" class="lang-option is-active" data-lang="en">
+            <span class="lang-flag">🇺🇸</span>
+            <span class="lang-name">English</span>
+          </button>
+          <button type="button" role="option" class="lang-option" data-lang="hi">
+            <span class="lang-flag">🇮🇳</span>
+            <span class="lang-name">हिंदी</span>
+          </button>
+          <button type="button" role="option" class="lang-option" data-lang="bn">
+            <span class="lang-flag">🇧🇩</span>
+            <span class="lang-name">বাংলা</span>
+          </button>
+          <button type="button" role="option" class="lang-option" data-lang="id">
+            <span class="lang-flag">🇮🇩</span>
+            <span class="lang-name">Indonesia</span>
+          </button>
+          <button type="button" role="option" class="lang-option" data-lang="es">
+            <span class="lang-flag">🇪🇸</span>
+            <span class="lang-name">Español</span>
+          </button>
+          <button type="button" role="option" class="lang-option" data-lang="ru">
+            <span class="lang-flag">🇷🇺</span>
+            <span class="lang-name">Русский</span>
+          </button>
+        </div>
+      </div>
+
       <a 
         href={APP_CONFIG.telegramBotUrl} 
         target="_blank" 
         rel="noopener noreferrer" 
         class="header-join-pill"
+        data-magnetic
         aria-label="Join Official Telegram Bot"
       >
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class="nav-tg-icon" aria-hidden="true">
           <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM16.64 8.8C16.49 10.38 15.82 14.33 15.48 16.14C15.34 16.91 15.06 17.17 14.79 17.19C14.2 17.25 13.75 16.8 13.18 16.43C12.29 15.84 11.79 15.48 10.92 14.91C9.92 14.25 10.57 13.89 11.14 13.3C11.29 13.15 13.85 10.82 13.9 10.61C13.91 10.58 13.91 10.48 13.84 10.42C13.78 10.36 13.68 10.38 13.61 10.4C13.5 10.42 11.76 11.57 8.38 13.85C7.88 14.19 7.43 14.36 7.03 14.35C6.59 14.34 5.74 14.1 5.11 13.9C4.33 13.65 3.72 13.51 3.77 13.08C3.8 12.85 4.12 12.62 4.74 12.37C8.59 10.7 11.16 9.6 12.45 9.06C16.13 7.53 16.9 7.27 17.4 7.27C17.51 7.27 17.76 7.3 17.92 7.43C18.06 7.54 18.09 7.7 18.11 7.82C18.1 7.91 18.12 8.19 16.64 8.8Z"/>
         </svg>
-        <span>Join Telegram</span>
+        <span data-i18n="nav.joinTg">Join Telegram</span>
       </a>
 
       <!-- Animated Hamburger Button for Mobile -->
@@ -59,12 +109,30 @@ import { APP_CONFIG } from '../utils/config';
   <!-- Mobile Glass Sheet Navigation -->
   <div class="mobile-nav-sheet" id="mobile-nav-sheet" aria-hidden="true">
     <div class="mobile-sheet-content">
-      <a href="#tools" class="mobile-sheet-link">Home</a>
-      <a href="#how-to-download" class="mobile-sheet-link">Diskwala Player</a>
-      <a href="#telegram-bot" class="mobile-sheet-link">Video Downloader</a>
-      <button type="button" class="mobile-sheet-link mobile-sheet-btn" data-open-modal="about">About Us</button>
-      <button type="button" class="mobile-sheet-link mobile-sheet-btn" data-open-modal="contact">Contact Us</button>
+      <a href="/" class="mobile-sheet-link" data-i18n="nav.home">Home</a>
+      <a href="/terabox-downloader/" class="mobile-sheet-link" data-i18n="nav.terabox">TeraBox Downloader</a>
+      <a href="/diskwala-video-downloader/" class="mobile-sheet-link" data-i18n="nav.diskwala">Diskwala Downloader</a>
+      <a href="/flezen-video-downloader/" class="mobile-sheet-link" data-i18n="nav.flezen">Flezen Downloader</a>
+      <a href="/about-us/" class="mobile-sheet-link" data-i18n="nav.about">About Us</a>
+      <a href="/contact-us/" class="mobile-sheet-link" data-i18n="nav.contact">Contact Us</a>
+      <a href="/privacy-policy/" class="mobile-sheet-link">Privacy Policy</a>
+      <a href="/terms-and-conditions/" class="mobile-sheet-link">Terms of Service</a>
+      <a href="/disclaimer/" class="mobile-sheet-link">Disclaimer</a>
+      <a href="/dmca/" class="mobile-sheet-link">DMCA</a>
       
+      <!-- Mobile Language Switcher Row -->
+      <div class="mobile-sheet-lang-row">
+        <span class="mobile-lang-title">Choose Language:</span>
+        <div class="mobile-lang-grid">
+          <button type="button" class="mobile-lang-chip is-active" data-lang-switch="en">🇺🇸 English</button>
+          <button type="button" class="mobile-lang-chip" data-lang-switch="hi">🇮🇳 हिंदी</button>
+          <button type="button" class="mobile-lang-chip" data-lang-switch="bn">🇧🇩 বাংলা</button>
+          <button type="button" class="mobile-lang-chip" data-lang-switch="id">🇮🇩 Indonesia</button>
+          <button type="button" class="mobile-lang-chip" data-lang-switch="es">🇪🇸 Español</button>
+          <button type="button" class="mobile-lang-chip" data-lang-switch="ru">🇷🇺 Русский</button>
+        </div>
+      </div>
+
       <div class="mobile-sheet-actions">
         <a 
           href={APP_CONFIG.telegramBotUrl} 
@@ -75,7 +143,7 @@ import { APP_CONFIG } from '../utils/config';
           <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" class="nav-tg-icon" aria-hidden="true">
             <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM16.64 8.8C16.49 10.38 15.82 14.33 15.48 16.14C15.34 16.91 15.06 17.17 14.79 17.19C14.2 17.25 13.75 16.8 13.18 16.43C12.29 15.84 11.79 15.48 10.92 14.91C9.92 14.25 10.57 13.89 11.14 13.3C11.29 13.15 13.85 10.82 13.9 10.61C13.91 10.58 13.91 10.48 13.84 10.42C13.78 10.36 13.68 10.38 13.61 10.4C13.5 10.42 11.76 11.57 8.38 13.85C7.88 14.19 7.43 14.36 7.03 14.35C6.59 14.34 5.74 14.1 5.11 13.9C4.33 13.65 3.72 13.51 3.77 13.08C3.8 12.85 4.12 12.62 4.74 12.37C8.59 10.7 11.16 9.6 12.45 9.06C16.13 7.53 16.9 7.27 17.4 7.27C17.51 7.27 17.76 7.3 17.92 7.43C18.06 7.54 18.09 7.7 18.11 7.82C18.1 7.91 18.12 8.19 16.64 8.8Z"/>
           </svg>
-          <span>Join Telegram</span>
+          <span data-i18n="nav.joinTg">Join Telegram</span>
         </a>
       </div>
     </div>
@@ -223,6 +291,161 @@ import { APP_CONFIG } from '../utils/config';
 
   .header-join-pill:active {
     transform: scale(0.96);
+  }
+
+  /* Language Selector Dropdown */
+  .lang-selector-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .lang-selector-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-pill);
+    padding: 7px 12px;
+    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    font-family: inherit;
+  }
+
+  .lang-selector-btn:hover {
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(16, 185, 129, 0.4);
+  }
+
+  .lang-globe-icon {
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .lang-curr-label {
+    letter-spacing: 0.05em;
+  }
+
+  .lang-chevron {
+    opacity: 0.6;
+    transition: transform 0.2s;
+  }
+
+  .lang-selector-btn[aria-expanded="true"] .lang-chevron {
+    transform: rotate(180deg);
+  }
+
+  .lang-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 170px;
+    background: rgba(10, 14, 15, 0.96);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--radius-md);
+    padding: 6px;
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.8),
+      0 0 20px rgba(16, 185, 129, 0.08);
+    z-index: 300;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    animation: langFadeIn 0.18s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  @keyframes langFadeIn {
+    from { opacity: 0; transform: translateY(-4px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .lang-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+    font-weight: 550;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s ease;
+    font-family: inherit;
+  }
+
+  .lang-option:hover {
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .lang-option.is-active {
+    color: var(--color-primary);
+    background: rgba(16, 185, 129, 0.12);
+    font-weight: 700;
+  }
+
+  .lang-flag {
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  /* Mobile Sheet Language Row */
+  .mobile-sheet-lang-row {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .mobile-lang-title {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+
+  .mobile-lang-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .mobile-lang-chip {
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .mobile-lang-chip:hover {
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-lang-chip.is-active {
+    color: var(--color-primary);
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
+    font-weight: 750;
   }
 
   /* Mobile Hamburger */
@@ -387,7 +610,7 @@ import { APP_CONFIG } from '../utils/config';
     }
 
     .header-actions {
-      gap: 0;
+      gap: 8px;
     }
 
     .brand-text {

@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about-us/" }
+];
+---
+
+<BaseLayout
+  title="About Us — TeraWala | Free Video Downloader & Online Player"
+  description="Learn about TeraWala, the free online video downloader and player for TeraBox, Diskwala, and Flezen cloud links. Our mission, team, and commitment to ad-free streaming."
+  canonicalUrl="https://terawala.com/about-us/"
+>
+  <section class="legal-page section">
+    <div class="container container-narrow">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="legal-header">
+        <span class="eyebrow eyebrow-green">ABOUT TERAWALA</span>
+        <h1 class="section-title-left">About <span class="text-gradient-green">TeraWala</span></h1>
+      </div>
+
+      <article class="legal-content">
+        <p>
+          TeraWala (<a href="https://terawala.com" class="inline-link">terawala.com</a>) was created to solve a universal frustration: accessing cloud-hosted video files without dealing with intrusive ads, forced app installations, and deceptive redirect chains.
+        </p>
+
+        <h2>Our Mission</h2>
+        <p>
+          We believe accessing shared media should be simple, fast, and safe. TeraWala provides a clean, browser-based interface for streaming and downloading videos from TeraBox, Diskwala, and Flezen cloud platforms — completely free of charge and without requiring any user accounts or personal data.
+        </p>
+
+        <h2>What We Do</h2>
+        <p>
+          TeraWala operates as a link analyzer and media resolver. When you paste a supported cloud video link into our tool, we validate the domain against our secure allowlist, sanitize tracking parameters, and resolve the direct media stream. You can then watch the video in our built-in HTML5 player or use our official Telegram bot for high-speed downloads.
+        </p>
+
+        <h2>Our Values</h2>
+        <ul>
+          <li><strong>Privacy First:</strong> We maintain a strict zero-log policy. No personal data is collected, stored, or shared.</li>
+          <li><strong>Completely Free:</strong> No premium tiers, no subscription fees, no credit card walls. TeraWala is free for everyone.</li>
+          <li><strong>Security:</strong> All connections are encrypted via HTTPS. Our domain validation prevents phishing and SSRF attacks.</li>
+          <li><strong>Transparency:</strong> We do not host or store any media files. We provide access tools for content already publicly shared on supported platforms.</li>
+        </ul>
+
+        <h2>Supported Platforms</h2>
+        <p>
+          TeraWala currently supports video links from three cloud storage ecosystems:
+        </p>
+        <ul>
+          <li><strong>TeraBox</strong> — including terabox.com, teraboxapp.com, terabox.app, 1024tera.com, and related domains</li>
+          <li><strong>Diskwala</strong> — diskwala.com</li>
+          <li><strong>Flezen</strong> — flezen.com</li>
+        </ul>
+
+        <h2>Non-Affiliation Disclaimer</h2>
+        <p>
+          TeraWala is an independent project. We are not affiliated with, endorsed by, or partnered with TeraBox, Diskwala, Flezen, or any of their parent companies. All trademarks and brand names belong to their respective owners.
+        </p>
+
+        <h2>Contact Us</h2>
+        <p>
+          Have questions, feedback, or partnership inquiries? Reach us at <a href="mailto:support@terawala.com" class="inline-link">support@terawala.com</a> or through our <a href="/contact-us/" class="inline-link">Contact page</a>.
+        </p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-page { padding-top: 40px; padding-bottom: 60px; }
+
+  .legal-header { margin-bottom: 36px; }
+
+  .legal-content {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.78;
+  }
+
+  .legal-content h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: 36px;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .legal-content p { margin-bottom: 18px; }
+
+  .legal-content ul {
+    margin: 14px 0 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .legal-content li { line-height: 1.7; }
+
+  .inline-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .inline-link:hover { color: var(--color-primary-hover); }
+</style>

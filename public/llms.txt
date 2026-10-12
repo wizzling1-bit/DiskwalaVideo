@@ -1,0 +1,23 @@
+# TeraWala — Terabox & Diskwala Video Downloader & Online Player
+
+> The premier online platform to stream, preview, convert, and download Terabox, Diskwala, and Flezen video links with zero ads, high speeds, and no app or APK installation required.
+
+- Website: https://terawala.com/
+- Primary Domain: terawala.com
+- Primary Keywords: TeraWala, terawala.com, TeraWala Video Downloader, Terabox Video Downloader, Diskwala Video Downloader, TeraWala Online Video Player
+- Secondary Keywords: Diskwala to Terabox Link Converter Online, Terabox Player Online, Diskwala Link Video Player Online, TeraWala Downloader, Flezen Video Downloader
+- Supported Hostnames: terabox.com, teraboxapp.com, terabox.app, 1024tera.com, terasharelink.com, freeterabox.com, mirrobox.com, nephobox.com, 4funbox.com, diskwala.com, flezen.com
+- Pricing: 100% Free ($0)
+- Platform Availability: Web (Chrome, Safari, Firefox, Edge, Android, iOS, Windows, macOS, Linux)
+
+## Core Capabilities
+- **Terabox & Diskwala Video Validation**: Instantly verifies media URLs, strips intrusive ad redirects, and extracts direct playback streams.
+- **In-Browser Online Video Player**: Watch videos directly in HTML5 player with fullscreen, volume, scrubbing, and picture-in-picture controls without third-party apps or APKs.
+- **Telegram Bot Integration**: Direct handoff to high-speed Telegram bot for uncapped, resume-supported downloads and cloud file caching.
+- **Zero-Log Privacy**: No tracking cookies, no required registration, and ephemeral memory-only link resolution.
+
+## Essential Links
+- Homepage: https://terawala.com/
+- Sitemap: https://terawala.com/sitemap.xml
+- Full Documentation: https://terawala.com/llms-full.txt
+- Pricing: https://terawala.com/pricing.md

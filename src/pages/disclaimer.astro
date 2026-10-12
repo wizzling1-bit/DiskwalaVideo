@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Disclaimer", href: "/disclaimer/" }
+];
+---
+
+<BaseLayout
+  title="Disclaimer — TeraWala | Non-Affiliation & Liability Notice"
+  description="TeraWala disclaimer. We are not affiliated with TeraBox, Diskwala, or Flezen. Read our liability limitations and content responsibility statement."
+  canonicalUrl="https://terawala.com/disclaimer/"
+>
+  <section class="legal-page section">
+    <div class="container container-narrow">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="legal-header">
+        <span class="eyebrow eyebrow-green">LEGAL NOTICE</span>
+        <h1 class="section-title-left"><span class="text-gradient-green">Disclaimer</span></h1>
+        <p class="legal-updated">Last Updated: October 2026</p>
+      </div>
+
+      <article class="legal-content">
+        <h2>Non-Affiliation Statement</h2>
+        <p>
+          TeraWala (terawala.com) is an independent online utility. We are <strong>not affiliated with, endorsed by, sponsored by, or partnered with</strong> TeraBox, Diskwala, Flezen, or any of their parent companies, subsidiaries, or affiliates. All product names, trademarks, registered trademarks, and brand names mentioned on this website are the property of their respective owners.
+        </p>
+
+        <h2>Service Limitations</h2>
+        <p>
+          TeraWala functions as a link analyzer and media resolver for supported cloud storage platforms. We do not:
+        </p>
+        <ul>
+          <li>Host, store, or distribute any media files on our servers</li>
+          <li>Guarantee the availability, quality, or legality of third-party content</li>
+          <li>Provide official support for TeraBox, Diskwala, or Flezen platforms</li>
+          <li>Warrant uninterrupted or error-free service</li>
+        </ul>
+
+        <h2>Content Responsibility</h2>
+        <p>
+          All media files accessible through TeraWala are hosted on and distributed by independent third-party cloud storage platforms. Users are solely responsible for ensuring they have the legal right to access, stream, or download any content processed through our tool. TeraWala bears no responsibility for the nature, legality, or copyright status of files hosted on third-party platforms.
+        </p>
+
+        <h2>Accuracy of Information</h2>
+        <p>
+          While we strive to provide accurate and up-to-date information on this website, we make no representations or warranties about the completeness, accuracy, reliability, or suitability of the information provided. Any reliance you place on such information is strictly at your own risk.
+        </p>
+
+        <h2>External Links</h2>
+        <p>
+          TeraWala may contain links to external websites and services (including Telegram). We have no control over the content, privacy policies, or practices of these third-party sites and are not responsible for any damages or losses resulting from their use.
+        </p>
+
+        <h2>Changes</h2>
+        <p>
+          We reserve the right to modify this disclaimer at any time without prior notice. Continued use of TeraWala following any changes constitutes acceptance of the updated disclaimer.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          For questions about this disclaimer, please contact us at <a href="mailto:support@terawala.com" class="inline-link">support@terawala.com</a>.
+        </p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-page { padding-top: 40px; padding-bottom: 60px; }
+  .legal-header { margin-bottom: 36px; }
+  .legal-updated { font-size: var(--text-sm); color: var(--color-text-muted); margin-top: 8px; }
+
+  .legal-content {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.78;
+  }
+
+  .legal-content h2 {
+    font-size: var(--text-xl);
+    font-weight: 800;
+    color: var(--color-text);
+    margin-top: 36px;
+    margin-bottom: 14px;
+    letter-spacing: -0.02em;
+  }
+
+  .legal-content p { margin-bottom: 18px; }
+
+  .legal-content ul {
+    margin: 14px 0 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .legal-content li { line-height: 1.7; }
+
+  .inline-link {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s;
+  }
+
+  .inline-link:hover { color: var(--color-primary-hover); }
+</style>

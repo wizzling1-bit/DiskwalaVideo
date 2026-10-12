@@ -1,5 +1,6 @@
 ---
 import { APP_CONFIG } from '../utils/config';
+import { getHrefLangTags } from '../utils/i18n';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import LegalModal from '../components/LegalModal.astro';
@@ -10,44 +11,54 @@ interface Props {
   title?: string;
   description?: string;
   canonicalUrl?: string;
+  noindex?: boolean;
 }
 
 const {
-  title = "Diskwala Video Downloader & Online Video Player — Free HD Stream",
-  description = "Free Diskwala video downloader and online video player. Stream HD Diskwala link video player online, convert Diskwala telegram links, and download videos with zero ads.",
-  canonicalUrl = "https://diskwalavideodownloader.com/"
+  title = "TeraWala — Free TeraBox, Diskwala & Flezen Video Downloader & Online Player",
+  description = "Free TeraWala online video player and video downloader. Stream HD TeraBox, Diskwala & Flezen video links online, bypass ads, and download MP4 videos with zero app installs.",
+  canonicalUrl = "https://terawala.com/",
+  noindex = false
 } = Astro.props;
 
-// Targeted SEO keywords
+// Targeted High-Volume SEO Keywords
 const metaKeywords = [
+  "terawala",
+  "terawala.com",
+  "terawala video downloader",
+  "terawala downloader",
+  "terabox video downloader",
   "diskwala video downloader",
   "diskwala online video player",
-  "diskwala downloader",
-  "diskwala video download",
-  "diskwala video player",
-  "diskwala video player online",
-  "diskwala telegram link",
+  "terabox player online",
   "diskwala to terabox link converter online",
   "diskwala link video player online",
-  "diskwala link video player",
-  "diskwala link downloader",
-  "diskwala link video downloader"
+  "terawala online player",
+  "diskwala video download",
+  "terabox downloader",
+  "flezen video downloader",
+  "terabox link downloader",
+  "diskwala link downloader"
 ].join(", ");
 
-// JSON-LD Structured Data
+const hrefLangTags = getHrefLangTags(Astro.url.pathname);
+
+// JSON-LD Structured Data Suite
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://diskwalavideodownloader.com/#website",
-      "url": "https://diskwalavideodownloader.com/",
-      "name": "Diskwala Video Downloader",
+      "@id": "https://terawala.com/#website",
+      "url": "https://terawala.com/",
+      "name": "TeraWala",
       "alternateName": [
-        "Diskwala Online Video Player",
-        "Diskwala Downloader",
-        "Diskwala Link Video Player Online",
-        "Diskwala Video Download"
+        "TeraWala Video Downloader",
+        "TeraWala Online Video Player",
+        "Terabox Video Downloader",
+        "Diskwala Video Downloader",
+        "TeraWala Downloader",
+        "Diskwala to Terabox Link Converter Online"
       ],
       "description": description,
       "inLanguage": "en-US",
@@ -55,16 +66,26 @@ const structuredData = {
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://diskwalavideodownloader.com/#tools"
+          "urlTemplate": "https://terawala.com/#tools"
         },
         "query-input": "required name=search_term_string"
       }
     },
     {
+      "@type": "Organization",
+      "@id": "https://terawala.com/#organization",
+      "name": "TeraWala",
+      "url": "https://terawala.com/",
+      "logo": "https://terawala.com/android-chrome-512x512.png",
+      "sameAs": [
+        "https://telegram.me/DiskWalaa_video_downloader_bot"
+      ]
+    },
+    {
       "@type": "WebApplication",
-      "@id": "https://diskwalavideodownloader.com/#webapp",
-      "url": "https://diskwalavideodownloader.com/",
-      "name": "Diskwala Video Downloader & Online Video Player",
+      "@id": "https://terawala.com/#webapp",
+      "url": "https://terawala.com/",
+      "name": "TeraWala — Terabox & Diskwala Video Downloader & Online Player",
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "All",
       "browserRequirements": "Requires JavaScript. Requires HTML5.",
@@ -74,43 +95,44 @@ const structuredData = {
         "priceCurrency": "USD"
       },
       "featureList": [
+        "Terabox Video Downloader",
         "Diskwala Video Downloader",
-        "Diskwala Online Video Player",
-        "Diskwala Link Video Player Online",
-        "Diskwala Telegram Link Resolution",
+        "In-Browser Online Video Player",
         "Diskwala to Terabox Link Converter Online",
-        "Ad-Free HD Streaming Pipeline"
+        "Zero-Ad HD Streaming Pipeline",
+        "High-Speed Telegram Bot Integration",
+        "Mobile and Desktop Browser Compatibility"
       ]
     },
     {
       "@type": "HowTo",
-      "@id": "https://diskwalavideodownloader.com/#howto",
-      "name": "How to Use Diskwala Video Downloader & Online Video Player",
-      "description": "Step-by-step instructions to stream or download Diskwala videos online without intrusive ads.",
+      "@id": "https://terawala.com/#howto",
+      "name": "How to Use TeraWala to Stream and Download Terabox & Diskwala Videos",
+      "description": "Step-by-step instructions to stream or download Terabox and Diskwala videos online without intrusive ads or app installations.",
       "step": [
         {
           "@type": "HowToStep",
           "position": 1,
-          "name": "Copy Diskwala Video Link",
-          "text": "Locate and copy your Diskwala or Flezen video share link from Telegram channels or messaging apps."
+          "name": "Copy Video Share Link",
+          "text": "Locate and copy your Terabox, Diskwala, or Flezen video share link from Telegram channels, messaging apps, or browsers."
         },
         {
           "@type": "HowToStep",
           "position": 2,
-          "name": "Paste Link into Diskwala Downloader",
-          "text": "Paste your link into the Diskwala video downloader input field at the top of the page."
+          "name": "Paste Link into TeraWala",
+          "text": "Paste your link into the TeraWala link input box at the top of terawala.com."
         },
         {
           "@type": "HowToStep",
           "position": 3,
           "name": "Click Play & Download",
-          "text": "Click the Play & Download button to validate the link and prepare your video stream."
+          "text": "Click the Play & Download button to validate the link parameters and initialize video resolution."
         },
         {
           "@type": "HowToStep",
           "position": 4,
-          "name": "Stream or Download in HD",
-          "text": "Open the official Telegram bot link to stream or download your video file at maximum speed."
+          "name": "Stream in Browser or Download in HD",
+          "text": "Watch directly in our online video player or launch the official Telegram bot to download the original full-quality MP4 video."
         }
       ]
     }
@@ -131,21 +153,33 @@ const structuredData = {
     <meta name="description" content={description} />
     <meta name="keywords" content={metaKeywords} />
     <link rel="canonical" href={canonicalUrl} />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    {hrefLangTags.map((tag) => (
+      <link rel="alternate" hreflang={tag.hreflang} href={tag.href} />
+    ))}
+    {noindex ? (
+      <>
+        <meta name="robots" content="noindex, follow" />
+        <meta name="googlebot" content="noindex, follow" />
+      </>
+    ) : (
+      <>
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      </>
+    )}
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Diskwala Video Downloader" />
+    <meta property="og:site_name" content="TeraWala" />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://diskwalavideodownloader.com/og-image.png" />
-    <meta property="og:image:secure_url" content="https://diskwalavideodownloader.com/og-image.png" />
+    <meta property="og:image" content="https://terawala.com/og-image.png" />
+    <meta property="og:image:secure_url" content="https://terawala.com/og-image.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Diskwala Video Downloader and Online Video Player Interface" />
+    <meta property="og:image:alt" content="TeraWala — Terabox and Diskwala Video Downloader and Online Player" />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Cards -->
@@ -153,14 +187,18 @@ const structuredData = {
     <meta name="twitter:url" content={canonicalUrl} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://diskwalavideodownloader.com/og-image.png" />
-    <meta name="twitter:image:alt" content="Diskwala Video Downloader and Online Video Player" />
+    <meta name="twitter:image" content="https://terawala.com/og-image.png" />
+    <meta name="twitter:image:alt" content="TeraWala — Terabox and Diskwala Video Downloader and Online Player" />
 
     <!-- Favicon & PWA Icons -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;850&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
