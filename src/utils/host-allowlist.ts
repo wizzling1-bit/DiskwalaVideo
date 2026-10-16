@@ -47,7 +47,7 @@ export function validateSourceUrl(inputUrl: string): ValidationResult {
 
   const hostname = parsed.hostname.toLowerCase();
 
-  // Terabox family host check
+  // Terabox family host check (supports 1024terabox.com, 1024tera, teraboxapp, mirrobox, etc.)
   const isTerabox = [
     'terabox.com',
     'www.terabox.com',
@@ -56,6 +56,8 @@ export function validateSourceUrl(inputUrl: string): ValidationResult {
     'terabox.app',
     '1024tera.com',
     'www.1024tera.com',
+    '1024terabox.com',
+    'www.1024terabox.com',
     'terasharelink.com',
     'www.terasharelink.com',
     'freeterabox.com',
@@ -65,8 +67,23 @@ export function validateSourceUrl(inputUrl: string): ValidationResult {
     'nephobox.com',
     'www.nephobox.com',
     '4funbox.com',
-    'www.4funbox.com'
-  ].includes(hostname);
+    'www.4funbox.com',
+    'terabox.link',
+    'www.terabox.link',
+    'teraboxshare.com',
+    'www.teraboxshare.com',
+    'tibabox.com',
+    'www.tibabox.com'
+  ].includes(hostname) || (
+    hostname.includes('terabox') ||
+    hostname.includes('1024tera') ||
+    hostname.includes('mirrobox') ||
+    hostname.includes('nephobox') ||
+    hostname.includes('4funbox') ||
+    hostname.includes('freeterabox') ||
+    hostname.includes('terasharelink') ||
+    hostname.includes('tibabox')
+  );
 
   // Diskwala & Flezen host checks
   const isDiskwala = hostname === 'diskwala.com' || hostname === 'www.diskwala.com';
