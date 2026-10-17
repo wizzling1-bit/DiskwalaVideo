@@ -24,7 +24,7 @@ export const APP_CONFIG = {
 
   // Razorpay Configuration
   razorpay: {
-    keyId: (typeof import.meta !== 'undefined' && import.meta.env?.PUBLIC_RAZORPAY_KEY_ID) || (typeof process !== 'undefined' && process.env?.PUBLIC_RAZORPAY_KEY_ID) || 'rzp_live_RsEo8sPBUJeTq8'
+    keyId: (typeof import.meta !== 'undefined' && import.meta.env?.PUBLIC_RAZORPAY_KEY_ID) || (typeof process !== 'undefined' && process.env?.PUBLIC_RAZORPAY_KEY_ID) || 'rzp_live_Tp2HDlEqi5oytm'
   },
 
   // Pricing Plans (Updated: ₹9 / 24h, ₹99 / 1m, ₹249 / 3m, ₹999 / 1y)
