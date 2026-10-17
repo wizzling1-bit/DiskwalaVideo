@@ -1,6 +1,7 @@
 import { validateSourceUrl, type SupportedProvider } from '../utils/host-allowlist';
 import { APP_CONFIG } from '../utils/config';
 import { TRANSLATIONS, LOCALES, DEFAULT_LOCALE, type Locale } from '../utils/i18n';
+import { checkDailyQuota, recordLinkUsage } from '../utils/supabase';
 import './motion';
 
 export interface TeraBoxItem {
@@ -39,8 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitBtnText = document.getElementById('submit-btn-text') as HTMLElement | null;
   const btnPlayIcon = document.getElementById('btn-play-icon') as HTMLElement | null;
   const btnSpinner = document.getElementById('btn-spinner') as HTMLElement | null;
-  const trySampleBtn = document.getElementById('try-sample-btn') as HTMLButtonElement | null;
-  const heroSampleTrigger = document.getElementById('hero-sample-trigger') as HTMLButtonElement | null;
+
 
   // Processing & Redesigned Ready Elements
   const processingStatusRow = document.getElementById('processing-status-row') as HTMLElement | null;
@@ -200,23 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Try sample buttons
-  const triggerSample = () => {
-    if (!linkInput) return;
-    linkInput.value = APP_CONFIG.sampleLink;
-    checkInputFeedback();
-    linkInput.focus();
-  };
 
-  if (trySampleBtn) {
-    trySampleBtn.addEventListener('click', triggerSample);
-  }
-  if (heroSampleTrigger) {
-    heroSampleTrigger.addEventListener('click', () => {
-      triggerSample();
-      form?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
-  }
 
   // Live typing validation
   if (linkInput) {
@@ -528,6 +512,72 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  let resetTimerInterval: any = null;
+
+  function startResetTicker() {
+    if (resetTimerInterval) return;
+    function tick() {
+      const now = new Date();
+      const midnight = new Date(now);
+      midnight.setHours(24, 0, 0, 0);
+      const diffMs = Math.max(0, midnight.getTime() - now.getTime());
+      
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+      
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      const timeStr = `${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+      
+      const resetEl = document.getElementById('reset-time-string');
+      if (resetEl) resetEl.textContent = timeStr;
+    }
+    tick();
+    resetTimerInterval = setInterval(tick, 1000);
+  }
+
+  // Update Quota Display Helper
+  async function updateQuotaDisplay() {
+    try {
+      const quota = await checkDailyQuota();
+      const quotaCount = document.getElementById('quota-count-display');
+      const upgradeBtn = document.getElementById('quota-upgrade-trigger');
+      const vipBadge = document.getElementById('quota-vip-status-badge');
+      const heroVipTrigger = document.getElementById('hero-vip-trigger');
+      const resetPill = document.getElementById('quota-reset-countdown');
+
+      startResetTicker();
+
+      if (quota.isPremium) {
+        if (quotaCount) {
+          quotaCount.innerHTML = '<span style="color:#10b981; font-weight:800;">Unlimited (VIP Active)</span>';
+        }
+        if (resetPill) resetPill.style.display = 'none';
+        if (upgradeBtn) upgradeBtn.style.display = 'none';
+        if (vipBadge) vipBadge.style.display = 'inline-flex';
+        if (heroVipTrigger) {
+          heroVipTrigger.setAttribute('href', '/dashboard/');
+          heroVipTrigger.innerHTML = `
+            <span>VIP Dashboard</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          `;
+        }
+      } else {
+        if (quotaCount) {
+          quotaCount.textContent = `${quota.remaining} of ${quota.limit} links left today`;
+        }
+        if (resetPill) resetPill.style.display = 'inline-flex';
+        if (upgradeBtn) upgradeBtn.style.display = 'inline-flex';
+        if (vipBadge) vipBadge.style.display = 'none';
+      }
+    } catch (e) {
+      console.warn('Quota display update error:', e);
+    }
+  }
+
   // Form Submission Flow
   async function processLinkFlow() {
     if (!linkInput) return;
@@ -543,6 +593,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!res.isValid) {
       showError(res.error || 'Invalid link format. Supported: Terabox, Diskwala, flezen.com');
       linkInput.focus();
+      return;
+    }
+
+    // Daily 5 Link Quota Enforcement
+    const quota = await checkDailyQuota();
+    if (!quota.allowed) {
+      showError(`Daily free quota reached (${quota.used}/${quota.limit} links used today). Buy Premium for unlimited downloads!`);
+      window.dispatchEvent(new CustomEvent('terawala:open-pricing', {
+        detail: { reason: `You have reached your daily limit of ${quota.limit} free links. Buy TeraWala Premium for unlimited high-speed downloads!` }
+      }));
       return;
     }
 
@@ -581,13 +641,22 @@ document.addEventListener('DOMContentLoaded', () => {
             resetBtnState();
             currentFileList = apiResult.list;
             displayActiveVideo(currentFileList[0], currentFileList);
+
+            // Record link usage & update quota
+            await recordLinkUsage(
+              currentUrl, 
+              res.provider, 
+              currentFileList[0]?.name, 
+              currentFileList[0]?.size_formatted
+            );
+            updateQuotaDisplay();
             return;
           } else {
             resetBtnState();
             const errMsg = apiResult.details || apiResult.error || apiResult.message || 'Unable to extract video. The link might be expired or password-protected.';
             showError(errMsg);
 
-            // Also show Telegram Bot card as a convenient fallback option
+            // Convenient fallback option without force blocking
             const idMatch = currentUrl.match(/(?:share|v|file|s)\/([a-zA-Z0-9_-]+)/);
             const fileId = idMatch ? idMatch[1].slice(0, 8) : 'terabox';
             const botLinkWithParam = `${APP_CONFIG.telegramBotUrl}?start=${encodeURIComponent(fileId)}`;
@@ -606,8 +675,8 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
       } else {
-        // DISKWALA / FLEZEN: Telegram Downloader Flow
-        setTimeout(() => {
+        // DISKWALA / FLEZEN: Direct Telegram Bot Fallback (No force gate popup modal)
+        setTimeout(async () => {
           resetBtnState();
 
           const idMatch = currentUrl.match(/(?:share|v|file|s)\/([a-zA-Z0-9_-]+)/);
@@ -623,7 +692,9 @@ document.addEventListener('DOMContentLoaded', () => {
             telegramReadyCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           }
 
-          openTelegramGate(fileId);
+          // Record usage and refresh quota
+          await recordLinkUsage(currentUrl, res.provider || 'diskwala', 'Diskwala Video File', '');
+          updateQuotaDisplay();
         }, 1000);
       }
     }
@@ -846,5 +917,136 @@ document.addEventListener('DOMContentLoaded', () => {
     applyLocale(currentLocale);
   }
 
+  // Premium Cinema Player Controls & Interactions
+  const playerSeekBackBtn = document.getElementById('player-seek-back-btn');
+  const playerSeekFwdBtn = document.getElementById('player-seek-fwd-btn');
+  const playerPipBtn = document.getElementById('player-pip-btn');
+  const playerTheaterBtn = document.getElementById('player-theater-btn');
+  const playerFsBtn = document.getElementById('player-fs-btn');
+  const playerBufferingOverlay = document.getElementById('player-buffering-overlay');
+  const mediaResultCard = document.getElementById('media-result-card');
+
+  // Seek -10s
+  playerSeekBackBtn?.addEventListener('click', () => {
+    if (embeddedPlayer) {
+      embeddedPlayer.currentTime = Math.max(0, embeddedPlayer.currentTime - 10);
+    }
+  });
+
+  // Seek +10s
+  playerSeekFwdBtn?.addEventListener('click', () => {
+    if (embeddedPlayer) {
+      embeddedPlayer.currentTime = Math.min(embeddedPlayer.duration || Infinity, embeddedPlayer.currentTime + 10);
+    }
+  });
+
+  // Speed chips
+  document.querySelectorAll<HTMLButtonElement>('.speed-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const speed = parseFloat(chip.getAttribute('data-speed') || '1');
+      if (embeddedPlayer) {
+        embeddedPlayer.playbackRate = speed;
+      }
+      document.querySelectorAll('.speed-chip').forEach(c => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+    });
+  });
+
+  // Picture in Picture
+  playerPipBtn?.addEventListener('click', async () => {
+    if (!embeddedPlayer) return;
+    try {
+      if ((document as any).pictureInPictureElement) {
+        await (document as any).exitPictureInPicture();
+      } else if ((document as any).pictureInPictureEnabled) {
+        await (embeddedPlayer as any).requestPictureInPicture();
+      }
+    } catch (err) {
+      console.warn('PiP error:', err);
+    }
+  });
+
+  // Theater Mode Toggle
+  playerTheaterBtn?.addEventListener('click', () => {
+    mediaResultCard?.classList.toggle('is-theater');
+  });
+
+  // Fullscreen Toggle
+  playerFsBtn?.addEventListener('click', () => {
+    if (!embeddedPlayer) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen?.();
+    } else {
+      embeddedPlayer.requestFullscreen?.();
+    }
+  });
+
+  // Buffering events on embedded player
+  if (embeddedPlayer && playerBufferingOverlay) {
+    embeddedPlayer.addEventListener('waiting', () => {
+      playerBufferingOverlay.style.display = 'flex';
+    });
+    embeddedPlayer.addEventListener('playing', () => {
+      playerBufferingOverlay.style.display = 'none';
+    });
+    embeddedPlayer.addEventListener('canplay', () => {
+      playerBufferingOverlay.style.display = 'none';
+    });
+  }
+
+  // Keyboard Shortcuts for Player
+  document.addEventListener('keydown', (e) => {
+    if (!resultPanel || resultPanel.style.display === 'none') return;
+    const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
+    if (tag === 'input' || tag === 'textarea') return;
+
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (embeddedPlayer) {
+        if (embeddedPlayer.paused) embeddedPlayer.play(); else embeddedPlayer.pause();
+      }
+    } else if (e.code === 'ArrowLeft') {
+      e.preventDefault();
+      if (embeddedPlayer) embeddedPlayer.currentTime = Math.max(0, embeddedPlayer.currentTime - 10);
+    } else if (e.code === 'ArrowRight') {
+      e.preventDefault();
+      if (embeddedPlayer) embeddedPlayer.currentTime = Math.min(embeddedPlayer.duration || Infinity, embeddedPlayer.currentTime + 10);
+    } else if (e.key === 'f' || e.key === 'F') {
+      e.preventDefault();
+      if (embeddedPlayer) {
+        if (document.fullscreenElement) document.exitFullscreen?.();
+        else embeddedPlayer.requestFullscreen?.();
+      }
+    } else if (e.key === 't' || e.key === 'T') {
+      e.preventDefault();
+      mediaResultCard?.classList.toggle('is-theater');
+    } else if (e.key === 'm' || e.key === 'M') {
+      e.preventDefault();
+      if (embeddedPlayer) embeddedPlayer.muted = !embeddedPlayer.muted;
+    }
+  });
+
   initI18n();
+
+  // Quota Upgrade Button Trigger
+  const quotaUpgradeBtn = document.getElementById('quota-upgrade-trigger');
+  quotaUpgradeBtn?.addEventListener('click', () => {
+    window.dispatchEvent(new CustomEvent('terawala:open-pricing', {
+      detail: { reason: 'Buy TeraWala Premium for unlimited high-speed downloads!' }
+    }));
+  });
+
+  // Check URL query param for automatic link resolving (e.g. from history / dashboard)
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramLink = urlParams.get('link');
+  if (paramLink && linkInput) {
+    linkInput.value = paramLink;
+    checkInputFeedback();
+    processLinkFlow();
+  }
+
+  // Initial quota display
+  updateQuotaDisplay();
+  window.addEventListener('terawala:auth-changed', updateQuotaDisplay);
+  window.addEventListener('terawala:subscription-activated', updateQuotaDisplay);
 });

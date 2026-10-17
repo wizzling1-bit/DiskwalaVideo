@@ -1,0 +1,1379 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { APP_CONFIG } from '../../utils/config';
+
+const breadcrumbs = [
+  { label: "Home", href: "/" },
+  { label: "Admin Console", href: "/admin/" }
+];
+---
+
+<BaseLayout 
+  title="Admin Console & Management Dashboard — TeraWala" 
+  description="Manage users, subscriptions, Razorpay transactions, daily link quotas, and site settings."
+  noindex={true}
+>
+  <div class="admin-wrapper">
+    <div class="container container-admin">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <!-- Checking Admin Authorization State -->
+      <div id="admin-auth-checking" class="admin-state-box">
+        <div class="admin-spinner"></div>
+        <p>Verifying admin security credentials...</p>
+      </div>
+
+      <!-- Access Denied / Admin Login Form -->
+      <div id="admin-gate-card" class="admin-gate-card" style="display: none;">
+        <div class="admin-shield-icon">
+          <img src="/logo.svg" alt="TeraWala Admin" width="56" height="56" class="admin-gate-logo" />
+        </div>
+        <h1 class="admin-gate-title">TeraWala Admin Console</h1>
+        <p class="admin-gate-desc" id="admin-gate-msg">
+          Sign in with an administrator account to access platform metrics, users, and financial logs.
+        </p>
+
+        <div id="gate-error-banner" class="gate-error-banner" style="display: none;"></div>
+
+        <form id="admin-login-form" class="admin-login-form">
+          <div class="admin-field">
+            <label for="admin-email">Admin Email</label>
+            <input type="email" id="admin-email" required placeholder="admin@terawala.com" />
+          </div>
+
+          <div class="admin-field">
+            <label for="admin-password">Password</label>
+            <input type="password" id="admin-password" required placeholder="••••••••" />
+          </div>
+
+          <button type="submit" class="btn-admin-submit" id="admin-login-btn">
+            <span>Unlock Admin Console</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </form>
+
+        <div class="admin-bootstrap-box" id="bootstrap-box" style="display: none;">
+          <p>Don't have an admin account yet? Click below to claim admin rights for the first registered user.</p>
+          <button type="button" class="btn-claim-admin" id="btn-claim-admin">
+            <span>Claim Admin Privileges</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MAIN ADMIN DASHBOARD -->
+      <div id="admin-main-panel" class="admin-main-panel" style="display: none;">
+        
+        <!-- Top Nav / Bar -->
+        <div class="admin-topbar">
+          <div class="topbar-left">
+            <img src="/logo.svg" alt="TeraWala" width="34" height="34" class="topbar-brand-logo" />
+            <div>
+              <h1 class="topbar-title">TeraWala Control Hub</h1>
+              <span class="topbar-sub">Super Admin Management & Analytics</span>
+            </div>
+          </div>
+
+          <div class="topbar-right">
+            <div class="system-status-chip">
+              <span class="status-dot"></span>
+              <span>Supabase & Razorpay Active</span>
+            </div>
+            <button type="button" class="btn-admin-logout" id="admin-logout-btn">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Metric Cards -->
+        <div class="admin-metrics-grid">
+          <!-- Total Users -->
+          <div class="metric-glass-card">
+            <div class="metric-head">
+              <span class="label">Total Users</span>
+              <div class="icon-circle icon-green">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+            </div>
+            <div class="metric-val" id="adm-total-users">0</div>
+            <span class="metric-note">Registered profiles</span>
+          </div>
+
+          <!-- VIP Subscribers -->
+          <div class="metric-glass-card">
+            <div class="metric-head">
+              <span class="label">Premium Subscribers</span>
+              <div class="icon-circle icon-amber">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"></path></svg>
+              </div>
+            </div>
+            <div class="metric-val" id="adm-vip-users">0</div>
+            <span class="metric-note">Active premium tier</span>
+          </div>
+
+          <!-- Total Links -->
+          <div class="metric-glass-card">
+            <div class="metric-head">
+              <span class="label">Links Processed</span>
+              <div class="icon-circle icon-blue">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              </div>
+            </div>
+            <div class="metric-val" id="adm-total-links">0</div>
+            <span class="metric-note" id="adm-today-links">0 today</span>
+          </div>
+
+          <!-- Total Revenue -->
+          <div class="metric-glass-card">
+            <div class="metric-head">
+              <span class="label">Revenue (Razorpay)</span>
+              <div class="icon-circle icon-emerald">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              </div>
+            </div>
+            <div class="metric-val" id="adm-total-rev">₹0</div>
+            <span class="metric-note">Live Gross Transactions</span>
+          </div>
+        </div>
+
+        <!-- Tab Switcher -->
+        <div class="admin-tabs-nav" role="tablist">
+          <button type="button" class="admin-tab-btn is-active" data-tab="tab-users">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            <span>Users</span>
+          </button>
+          <button type="button" class="admin-tab-btn" data-tab="tab-payments">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            <span>Razorpay Payments</span>
+          </button>
+          <button type="button" class="admin-tab-btn" data-tab="tab-links">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            <span>Link Stream Logs</span>
+          </button>
+          <button type="button" class="admin-tab-btn" data-tab="tab-settings">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>Site Settings</span>
+          </button>
+        </div>
+
+        <!-- TAB 1: USER MANAGEMENT -->
+        <section id="tab-users" class="admin-tab-content is-active">
+          <div class="table-card">
+            <div class="table-card-header">
+              <div>
+                <h2 class="table-card-title">User Accounts</h2>
+                <p class="table-card-sub">Manage membership tiers, roles, and daily quotas</p>
+              </div>
+              <div class="table-actions">
+                <input type="text" id="user-search-input" placeholder="Search email..." class="search-input" />
+                <button type="button" class="btn-subtle" id="refresh-users-btn">Refresh</button>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-data-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Tier</th>
+                    <th>Daily Quota</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-users-tbody">
+                  <!-- Populated via script -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 2: RAZORPAY PAYMENTS -->
+        <section id="tab-payments" class="admin-tab-content">
+          <div class="table-card">
+            <div class="table-card-header">
+              <div>
+                <h2 class="table-card-title">Razorpay Transaction Records</h2>
+                <p class="table-card-sub">Live log of verified subscriptions and payments</p>
+              </div>
+              <button type="button" class="btn-subtle" id="refresh-payments-btn">Refresh</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-data-table">
+                <thead>
+                  <tr>
+                    <th>Payment ID</th>
+                    <th>User Email</th>
+                    <th>Plan</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Valid Until</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-payments-tbody">
+                  <!-- Populated via script -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: LINK ACTIVITY STREAM -->
+        <section id="tab-links" class="admin-tab-content">
+          <div class="table-card">
+            <div class="table-card-header">
+              <div>
+                <h2 class="table-card-title">Live Link Processing Feed</h2>
+                <p class="table-card-sub">Real-time log of Terabox and Diskwala links resolved across TeraWala</p>
+              </div>
+              <button type="button" class="btn-subtle" id="refresh-links-btn">Refresh</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-data-table">
+                <thead>
+                  <tr>
+                    <th>File / URL</th>
+                    <th>Provider</th>
+                    <th>User / Guest</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-links-tbody">
+                  <!-- Populated via script -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 4: SITE SETTINGS -->
+        <section id="tab-settings" class="admin-tab-content">
+          <div class="settings-grid">
+            <!-- Setting 1: Free Daily Quota -->
+            <div class="settings-card">
+              <h3 class="settings-title">Free Daily Link Limit</h3>
+              <p class="settings-desc">Set the maximum free video links allowed per day for unregistered/free tier users.</p>
+              <div class="setting-input-row">
+                <input type="number" id="setting-free-limit" min="1" max="100" class="setting-number-input" />
+                <button type="button" class="btn-save-setting" id="save-limit-btn">Update Limit</button>
+              </div>
+            </div>
+
+            <!-- Setting 2: Global Announcement -->
+            <div class="settings-card">
+              <h3 class="settings-title">Global Banner Announcement</h3>
+              <p class="settings-desc">Broadcast a message banner to all visitors at the top of the platform.</p>
+              <div class="setting-input-col">
+                <textarea id="setting-announcement-text" rows="3" class="setting-textarea" placeholder="Welcome to TeraWala!"></textarea>
+                <button type="button" class="btn-save-setting" id="save-announcement-btn">Save Announcement</button>
+              </div>
+            </div>
+
+            <!-- Setting 3: Telegram Community URL -->
+            <div class="settings-card">
+              <h3 class="settings-title">Official Telegram Channel</h3>
+              <p class="settings-desc">URL linked across floating buttons and Telegram call-to-actions.</p>
+              <div class="setting-input-row">
+                <input type="url" id="setting-telegram-url" class="setting-text-input" value="https://telegram.me/terawala_official" />
+                <button type="button" class="btn-save-setting" id="save-tg-btn">Update Telegram</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .admin-wrapper {
+    padding: 30px 16px 80px;
+    min-height: 85vh;
+  }
+  .container-admin {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .admin-state-box,
+  .admin-gate-card {
+    background: rgba(10, 16, 18, 0.92);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: var(--radius-xl);
+    padding: 50px 30px;
+    max-width: 520px;
+    margin: 40px auto;
+    text-align: center;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(16, 185, 129, 0.15);
+  }
+  .admin-spinner {
+    width: 38px;
+    height: 38px;
+    border: 3px solid rgba(16, 185, 129, 0.2);
+    border-top-color: #10b981;
+    border-radius: 50%;
+    animation: admSpin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes admSpin { to { transform: rotate(360deg); } }
+
+  .admin-shield-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-lg);
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .admin-gate-title {
+    font-size: var(--text-2xl);
+    font-weight: 850;
+    color: #ffffff;
+    margin-bottom: 8px;
+  }
+  .admin-gate-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+    margin-bottom: 24px;
+  }
+  .gate-error-banner {
+    padding: 10px 14px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+    text-align: left;
+  }
+  .admin-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+  }
+  .admin-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .admin-field label {
+    font-size: var(--text-xs);
+    font-weight: 650;
+    color: var(--color-text-secondary);
+  }
+  .admin-field input {
+    width: 100%;
+    padding: 12px 14px;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    color: #ffffff;
+    font-size: var(--text-sm);
+  }
+  .admin-field input:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  }
+  .btn-admin-submit {
+    margin-top: 10px;
+    padding: 13px;
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    color: #ffffff;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-weight: 750;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 18px rgba(16, 185, 129, 0.35);
+  }
+  .admin-bootstrap-box {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+  }
+  .btn-claim-admin {
+    margin-top: 10px;
+    padding: 10px 18px;
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+    font-size: var(--text-xs);
+    font-weight: 750;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  /* Topbar */
+  .admin-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 28px;
+    background: rgba(12, 19, 21, 0.95);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: var(--radius-xl);
+    margin-bottom: 24px;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.7);
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .admin-badge-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 12px #10b981;
+  }
+  .topbar-title {
+    font-size: var(--text-xl);
+    font-weight: 850;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+  }
+  .topbar-sub {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+  }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .system-status-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #34d399;
+  }
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+  }
+  .btn-admin-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+    font-weight: 650;
+    cursor: pointer;
+  }
+
+  /* Metrics Grid */
+  .admin-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 26px;
+  }
+  .metric-glass-card {
+    background: rgba(11, 17, 19, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .metric-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .metric-head .label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .icon-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .metric-val {
+    font-size: 2.2rem;
+    font-weight: 850;
+    color: #ffffff;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .metric-note {
+    font-size: 11px;
+    color: var(--color-text-muted);
+  }
+
+  /* Tabs Nav */
+  .admin-tabs-nav {
+    display: flex;
+    gap: 8px;
+    background: rgba(8, 13, 14, 0.7);
+    padding: 6px;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 22px;
+    overflow-x: auto;
+  }
+  .admin-tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+    font-weight: 750;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .admin-tab-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .admin-tab-btn.is-active {
+    background: rgba(16, 185, 129, 0.2);
+    color: #ffffff;
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  }
+
+  .admin-tab-content {
+    display: none;
+  }
+  .admin-tab-content.is-active {
+    display: block;
+    animation: fadeIn 0.2s ease;
+  }
+
+  /* Tables */
+  .table-card {
+    background: rgba(11, 17, 19, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-xl);
+    padding: 26px;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6);
+  }
+  .table-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .table-card-title {
+    font-size: var(--text-lg);
+    font-weight: 800;
+    color: #ffffff;
+  }
+  .table-card-sub {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin-top: 2px;
+  }
+  .table-actions {
+    display: flex;
+    gap: 10px;
+  }
+  .search-input {
+    padding: 7px 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-sm);
+    color: #ffffff;
+    font-size: var(--text-xs);
+  }
+  .btn-subtle {
+    padding: 7px 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--text-xs);
+    cursor: pointer;
+  }
+  .btn-subtle:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+  .admin-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-xs);
+    text-align: left;
+  }
+  .admin-data-table th {
+    padding: 12px 14px;
+    color: var(--color-text-muted);
+    font-weight: 750;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .admin-data-table td {
+    padding: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--color-text-secondary);
+  }
+  .admin-data-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .badge-vip {
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 750;
+    text-transform: uppercase;
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.4);
+  }
+  .badge-free {
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 750;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+  }
+  .badge-admin {
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+  }
+
+  .btn-action-small {
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-sm);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-right: 4px;
+    transition: all 0.15s;
+  }
+  .btn-action-small:hover {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(52, 211, 153, 0.4);
+    color: #34d399;
+  }
+
+  /* Settings Grid */
+  .settings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .settings-card {
+    background: rgba(11, 17, 19, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+  .settings-title {
+    font-size: var(--text-base);
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 6px;
+  }
+  .settings-desc {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .setting-input-row {
+    display: flex;
+    gap: 10px;
+  }
+  .setting-input-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .setting-number-input,
+  .setting-text-input {
+    flex: 1;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    color: #ffffff;
+    font-size: var(--text-sm);
+  }
+  .setting-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    color: #ffffff;
+    font-size: var(--text-xs);
+    resize: vertical;
+  }
+  .btn-save-setting {
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    border-radius: var(--radius-md);
+    color: #ffffff;
+    font-size: var(--text-xs);
+    font-weight: 750;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 960px) {
+    .admin-metrics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .settings-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .admin-topbar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      padding: 16px;
+    }
+    .topbar-right {
+      justify-content: space-between;
+      width: 100%;
+    }
+    .admin-tabs-nav {
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .admin-tabs-nav::-webkit-scrollbar {
+      display: none;
+    }
+    .admin-tab-btn {
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding: 8px 14px;
+    }
+    .table-card-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+    .table-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    .search-input {
+      width: 100%;
+    }
+    .setting-input-row {
+      flex-direction: column;
+    }
+    .btn-save-setting {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .admin-metrics-grid {
+      grid-template-columns: 1fr;
+    }
+    .table-card {
+      padding: 16px 12px;
+    }
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -4px;
+    }
+    .admin-data-table {
+      min-width: 580px;
+    }
+    .admin-data-table th, .admin-data-table td {
+      padding: 10px 8px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .admin-console-section {
+      padding: 16px 10px 40px;
+    }
+    .admin-gate-card {
+      padding: 24px 14px 20px;
+      border-radius: var(--radius-lg);
+    }
+    .admin-gate-title {
+      font-size: 1.4rem;
+    }
+    .gate-input {
+      font-size: 16px !important;
+      height: 48px;
+    }
+    .gate-submit-btn {
+      min-height: 48px;
+      font-size: 15px;
+    }
+    .admin-topbar {
+      padding: 12px 14px;
+      border-radius: var(--radius-lg);
+    }
+    .topbar-title {
+      font-size: 1.15rem;
+    }
+  }
+
+  /* Light Mode Styling for Admin Console */
+  :root[data-theme="light"] .admin-topbar {
+    background: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+  }
+  :root[data-theme="light"] .topbar-title {
+    color: #0f172a !important;
+  }
+  :root[data-theme="light"] .metric-glass-card {
+    background: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+  }
+  :root[data-theme="light"] .metric-val {
+    color: #0f172a !important;
+  }
+  :root[data-theme="light"] .admin-tabs-nav {
+    background: #f1f5f9 !important;
+    border-color: #e2e8f0 !important;
+  }
+  :root[data-theme="light"] .admin-tab-btn {
+    color: #475569 !important;
+  }
+  :root[data-theme="light"] .admin-tab-btn.is-active {
+    background: #ffffff !important;
+    color: #059669 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  }
+  :root[data-theme="light"] .table-card {
+    background: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.06) !important;
+  }
+  :root[data-theme="light"] .table-card-title {
+    color: #0f172a !important;
+  }
+  :root[data-theme="light"] .admin-data-table th {
+    border-bottom-color: #e2e8f0 !important;
+    color: #64748b !important;
+  }
+  :root[data-theme="light"] .admin-data-table td {
+    border-bottom-color: #f1f5f9 !important;
+    color: #334155 !important;
+  }
+  .user-row-email,
+  .payment-row-id,
+  .link-row-title {
+    font-weight: 700;
+    color: #ffffff;
+  }
+  .user-row-sub {
+    font-size: 11px;
+    color: var(--color-text-muted);
+  }
+
+  :root[data-theme="light"] .user-row-email,
+  :root[data-theme="light"] .payment-row-id,
+  :root[data-theme="light"] .link-row-title {
+    color: #0f172a !important;
+  }
+  :root[data-theme="light"] .user-row-sub {
+    color: #64748b !important;
+  }
+  :root[data-theme="light"] .search-input,
+  :root[data-theme="light"] .setting-input,
+  :root[data-theme="light"] .setting-number-input,
+  :root[data-theme="light"] .setting-text-input,
+  :root[data-theme="light"] .setting-textarea {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+  }
+  :root[data-theme="light"] .settings-card {
+    background: #ffffff !important;
+    border-color: rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+  }
+  :root[data-theme="light"] .settings-title {
+    color: #0f172a !important;
+  }
+  :root[data-theme="light"] .settings-desc {
+    color: #64748b !important;
+  }
+  :root[data-theme="light"] .admin-gate-card {
+    background: #ffffff !important;
+    border-color: rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.1) !important;
+  }
+  :root[data-theme="light"] .admin-gate-title {
+    color: #0f172a !important;
+  }
+  :root[data-theme="light"] .admin-gate-desc {
+    color: #64748b !important;
+  }
+  :root[data-theme="light"] .admin-field label {
+    color: #334155 !important;
+  }
+  :root[data-theme="light"] .admin-field input {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+  }
+  :root[data-theme="light"] .admin-field input:focus {
+    background: #ffffff !important;
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15) !important;
+  }
+</style>
+
+<script>
+  import { getCurrentUser, getUserProfile, getSupabase, signOutUser } from '../../utils/supabase';
+
+  const checkingEl = document.getElementById('admin-auth-checking');
+  const gateCard = document.getElementById('admin-gate-card');
+  const gateMsg = document.getElementById('admin-gate-msg');
+  const mainPanel = document.getElementById('admin-main-panel');
+  const errorBanner = document.getElementById('gate-error-banner');
+  const bootstrapBox = document.getElementById('bootstrap-box');
+
+  const admTotalUsers = document.getElementById('adm-total-users');
+  const admVipUsers = document.getElementById('adm-vip-users');
+  const admTotalLinks = document.getElementById('adm-total-links');
+  const admTodayLinks = document.getElementById('adm-today-links');
+  const admTotalRev = document.getElementById('adm-total-rev');
+
+  const usersTbody = document.getElementById('admin-users-tbody');
+  const paymentsTbody = document.getElementById('admin-payments-tbody');
+  const linksTbody = document.getElementById('admin-links-tbody');
+
+  let allUsersList: any[] = [];
+
+  async function checkAdminState() {
+    try {
+      const user = await getCurrentUser();
+      if (!user) {
+        showGate('Please sign in with administrator credentials.');
+        return;
+      }
+
+      const profile = await getUserProfile(user.id);
+      if (!profile || profile.role !== 'admin') {
+        showGate('Access Denied: Your account does not have administrator privileges.');
+        if (bootstrapBox) bootstrapBox.style.display = 'block';
+        return;
+      }
+
+      // User is verified admin!
+      if (checkingEl) checkingEl.style.display = 'none';
+      if (gateCard) gateCard.style.display = 'none';
+      if (mainPanel) mainPanel.style.display = 'block';
+
+      await loadAdminData();
+    } catch (err) {
+      console.error('Error verifying admin:', err);
+      showGate('Error checking admin session.');
+    }
+  }
+
+  function showGate(message: string) {
+    if (checkingEl) checkingEl.style.display = 'none';
+    if (gateCard) gateCard.style.display = 'block';
+    if (mainPanel) mainPanel.style.display = 'none';
+    if (gateMsg) gateMsg.textContent = message;
+  }
+
+  async function loadAdminData() {
+    const sb = getSupabase();
+
+    // 1. Fetch Overview Stats via RPC
+    try {
+      const { data: stats, error } = await sb.rpc('get_admin_stats');
+      if (!error && stats) {
+        if (admTotalUsers) admTotalUsers.textContent = (stats.total_users || 0).toString();
+        if (admVipUsers) admVipUsers.textContent = (stats.premium_users || 0).toString();
+        if (admTotalLinks) admTotalLinks.textContent = (stats.total_links || 0).toString();
+        if (admTodayLinks) admTodayLinks.textContent = `${stats.today_links || 0} processed today`;
+        if (admTotalRev) admTotalRev.textContent = `₹${stats.total_revenue || 0}`;
+      }
+    } catch (err) {
+      console.warn('Stats RPC error:', err);
+    }
+
+    // 2. Load Users
+    await loadUsers();
+
+    // 3. Load Payments
+    await loadPayments();
+
+    // 4. Load Links
+    await loadLinks();
+
+    // 5. Load Settings
+    await loadSettings();
+  }
+
+  async function loadUsers() {
+    const sb = getSupabase();
+    const { data, error } = await sb.from('profiles').select('*').order('created_at', { ascending: false }).limit(50);
+    if (!error && data) {
+      allUsersList = data;
+      renderUsers(allUsersList);
+      if (admVipUsers) {
+        const vipCount = allUsersList.filter(u => u.subscription_tier === 'premium' || u.subscription_tier === 'vip' || u.role === 'admin').length;
+        if (vipCount > 0 && parseInt(admVipUsers.textContent || '0', 10) === 0) {
+          admVipUsers.textContent = vipCount.toString();
+        }
+      }
+    }
+  }
+
+  function renderUsers(users: any[]) {
+    if (!usersTbody) return;
+    usersTbody.innerHTML = '';
+
+    users.forEach((u) => {
+      const tr = document.createElement('tr');
+      const isVip = u.subscription_tier === 'premium' || u.subscription_tier === 'vip';
+      const isAdmin = u.role === 'admin';
+      const dateStr = u.created_at ? new Date(u.created_at).toLocaleDateString() : 'N/A';
+      const planTitle = u.subscription_plan_name || (isAdmin ? 'Admin VIP' : isVip ? 'Premium VIP' : 'Free Tier');
+
+      tr.innerHTML = `
+        <td>
+          <div class="user-row-email">${u.email}</div>
+          <div class="user-row-sub">${u.full_name || 'No name'}</div>
+        </td>
+        <td>
+          <span class="${isAdmin ? 'badge-admin' : 'badge-free'}">${u.role}</span>
+        </td>
+        <td>
+          <span class="${isVip ? 'badge-vip' : 'badge-free'}">${planTitle}</span>
+        </td>
+        <td style="font-weight: 700; color: #10b981;">
+          ${isVip ? 'Unlimited' : `${u.daily_limit || 5} links`}
+        </td>
+        <td style="font-size: 11px;">${dateStr}</td>
+        <td>
+          <button type="button" class="btn-action-small" data-toggle-vip="${u.id}" data-current-tier="${u.subscription_tier}">
+            ${isVip ? 'Revoke VIP' : 'Grant VIP'}
+          </button>
+          <button type="button" class="btn-action-small" data-toggle-admin="${u.id}" data-current-role="${u.role}">
+            ${isAdmin ? 'Demote' : 'Make Admin'}
+          </button>
+          <button type="button" class="btn-action-small" data-edit-limit="${u.id}" data-current-limit="${u.daily_limit || 5}">
+            Set Limit
+          </button>
+        </td>
+      `;
+      usersTbody.appendChild(tr);
+    });
+
+    wireUserActionButtons();
+  }
+
+  function wireUserActionButtons() {
+    const sb = getSupabase();
+
+    // Toggle VIP
+    document.querySelectorAll('[data-toggle-vip]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const userId = btn.getAttribute('data-toggle-vip');
+        const currTier = btn.getAttribute('data-current-tier');
+        const newTier = (currTier === 'premium' || currTier === 'vip') ? 'free' : 'premium';
+        const newLimit = newTier === 'premium' ? 99999 : 5;
+
+        try {
+          await sb.rpc('admin_update_user', {
+            target_user_id: userId,
+            new_role: null,
+            new_tier: newTier,
+            new_daily_limit: newLimit
+          });
+          await loadUsers();
+        } catch (err: any) {
+          alert('Error: ' + err.message);
+        }
+      });
+    });
+
+    // Toggle Admin
+    document.querySelectorAll('[data-toggle-admin]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const userId = btn.getAttribute('data-toggle-admin');
+        const currRole = btn.getAttribute('data-current-role');
+        const newRole = currRole === 'admin' ? 'user' : 'admin';
+
+        if (confirm(`Change user role to ${newRole}?`)) {
+          try {
+            await sb.rpc('admin_update_user', {
+              target_user_id: userId,
+              new_role: newRole,
+              new_tier: null,
+              new_daily_limit: null
+            });
+            await loadUsers();
+          } catch (err: any) {
+            alert('Error: ' + err.message);
+          }
+        }
+      });
+    });
+
+    // Set Limit
+    document.querySelectorAll('[data-edit-limit]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const userId = btn.getAttribute('data-edit-limit');
+        const currLimit = btn.getAttribute('data-current-limit') || '5';
+        const input = prompt('Enter new daily free link limit:', currLimit);
+        if (input !== null) {
+          const num = parseInt(input, 10);
+          if (isNaN(num) || num < 0) return alert('Invalid number');
+
+          try {
+            await sb.rpc('admin_update_user', {
+              target_user_id: userId,
+              new_role: null,
+              new_tier: null,
+              new_daily_limit: num
+            });
+            await loadUsers();
+          } catch (err: any) {
+            alert('Error: ' + err.message);
+          }
+        }
+      });
+    });
+  }
+
+  async function loadPayments() {
+    const sb = getSupabase();
+    const { data, error } = await sb.from('payments').select('*').order('created_at', { ascending: false }).limit(50);
+    if (!error && paymentsTbody && data) {
+      paymentsTbody.innerHTML = '';
+      if (data.length === 0) {
+        paymentsTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:var(--color-text-muted);">No payment records yet.</td></tr>';
+        return;
+      }
+      data.forEach((p) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="payment-row-id" style="font-family: monospace; font-size: 11px;">${p.razorpay_payment_id || p.id.slice(0, 8)}</td>
+          <td>${p.user_email || 'User'}</td>
+          <td style="font-weight: 700;">${p.plan_name}</td>
+          <td style="color: #10b981; font-weight: 800;">₹${p.amount}</td>
+          <td><span class="badge-vip">${p.status}</span></td>
+          <td style="font-size: 11px;">${p.valid_until ? new Date(p.valid_until).toLocaleDateString() : 'N/A'}</td>
+          <td style="font-size: 11px;">${p.created_at ? new Date(p.created_at).toLocaleString() : ''}</td>
+        `;
+        paymentsTbody.appendChild(tr);
+      });
+    }
+  }
+
+  async function loadLinks() {
+    const sb = getSupabase();
+    const { data, error } = await sb.from('link_usage').select('*').order('created_at', { ascending: false }).limit(50);
+    if (!error && linksTbody && data) {
+      linksTbody.innerHTML = '';
+      if (data.length === 0) {
+        linksTbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--color-text-muted);">No links processed yet.</td></tr>';
+        return;
+      }
+      data.forEach((l) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>
+            <div class="link-row-title" style="max-width: 240px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${l.link_url}">
+              ${l.file_name || l.link_url}
+            </div>
+          </td>
+          <td><span class="badge-vip" style="background:rgba(59,130,246,0.18); color:#60a5fa;">${l.provider}</span></td>
+          <td>${l.user_email || 'Guest / Anon'}</td>
+          <td><span style="color:#10b981; font-weight:700;">● ${l.status}</span></td>
+          <td style="font-size: 11px;">${l.created_at ? new Date(l.created_at).toLocaleString() : ''}</td>
+        `;
+        linksTbody.appendChild(tr);
+      });
+    }
+  }
+
+  async function loadSettings() {
+    const sb = getSupabase();
+    const { data, error } = await sb.from('site_settings').select('*');
+    if (!error && data) {
+      data.forEach((s) => {
+        if (s.key === 'free_daily_limit') {
+          const inp = document.getElementById('setting-free-limit') as HTMLInputElement | null;
+          if (inp) inp.value = s.value;
+        } else if (s.key === 'announcement') {
+          const ta = document.getElementById('setting-announcement-text') as HTMLTextAreaElement | null;
+          if (ta) ta.value = typeof s.value === 'object' ? s.value.message : s.value;
+        } else if (s.key === 'telegram_channel') {
+          const inp = document.getElementById('setting-telegram-url') as HTMLInputElement | null;
+          if (inp) inp.value = typeof s.value === 'string' ? s.value : 'https://telegram.me/terawala_official';
+        }
+      });
+    }
+  }
+
+  // Setting Save Handlers
+  document.getElementById('save-limit-btn')?.addEventListener('click', async () => {
+    const val = parseInt((document.getElementById('setting-free-limit') as HTMLInputElement).value, 10);
+    const sb = getSupabase();
+    await sb.rpc('admin_update_setting', { p_key: 'free_daily_limit', p_value: val });
+    alert('Daily Free Limit updated to ' + val);
+  });
+
+  document.getElementById('save-announcement-btn')?.addEventListener('click', async () => {
+    const msg = (document.getElementById('setting-announcement-text') as HTMLTextAreaElement).value;
+    const sb = getSupabase();
+    await sb.rpc('admin_update_setting', { p_key: 'announcement', p_value: { enabled: true, message: msg } });
+    alert('Global announcement updated!');
+  });
+
+  document.getElementById('save-tg-btn')?.addEventListener('click', async () => {
+    const url = (document.getElementById('setting-telegram-url') as HTMLInputElement).value;
+    const sb = getSupabase();
+    await sb.rpc('admin_update_setting', { p_key: 'telegram_channel', p_value: url });
+    alert('Telegram channel updated to ' + url);
+  });
+
+  // Tab Switching
+  document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('is-active'));
+      document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('is-active'));
+
+      btn.classList.add('is-active');
+      const tabId = btn.getAttribute('data-tab');
+      if (tabId) document.getElementById(tabId)?.classList.add('is-active');
+    });
+  });
+
+  // Search filter
+  document.getElementById('user-search-input')?.addEventListener('input', (e) => {
+    const query = (e.target as HTMLInputElement).value.toLowerCase();
+    const filtered = allUsersList.filter(u => 
+      (u.email || '').toLowerCase().includes(query) || 
+      (u.full_name || '').toLowerCase().includes(query)
+    );
+    renderUsers(filtered);
+  });
+
+  // Refreshes
+  document.getElementById('refresh-users-btn')?.addEventListener('click', loadUsers);
+  document.getElementById('refresh-payments-btn')?.addEventListener('click', loadPayments);
+  document.getElementById('refresh-links-btn')?.addEventListener('click', loadLinks);
+
+  // Logout
+  document.getElementById('admin-logout-btn')?.addEventListener('click', async () => {
+    if (confirm('Log out from Admin Console?')) {
+      await signOutUser();
+      window.location.href = '/';
+    }
+  });
+
+  // Claim first admin if needed
+  document.getElementById('btn-claim-admin')?.addEventListener('click', async () => {
+    const user = await getCurrentUser();
+    if (!user) return;
+    const sb = getSupabase();
+    const { error } = await sb.from('profiles').update({ role: 'admin' }).eq('id', user.id);
+    if (!error) {
+      alert('Congratulations! Your account is now Admin. Refreshing...');
+      window.location.reload();
+    } else {
+      alert('Could not set admin: ' + error.message);
+    }
+  });
+
+  // Admin login form submission
+  document.getElementById('admin-login-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = (document.getElementById('admin-email') as HTMLInputElement).value.trim();
+    const pw = (document.getElementById('admin-password') as HTMLInputElement).value;
+    const sb = getSupabase();
+
+    try {
+      const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+      if (error) throw error;
+      window.location.reload();
+    } catch (err: any) {
+      if (errorBanner) {
+        errorBanner.textContent = err.message || 'Login failed.';
+        errorBanner.style.display = 'block';
+      }
+    }
+  });
+
+  // Run initial check
+  checkAdminState();
+</script>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080e11" />
+      <stop offset="100%" stop-color="#040608" />
+    </linearGradient>
+
+    <!-- Emerald-Cyan Glow Gradient -->
+    <linearGradient id="teraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f2fe" />
+      <stop offset="40%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <!-- Cloud Arc Gradient -->
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0.6" />
+    </linearGradient>
+
+    <!-- Filter for subtle neon ambient glow -->
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Base with border -->
+  <rect width="64" height="64" rx="16" fill="url(#bgGrad)" stroke="#10b981" stroke-opacity="0.35" stroke-width="1.5" />
+
+  <!-- Cloud Storage Arc (Stylized behind T) -->
+  <path d="M34 16 C38 12, 47 13, 49 19 C54 20, 56 26, 52 30 C55 35, 52 42, 45 42 L39 42" 
+        fill="none" 
+        stroke="url(#cloudGrad)" 
+        stroke-width="3" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        opacity="0.75" />
+
+  <!-- Stylized Geometric 'T' & Integrated Play Triangle -->
+  <!-- Top bar of the T -->
+  <path d="M14 22 L36 22 L34 27 L22 27 L22 47 L16 47 L16 22 Z" 
+        fill="url(#teraGrad)" 
+        filter="url(#neonGlow)" />
+
+  <!-- Central High-Impact Play Triangle -->
+  <polygon points="28,29 44,38 28,47" 
+           fill="url(#teraGrad)" 
+           filter="url(#neonGlow)" />
+</svg>

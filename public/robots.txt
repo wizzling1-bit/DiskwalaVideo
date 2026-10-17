@@ -4,6 +4,10 @@ Disallow: /404
 Disallow: /500
 Disallow: /404/
 Disallow: /500/
+Disallow: /admin/
+Disallow: /admin
+Disallow: /dashboard/
+Disallow: /dashboard
 
 # Major Search Engine Crawlers
 User-agent: Googlebot

@@ -896,6 +896,38 @@ const faqJsonLd = {
       padding-left: 24px;
     }
   }
+
+  @media (max-width: 480px) {
+    .bezel-inner {
+      padding: 12px 8px;
+      border-radius: var(--radius-lg);
+    }
+    .guide-article {
+      padding: 20px 14px;
+      border-radius: var(--radius-lg);
+    }
+    .bento-card {
+      padding: 18px 14px;
+    }
+  }
+
+  :global(:root[data-theme="light"]) .bezel-outer {
+    background: rgba(15, 23, 42, 0.04) !important;
+    border-color: rgba(16, 185, 129, 0.25) !important;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(15, 23, 42, 0.03) !important;
+  }
+
+  :global(:root[data-theme="light"]) .bezel-inner {
+    background: #ffffff !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), inset 0 1px 0 #ffffff !important;
+  }
+
+  :global(:root[data-theme="light"]) .guide-article {
+    background: #ffffff !important;
+    border-color: rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04) !important;
+  }
 </style>
 
 <script>

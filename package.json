@@ -11,6 +11,7 @@
     "deploy": "wrangler deploy"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
     "astro": "^5.4.2"
   },
   "devDependencies": {

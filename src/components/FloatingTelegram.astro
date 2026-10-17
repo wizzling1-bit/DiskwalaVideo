@@ -1,0 +1,173 @@
+---
+// Floating Telegram Action Button
+// Target: https://telegram.me/terawala_official
+---
+
+<aside class="floating-tg-container" aria-label="Official Telegram Community">
+  <!-- Glowing radar pulses behind button -->
+  <span class="tg-pulse-ring ring-1" aria-hidden="true"></span>
+  <span class="tg-pulse-ring ring-2" aria-hidden="true"></span>
+
+  <a 
+    href="https://telegram.me/terawala_official" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    class="floating-tg-fab"
+    id="floating-tg-link"
+    title="Join Official Telegram Channel"
+    aria-label="Join Official Telegram Channel"
+  >
+    <!-- Crisp Telegram Paperplane Icon -->
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" class="tg-paperplane-svg" aria-hidden="true">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.6 7.54c-.12.55-.45.69-.91.43l-2.47-1.82-1.19 1.15c-.13.13-.24.24-.5.24l.18-2.5 4.55-4.11c.2-.18-.04-.27-.31-.1l-5.63 3.54-2.42-.76c-.53-.16-.54-.53.11-.79l9.46-3.65c.44-.16.82.1.68.78z"/>
+    </svg>
+
+    <!-- Glowing Live Online Pulse Indicator -->
+    <span class="tg-live-dot" aria-hidden="true"></span>
+  </a>
+</aside>
+
+<style>
+  .floating-tg-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 998;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    width: 52px;
+    height: 52px;
+  }
+
+  /* Multi-layer pulsating animated waves */
+  .tg-pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    pointer-events: none;
+    border: 2px solid rgba(16, 185, 129, 0.7);
+    animation: tgPulseGlow 2.6s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
+  }
+
+  .tg-pulse-ring.ring-2 {
+    animation-delay: 1.3s;
+    border-color: rgba(34, 158, 217, 0.7);
+  }
+
+  @keyframes tgPulseGlow {
+    0% {
+      transform: translate(-50%, -50%) scale(0.95);
+      opacity: 0.85;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1.6);
+      opacity: 0;
+    }
+  }
+
+  /* Main Circular Floating Action Button */
+  .floating-tg-fab {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 40%, #059669 100%);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    text-decoration: none;
+    box-shadow: 
+      0 10px 28px rgba(2, 132, 199, 0.5),
+      0 0 22px rgba(16, 185, 129, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s, background 0.25s;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .floating-tg-fab:hover {
+    transform: translateY(-3px) scale(1.1);
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 40%, #10b981 100%);
+    box-shadow: 
+      0 14px 36px rgba(2, 132, 199, 0.65),
+      0 0 30px rgba(16, 185, 129, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .floating-tg-fab:active {
+    transform: translateY(0) scale(0.95);
+  }
+
+  .tg-paperplane-svg {
+    transition: transform 0.25s ease;
+  }
+
+  .floating-tg-fab:hover .tg-paperplane-svg {
+    transform: rotate(-15deg) scale(1.12);
+  }
+
+  /* Live Online Dot in top-right of FAB */
+  .tg-live-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #34d399;
+    border: 2px solid #0369a1;
+    box-shadow: 0 0 8px #34d399;
+    animation: livePulse 1.8s infinite ease-in-out;
+  }
+
+  @keyframes livePulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  /* Mobile screen optimization with safe-area insets */
+  @media (max-width: 640px) {
+    .floating-tg-container {
+      bottom: max(18px, env(safe-area-inset-bottom, 18px));
+      right: max(16px, env(safe-area-inset-right, 16px));
+      width: 48px;
+      height: 48px;
+    }
+
+    .floating-tg-fab {
+      width: 48px;
+      height: 48px;
+    }
+
+    .tg-paperplane-svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .floating-tg-container {
+      bottom: max(14px, env(safe-area-inset-bottom, 14px));
+      right: max(12px, env(safe-area-inset-right, 12px));
+      width: 44px;
+      height: 44px;
+    }
+    .floating-tg-fab {
+      width: 44px;
+      height: 44px;
+    }
+    .tg-paperplane-svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+</style>

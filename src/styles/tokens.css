@@ -109,3 +109,74 @@
 
   --stagger-step: 0.065s;
 }
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* Surface & Background Palette (Premium Alabaster Pearl Light Mode) */
+  --color-bg: #f5f6f9;
+  --color-bg-translucent: rgba(245, 246, 249, 0.94);
+  --color-surface-0: #f5f6f9;
+  --color-surface-1: #ffffff;
+  --color-surface-2: #edf0f5;
+  --color-surface-3: #dfe5ee;
+  --color-surface-card: #ffffff;
+  
+  --color-border: #dbe2ea;
+  --color-border-subtle: rgba(219, 226, 234, 0.85);
+  --color-border-strong: rgba(5, 150, 105, 0.35);
+  --color-border-focus: #059669;
+
+  /* Standardized Semantic Text Palette (High Contrast Slate) */
+  --color-text: #090d16;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748b;
+  --color-text-inverse: #ffffff;
+  --color-text-btn: #ffffff;
+  --color-text-emerald: #047857;
+
+  /* Primary Emerald Accent */
+  --color-primary: #059669;
+  --color-primary-hover: #047857;
+  --color-primary-pressed: #065f46;
+  --color-primary-glow: rgba(5, 150, 105, 0.18);
+  --color-primary-soft: rgba(5, 150, 105, 0.08);
+  --color-primary-border: rgba(5, 150, 105, 0.28);
+
+  /* Secondary Provider Accents (Calibrated for Light Backgrounds) */
+  --color-terabox: #059669;
+  --color-diskwala: #0284c7;
+  --color-flezen: #7e22ce;
+
+  --color-cyan: #0284c7;
+  --color-cyan-hover: #0369a1;
+  --color-cyan-soft: rgba(2, 132, 199, 0.08);
+  --color-cyan-border: rgba(2, 132, 199, 0.25);
+
+  --color-amber: #d97706;
+  --color-amber-hover: #b45309;
+  --color-amber-soft: rgba(217, 119, 6, 0.08);
+  --color-amber-border: rgba(217, 119, 6, 0.25);
+
+  --color-purple: #7e22ce;
+  --color-purple-hover: #6b21a8;
+  --color-purple-soft: rgba(126, 34, 206, 0.08);
+  --color-purple-border: rgba(126, 34, 206, 0.25);
+
+  --color-blue: #2563eb;
+  --color-blue-hover: #1d4ed8;
+  --color-blue-soft: rgba(37, 99, 235, 0.08);
+  --color-blue-border: rgba(37, 99, 235, 0.25);
+
+  --color-error: #dc2626;
+  --color-error-soft: rgba(220, 38, 38, 0.08);
+  --color-error-border: rgba(220, 38, 38, 0.28);
+
+  /* Multi-Layer Shadows & Bevels (Soft & Elegant for Light Mode) */
+  --shadow-subtle: 0 4px 16px rgba(15, 23, 42, 0.04);
+  --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.03);
+  --shadow-card-hover: 0 18px 45px rgba(15, 23, 42, 0.1), 0 2px 6px rgba(15, 23, 42, 0.04);
+  --shadow-glow-green: 0 4px 20px rgba(5, 150, 105, 0.16);
+  --shadow-modal: 0 24px 60px rgba(15, 23, 42, 0.18), 0 0 25px rgba(5, 150, 105, 0.12);
+}
+
