@@ -31,6 +31,17 @@ const breadcrumbs = [
         <p class="pricing-subtext">
           Free users enjoy 5 links every day. Need more? Buy Premium for unlimited high-speed downloads, dedicated CDN proxies, and 4K online playback.
         </p>
+
+        <!-- Dynamic Quota Alert Banner -->
+        <div id="pricing-quota-banner" class="pricing-quota-banner" style="display: none;">
+          <div class="quota-banner-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#f59e0b" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          </div>
+          <div class="quota-banner-content">
+            <strong>Daily Free Limit Reached</strong>
+            <span>You have used your 5 free links for today. Select a VIP plan below for instant unlimited downloads and zero wait queues!</span>
+          </div>
+        </div>
       </section>
 
       <!-- 3 Tier Cards -->
@@ -515,14 +526,63 @@ const breadcrumbs = [
     border-color: rgba(0, 0, 0, 0.08) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
   }
-  :root[data-theme="light"] .faq-box h3 {
-    color: #0f172a !important;
+  .pricing-quota-banner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 680px;
+    margin: 20px auto 0;
+    padding: 14px 20px;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    border-radius: var(--radius-lg);
+    color: #fef3c7;
+    text-align: left;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease;
+  }
+  .quota-banner-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .quota-banner-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: var(--text-xs);
+    line-height: 1.45;
+  }
+  .quota-banner-content strong {
+    color: #fbbf24;
+    font-size: var(--text-sm);
+    font-weight: 800;
+  }
+
+  :root[data-theme="light"] .pricing-quota-banner {
+    background: #fffbeb !important;
+    border-color: #fde68a !important;
+    color: #92400e !important;
+  }
+  :root[data-theme="light"] .quota-banner-content strong {
+    color: #b45309 !important;
   }
 </style>
 
 <script>
   import { startRazorpayCheckout } from '../utils/razorpay';
   import { APP_CONFIG } from '../utils/config';
+
+  // Check URL params for quota redirect
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('reason') === 'quota') {
+    const quotaBanner = document.getElementById('pricing-quota-banner');
+    if (quotaBanner) {
+      quotaBanner.style.display = 'flex';
+      quotaBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
 
   document.querySelectorAll('[data-pricing-plan-id]').forEach(btn => {
     btn.addEventListener('click', () => {

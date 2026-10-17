@@ -5,8 +5,6 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import LegalModal from '../components/LegalModal.astro';
 import FloatingTelegram from '../components/FloatingTelegram.astro';
-import AuthModal from '../components/AuthModal.astro';
-import PricingModal from '../components/PricingModal.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -243,10 +241,8 @@ const structuredData = {
     </main>
     <SiteFooter />
 
-    <!-- Global Modals & Floating Tools -->
+    <!-- Global Floating Tools & Modals -->
     <FloatingTelegram />
-    <AuthModal />
-    <PricingModal />
     <LegalModal />
 
     <!-- Client Script -->

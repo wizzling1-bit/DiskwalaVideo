@@ -1348,11 +1348,11 @@ const breadcrumbs = [
 
   // Event wiring
   document.getElementById('dash-login-btn')?.addEventListener('click', () => {
-    window.dispatchEvent(new CustomEvent('terawala:open-auth', { detail: { mode: 'login' } }));
+    window.location.href = '/login/';
   });
 
   document.getElementById('dash-signup-btn')?.addEventListener('click', () => {
-    window.dispatchEvent(new CustomEvent('terawala:open-auth', { detail: { mode: 'signup' } }));
+    window.location.href = '/signup/';
   });
 
   signoutBtn?.addEventListener('click', async () => {
@@ -1363,14 +1363,7 @@ const breadcrumbs = [
   });
 
   document.getElementById('dash-upgrade-btn')?.addEventListener('click', () => {
-    const sec = document.getElementById('pricing-plans-section');
-    if (sec) {
-      sec.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.dispatchEvent(new CustomEvent('terawala:open-pricing', {
-        detail: { reason: 'Buy TeraWala Premium for unlimited daily links!' }
-      }));
-    }
+    window.location.href = '/pricing/';
   });
 
   refreshHistoryBtn?.addEventListener('click', async () => {

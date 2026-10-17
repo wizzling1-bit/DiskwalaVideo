@@ -1878,7 +1878,7 @@ import { APP_CONFIG } from '../utils/config';
   authBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     if (!currentUser) {
-      window.dispatchEvent(new CustomEvent('terawala:open-auth', { detail: { mode: 'login' } }));
+      window.location.href = '/login/';
     } else {
       if (window.innerWidth < 769) {
         window.location.href = '/dashboard/';
@@ -1892,20 +1892,14 @@ import { APP_CONFIG } from '../utils/config';
     }
   });
 
-  // Upgrade to Premium item trigger
-  upgradeItem?.addEventListener('click', (e) => {
-    if (upgradeItem.getAttribute('href') === '/pricing/') {
-      e.preventDefault();
-      closeProfileMenu();
-      window.dispatchEvent(new CustomEvent('terawala:open-pricing', {
-        detail: { reason: 'Unlock unlimited high-speed downloads with TeraWala Premium!' }
-      }));
-    }
+  // Upgrade to Premium item trigger — navigate cleanly to /pricing/
+  upgradeItem?.addEventListener('click', () => {
+    closeProfileMenu();
   });
 
   mobileAuthBtn?.addEventListener('click', () => {
     if (!currentUser) {
-      window.dispatchEvent(new CustomEvent('terawala:open-auth', { detail: { mode: 'login' } }));
+      window.location.href = '/login/';
     } else {
       window.location.href = '/dashboard/';
     }

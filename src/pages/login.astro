@@ -260,9 +260,18 @@ const breadcrumbs = [
 <script>
   import { signInWithEmail, getCurrentUser } from '../utils/supabase';
 
-  // If already logged in, redirect straight to dashboard
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetUrl = urlParams.get('redirect') || '/dashboard/';
+
+  // Preserve redirect query parameter for signup link
+  const signupLink = document.querySelector('.auth-page-switch a');
+  if (urlParams.get('redirect') && signupLink) {
+    signupLink.setAttribute('href', `/signup/?redirect=${encodeURIComponent(targetUrl)}`);
+  }
+
+  // If already logged in, redirect straight to target
   getCurrentUser().then(user => {
-    if (user) window.location.href = '/dashboard/';
+    if (user) window.location.href = targetUrl;
   });
 
   const form = document.getElementById('page-login-form') as HTMLFormElement | null;
@@ -287,11 +296,11 @@ const breadcrumbs = [
     try {
       await signInWithEmail(emailInput.value.trim(), pwInput.value);
       if (succBox) {
-        succBox.textContent = 'Signed in successfully! Redirecting to dashboard...';
+        succBox.textContent = 'Signed in successfully! Redirecting...';
         succBox.style.display = 'block';
       }
       setTimeout(() => {
-        window.location.href = '/dashboard/';
+        window.location.href = targetUrl;
       }, 600);
     } catch (err: any) {
       if (errBox) {

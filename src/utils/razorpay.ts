@@ -58,10 +58,8 @@ export async function startRazorpayCheckout(
 
   const user = await getCurrentUser();
   if (!user) {
-    // Dispatch auth modal event to prompt login before payment
-    window.dispatchEvent(new CustomEvent('terawala:open-auth', { 
-      detail: { message: `Please log in or sign up first to attach your ${plan.name} to your account!` }
-    }));
+    const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
+    window.location.href = `/login/?redirect=${returnUrl}`;
     return;
   }
 

@@ -599,10 +599,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Daily 5 Link Quota Enforcement
     const quota = await checkDailyQuota();
     if (!quota.allowed) {
-      showError(`Daily free quota reached (${quota.used}/${quota.limit} links used today). Buy Premium for unlimited downloads!`);
-      window.dispatchEvent(new CustomEvent('terawala:open-pricing', {
-        detail: { reason: `You have reached your daily limit of ${quota.limit} free links. Buy TeraWala Premium for unlimited high-speed downloads!` }
-      }));
+      showError(`Daily free quota reached (${quota.used}/${quota.limit} links used today). Redirecting to Buy Premium for unlimited downloads...`);
+      setTimeout(() => {
+        window.location.href = '/pricing/?reason=quota';
+      }, 800);
       return;
     }
 
@@ -1031,9 +1031,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Quota Upgrade Button Trigger
   const quotaUpgradeBtn = document.getElementById('quota-upgrade-trigger');
   quotaUpgradeBtn?.addEventListener('click', () => {
-    window.dispatchEvent(new CustomEvent('terawala:open-pricing', {
-      detail: { reason: 'Buy TeraWala Premium for unlimited high-speed downloads!' }
-    }));
+    window.location.href = '/pricing/';
   });
 
   // Check URL query param for automatic link resolving (e.g. from history / dashboard)
