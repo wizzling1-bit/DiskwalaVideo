@@ -532,8 +532,7 @@ const breadcrumbs = [
 
       startRazorpayCheckout(plan as any, {
         onSuccess: () => {
-          alert('Payment Successful! Premium Activated.');
-          window.location.href = '/dashboard/';
+          window.location.href = '/dashboard/?upgraded=true';
         }
       });
     });

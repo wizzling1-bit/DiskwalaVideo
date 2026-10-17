@@ -18,13 +18,13 @@ export const APP_CONFIG = {
 
   // Supabase Configuration
   supabase: {
-    url: typeof process !== 'undefined' && process.env?.PUBLIC_SUPABASE_URL ? process.env.PUBLIC_SUPABASE_URL : 'https://fyjeyhrkuuuxxwhjnhov.supabase.co',
-    anonKey: typeof process !== 'undefined' && process.env?.PUBLIC_SUPABASE_ANON_KEY ? process.env.PUBLIC_SUPABASE_ANON_KEY : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5amV5aHJrdXV1eHh3aGpuaG92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMTcxNTAsImV4cCI6MjEwNzc5MzE1MH0.eZIc7JQ9X3niGjNTjGmiztedCqwKpeEWrDFgE9c2VOw'
+    url: (typeof import.meta !== 'undefined' && import.meta.env?.PUBLIC_SUPABASE_URL) || (typeof process !== 'undefined' && process.env?.PUBLIC_SUPABASE_URL) || 'https://fyjeyhrkuuuxxwhjnhov.supabase.co',
+    anonKey: (typeof import.meta !== 'undefined' && import.meta.env?.PUBLIC_SUPABASE_ANON_KEY) || (typeof process !== 'undefined' && process.env?.PUBLIC_SUPABASE_ANON_KEY) || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5amV5aHJrdXV1eHh3aGpuaG92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMTcxNTAsImV4cCI6MjEwNzc5MzE1MH0.eZIc7JQ9X3niGjNTjGmiztedCqwKpeEWrDFgE9c2VOw'
   },
 
   // Razorpay Configuration
   razorpay: {
-    keyId: typeof process !== 'undefined' && process.env?.PUBLIC_RAZORPAY_KEY_ID ? process.env.PUBLIC_RAZORPAY_KEY_ID : 'rzp_live_RsEo8sPBUJeTq8'
+    keyId: (typeof import.meta !== 'undefined' && import.meta.env?.PUBLIC_RAZORPAY_KEY_ID) || (typeof process !== 'undefined' && process.env?.PUBLIC_RAZORPAY_KEY_ID) || 'rzp_live_RsEo8sPBUJeTq8'
   },
 
   // Pricing Plans (Updated: ₹9 / 24h, ₹99 / 1m, ₹249 / 3m, ₹999 / 1y)

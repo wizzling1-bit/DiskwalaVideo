@@ -568,8 +568,7 @@ const plans = APP_CONFIG.plans;
 
       startRazorpayCheckout(plan as RazorpayPlan, {
         onSuccess: (resp) => {
-          alert('Payment Successful! Your Premium Membership is now activated.');
-          window.location.reload();
+          window.location.href = '/dashboard/?upgraded=true';
         },
         onError: (err) => {
           console.error(err);
