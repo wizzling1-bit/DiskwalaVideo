@@ -43,12 +43,13 @@ export function getSupabase(): SupabaseClient {
   if (!supabaseInstance) {
     const supabaseUrl = APP_CONFIG.supabase.url;
     const supabaseAnonKey = APP_CONFIG.supabase.anonKey;
+    const isBrowser = typeof window !== 'undefined';
     supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        storage: typeof window !== 'undefined' ? window.localStorage : undefined
+        persistSession: isBrowser,
+        autoRefreshToken: isBrowser,
+        detectSessionInUrl: isBrowser,
+        storage: isBrowser ? window.localStorage : undefined
       }
     });
   }
@@ -82,6 +83,33 @@ export async function signInWithEmail(email: string, password: string) {
   const { data, error } = await sb.auth.signInWithPassword({
     email,
     password
+  });
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Request password reset email
+ */
+export async function sendPasswordResetEmail(email: string, redirectTo?: string) {
+  const sb = getSupabase();
+  const redirect = redirectTo || (typeof window !== 'undefined' ? `${window.location.origin}/reset-password/` : undefined);
+  const { data, error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: redirect
+  });
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Update authenticated user's password (e.g. following recovery link)
+ */
+export async function updateUserPassword(newPassword: string) {
+  const sb = getSupabase();
+  const { data, error } = await sb.auth.updateUser({
+    password: newPassword
   });
 
   if (error) throw error;

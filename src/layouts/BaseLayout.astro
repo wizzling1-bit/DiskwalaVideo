@@ -231,6 +231,9 @@ const structuredData = {
     <!-- Razorpay Checkout Script Preload -->
     <script is:inline src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+    <!-- Cloudflare Turnstile CAPTCHA (Explicit Render Mode) -->
+    <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+
     <!-- Structured Data JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>

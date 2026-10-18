@@ -42,6 +42,9 @@ const breadcrumbs = [
             <input type="password" id="signup-password" required minlength="6" placeholder="••••••••" autocomplete="new-password" />
           </div>
 
+          <!-- Cloudflare Turnstile Verification -->
+          <div id="signup-turnstile-container" style="display: flex; justify-content: center; margin: 16px 0; min-height: 65px;"></div>
+
           <button type="submit" class="btn-auth-submit" id="signup-submit-btn">
             <span class="auth-spinner" id="signup-spinner" style="display: none;"></span>
             <span id="signup-btn-text">Create Free Account</span>
@@ -248,9 +251,42 @@ const breadcrumbs = [
 
 <script>
   import { signUpWithEmail, getCurrentUser } from '../utils/supabase';
+  import { APP_CONFIG } from '../utils/config';
 
   const urlParams = new URLSearchParams(window.location.search);
   const targetUrl = urlParams.get('redirect') || '/dashboard/';
+
+  // Cloudflare Turnstile explicit rendering
+  let signupTurnstileWidgetId: any = null;
+  function initSignupTurnstile() {
+    const container = document.getElementById('signup-turnstile-container');
+    if (!container || signupTurnstileWidgetId !== null) return;
+    const turnstileObj = (window as any).turnstile;
+    if (turnstileObj && typeof turnstileObj.render === 'function') {
+      try {
+        signupTurnstileWidgetId = turnstileObj.render(container, {
+          sitekey: APP_CONFIG.turnstile?.siteKey || '1x00000000000000000000AA',
+          theme: 'dark'
+        });
+      } catch (err) {
+        console.warn('Turnstile render warning:', err);
+      }
+    }
+  }
+
+  if (typeof window !== 'undefined') {
+    if ((window as any).turnstile) {
+      initSignupTurnstile();
+    } else {
+      const turnstilePoll = setInterval(() => {
+        if ((window as any).turnstile) {
+          clearInterval(turnstilePoll);
+          initSignupTurnstile();
+        }
+      }, 250);
+      setTimeout(() => clearInterval(turnstilePoll), 6000);
+    }
+  }
 
   // Preserve redirect query parameter for login link
   const loginLink = document.querySelector('.auth-page-switch a');
@@ -279,6 +315,19 @@ const breadcrumbs = [
     if (errBox) errBox.style.display = 'none';
     if (succBox) succBox.style.display = 'none';
 
+    // Verify Cloudflare Turnstile token
+    const turnstileObj = (window as any).turnstile;
+    if (turnstileObj && signupTurnstileWidgetId !== null) {
+      const token = turnstileObj.getResponse(signupTurnstileWidgetId);
+      if (!token) {
+        if (errBox) {
+          errBox.textContent = 'Please complete the Cloudflare security verification to create an account.';
+          errBox.style.display = 'block';
+        }
+        return;
+      }
+    }
+
     if (submitBtn) submitBtn.disabled = true;
     if (spinner) spinner.style.display = 'inline-block';
 
@@ -295,6 +344,9 @@ const breadcrumbs = [
       if (errBox) {
         errBox.textContent = err.message || 'Error creating account. Please try again.';
         errBox.style.display = 'block';
+      }
+      if (turnstileObj && signupTurnstileWidgetId !== null) {
+        try { turnstileObj.reset(signupTurnstileWidgetId); } catch {}
       }
     } finally {
       if (submitBtn) submitBtn.disabled = false;

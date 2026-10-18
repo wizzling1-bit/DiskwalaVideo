@@ -20,12 +20,13 @@ const breadcrumbs = [
         <div class="auth-page-icon">
           <img src="/logo.svg" alt="TeraWala Logo" width="48" height="48" class="auth-brand-logo-img" />
         </div>
-        <h1 class="auth-page-title">Sign In to TeraWala</h1>
-        <p class="auth-page-desc">Enter your credentials to access your daily quota and Premium features</p>
+        <h1 class="auth-page-title" id="auth-title">Sign In to TeraWala</h1>
+        <p class="auth-page-desc" id="auth-desc">Enter your credentials to access your daily quota and Premium features</p>
 
         <div id="page-auth-error" class="auth-alert error" style="display: none;"></div>
         <div id="page-auth-success" class="auth-alert success" style="display: none;"></div>
 
+        <!-- Main Sign In Form -->
         <form id="page-login-form" class="auth-page-form">
           <div class="form-group">
             <label for="page-email">Email Address</label>
@@ -35,10 +36,13 @@ const breadcrumbs = [
           <div class="form-group">
             <div class="label-row">
               <label for="page-password">Password</label>
-              <a href="#" id="page-forgot-btn">Forgot?</a>
+              <a href="javascript:void(0)" id="page-forgot-btn">Forgot?</a>
             </div>
             <input type="password" id="page-password" required placeholder="••••••••" autocomplete="current-password" />
           </div>
+
+          <!-- Cloudflare Turnstile Verification -->
+          <div id="login-turnstile-container" style="display: flex; justify-content: center; margin: 16px 0; min-height: 65px;"></div>
 
           <button type="submit" class="btn-auth-submit" id="page-submit-btn">
             <span class="auth-spinner" id="page-spinner" style="display: none;"></span>
@@ -46,7 +50,24 @@ const breadcrumbs = [
           </button>
         </form>
 
-        <div class="auth-page-switch">
+        <!-- Forgot Password Form -->
+        <form id="page-forgot-form" class="auth-page-form" style="display: none;">
+          <div class="form-group">
+            <label for="forgot-email">Account Email Address</label>
+            <input type="email" id="forgot-email" required placeholder="you@example.com" autocomplete="email" />
+          </div>
+
+          <button type="submit" class="btn-auth-submit" id="forgot-submit-btn">
+            <span class="auth-spinner" id="forgot-spinner" style="display: none;"></span>
+            <span id="forgot-btn-text">Send Password Reset Link</span>
+          </button>
+
+          <button type="button" class="btn-auth-back" id="btn-back-to-login">
+            ← Back to Sign In
+          </button>
+        </form>
+
+        <div class="auth-page-switch" id="auth-switch-box">
           <span>Don't have an account?</span>
           <a href="/signup/">Create one for free</a>
         </div>
@@ -255,13 +276,81 @@ const breadcrumbs = [
     border-top-color: #e2e8f0 !important;
     color: #64748b !important;
   }
+  .btn-auth-back {
+    margin-top: 4px;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .btn-auth-back:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  :root[data-theme="light"] .btn-auth-back {
+    border-color: #cbd5e1 !important;
+    color: #475569 !important;
+  }
+  :root[data-theme="light"] .btn-auth-back:hover {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+  }
 </style>
 
 <script>
-  import { signInWithEmail, getCurrentUser } from '../utils/supabase';
+  import { signInWithEmail, getCurrentUser, sendPasswordResetEmail } from '../utils/supabase';
+  import { APP_CONFIG } from '../utils/config';
 
   const urlParams = new URLSearchParams(window.location.search);
   const targetUrl = urlParams.get('redirect') || '/dashboard/';
+
+  const succBox = document.getElementById('page-auth-success');
+  const errBox = document.getElementById('page-auth-error');
+
+  // Cloudflare Turnstile explicit rendering
+  let loginTurnstileWidgetId: any = null;
+  function initLoginTurnstile() {
+    const container = document.getElementById('login-turnstile-container');
+    if (!container || loginTurnstileWidgetId !== null) return;
+    const turnstileObj = (window as any).turnstile;
+    if (turnstileObj && typeof turnstileObj.render === 'function') {
+      try {
+        loginTurnstileWidgetId = turnstileObj.render(container, {
+          sitekey: APP_CONFIG.turnstile?.siteKey || '1x00000000000000000000AA',
+          theme: 'dark'
+        });
+      } catch (err) {
+        console.warn('Turnstile render warning:', err);
+      }
+    }
+  }
+
+  if (typeof window !== 'undefined') {
+    if ((window as any).turnstile) {
+      initLoginTurnstile();
+    } else {
+      const turnstilePoll = setInterval(() => {
+        if ((window as any).turnstile) {
+          clearInterval(turnstilePoll);
+          initLoginTurnstile();
+        }
+      }, 250);
+      setTimeout(() => clearInterval(turnstilePoll), 6000);
+    }
+  }
+
+  // Check if reset was successful
+  if (urlParams.get('reset') === 'success' && succBox) {
+    succBox.textContent = '✅ Your password has been successfully reset! Please sign in with your new password.';
+    succBox.style.display = 'block';
+  }
 
   // Preserve redirect query parameter for signup link
   const signupLink = document.querySelector('.auth-page-switch a');
@@ -274,21 +363,78 @@ const breadcrumbs = [
     if (user) window.location.href = targetUrl;
   });
 
-  const form = document.getElementById('page-login-form') as HTMLFormElement | null;
+  const loginForm = document.getElementById('page-login-form') as HTMLFormElement | null;
+  const forgotForm = document.getElementById('page-forgot-form') as HTMLFormElement | null;
+  const forgotBtn = document.getElementById('page-forgot-btn');
+  const backToLoginBtn = document.getElementById('btn-back-to-login');
+
+  const authTitle = document.getElementById('auth-title');
+  const authDesc = document.getElementById('auth-desc');
+  const authSwitchBox = document.getElementById('auth-switch-box');
+
   const emailInput = document.getElementById('page-email') as HTMLInputElement | null;
   const pwInput = document.getElementById('page-password') as HTMLInputElement | null;
   const submitBtn = document.getElementById('page-submit-btn') as HTMLButtonElement | null;
   const spinner = document.getElementById('page-spinner');
-  const btnText = document.getElementById('page-btn-text');
-  const errBox = document.getElementById('page-auth-error');
-  const succBox = document.getElementById('page-auth-success');
 
-  form?.addEventListener('submit', async (e) => {
+  const forgotEmailInput = document.getElementById('forgot-email') as HTMLInputElement | null;
+  const forgotSubmitBtn = document.getElementById('forgot-submit-btn') as HTMLButtonElement | null;
+  const forgotSpinner = document.getElementById('forgot-spinner');
+  const forgotBtnText = document.getElementById('forgot-btn-text');
+
+  // Toggle to Forgot Password Form
+  forgotBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (errBox) errBox.style.display = 'none';
+    if (succBox) succBox.style.display = 'none';
+
+    if (loginForm) loginForm.style.display = 'none';
+    if (forgotForm) forgotForm.style.display = 'flex';
+    if (authSwitchBox) authSwitchBox.style.display = 'none';
+
+    if (authTitle) authTitle.textContent = 'Reset Password';
+    if (authDesc) authDesc.textContent = 'Enter your registered email address and we will send you a password recovery link.';
+
+    if (emailInput && forgotEmailInput && emailInput.value.trim()) {
+      forgotEmailInput.value = emailInput.value.trim();
+    }
+    forgotEmailInput?.focus();
+  });
+
+  // Toggle back to Login Form
+  backToLoginBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (errBox) errBox.style.display = 'none';
+    if (succBox) succBox.style.display = 'none';
+
+    if (forgotForm) forgotForm.style.display = 'none';
+    if (loginForm) loginForm.style.display = 'flex';
+    if (authSwitchBox) authSwitchBox.style.display = 'flex';
+
+    if (authTitle) authTitle.textContent = 'Sign In to TeraWala';
+    if (authDesc) authDesc.textContent = 'Enter your credentials to access your daily quota and Premium features';
+  });
+
+  // Handle Login submission
+  loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!emailInput || !pwInput) return;
 
     if (errBox) errBox.style.display = 'none';
     if (succBox) succBox.style.display = 'none';
+
+    // Verify Cloudflare Turnstile token
+    const turnstileObj = (window as any).turnstile;
+    if (turnstileObj && loginTurnstileWidgetId !== null) {
+      const token = turnstileObj.getResponse(loginTurnstileWidgetId);
+      if (!token) {
+        if (errBox) {
+          errBox.textContent = 'Please complete the Cloudflare security verification to sign in.';
+          errBox.style.display = 'block';
+        }
+        return;
+      }
+    }
 
     if (submitBtn) submitBtn.disabled = true;
     if (spinner) spinner.style.display = 'inline-block';
@@ -307,9 +453,59 @@ const breadcrumbs = [
         errBox.textContent = err.message || 'Invalid email or password.';
         errBox.style.display = 'block';
       }
+      if (turnstileObj && loginTurnstileWidgetId !== null) {
+        try { turnstileObj.reset(loginTurnstileWidgetId); } catch {}
+      }
     } finally {
       if (submitBtn) submitBtn.disabled = false;
       if (spinner) spinner.style.display = 'none';
+    }
+  });
+
+  // Handle Forgot Password submission
+  forgotForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!forgotEmailInput) return;
+
+    const email = forgotEmailInput.value.trim();
+    if (!email) return;
+
+    if (errBox) errBox.style.display = 'none';
+    if (succBox) succBox.style.display = 'none';
+
+    if (forgotSubmitBtn) forgotSubmitBtn.disabled = true;
+    if (forgotSpinner) forgotSpinner.style.display = 'inline-block';
+    if (forgotBtnText) forgotBtnText.textContent = 'Sending Link...';
+
+    try {
+      await sendPasswordResetEmail(email);
+      if (succBox) {
+        succBox.textContent = `✨ Password reset email sent to ${email}! Check your inbox and spam folder for instructions.`;
+        succBox.style.display = 'block';
+      }
+
+      // 60-second cooldown on resending
+      let cooldown = 60;
+      if (forgotBtnText) forgotBtnText.textContent = `Resend in ${cooldown}s`;
+      const timer = setInterval(() => {
+        cooldown--;
+        if (cooldown <= 0) {
+          clearInterval(timer);
+          if (forgotSubmitBtn) forgotSubmitBtn.disabled = false;
+          if (forgotBtnText) forgotBtnText.textContent = 'Send Password Reset Link';
+        } else if (forgotBtnText) {
+          forgotBtnText.textContent = `Resend in ${cooldown}s`;
+        }
+      }, 1000);
+    } catch (err: any) {
+      if (forgotSubmitBtn) forgotSubmitBtn.disabled = false;
+      if (forgotBtnText) forgotBtnText.textContent = 'Send Password Reset Link';
+      if (errBox) {
+        errBox.textContent = err.message || 'Could not send reset email. Please verify the address and try again.';
+        errBox.style.display = 'block';
+      }
+    } finally {
+      if (forgotSpinner) forgotSpinner.style.display = 'none';
     }
   });
 </script>

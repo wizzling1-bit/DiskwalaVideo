@@ -135,14 +135,15 @@ export const APP_CONFIG = {
     'www.flezen.com'
   ],
 
-  // Sample demo links for instant testing (Real working link)
-  sampleLink: 'https://1024terabox.com/s/1jV4tzRwAj_9sTwW7b30sXQ',
-  sampleTeraboxLink: 'https://1024terabox.com/s/1jV4tzRwAj_9sTwW7b30sXQ',
+  // Cloudflare Turnstile CAPTCHA (Standard pass key used as fallback if env is unset)
+  turnstile: {
+    siteKey: (typeof import.meta !== 'undefined' && import.meta.env?.PUBLIC_TURNSTILE_SITE_KEY) || (typeof process !== 'undefined' && process.env?.PUBLIC_TURNSTILE_SITE_KEY) || '1x00000000000000000000AA'
+  },
   
   // TeraBox API Configuration (xAPIverse)
   xapiverse: {
     apiUrl: 'https://xapiverse.com/api/terabox',
-    apiKey: 'xapi_e8ad5454c8b1d7f8935b5482fa6aa52d'
+    apiKey: (typeof import.meta !== 'undefined' && (import.meta.env?.XAPIVERSE_KEY || import.meta.env?.PUBLIC_XAPIVERSE_KEY)) || (typeof process !== 'undefined' && (process.env?.XAPIVERSE_KEY || process.env?.PUBLIC_XAPIVERSE_KEY)) || 'xapi_e8ad5454c8b1d7f8935b5482fa6aa52d'
   },
 
   // Contact & Support

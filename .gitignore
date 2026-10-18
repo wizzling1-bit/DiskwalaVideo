@@ -37,3 +37,6 @@ yarn-error.log*
 
 # Scratch & test scripts
 scratch/
+
+# Standalone separate project repository
+TeraboxVideos/

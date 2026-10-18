@@ -1034,13 +1034,15 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = '/pricing/';
   });
 
-  // Check URL query param for automatic link resolving (e.g. from history / dashboard)
+  // Check URL query param for automatic link resolving (e.g. from TeraboxVideos, history, or dashboard)
   const urlParams = new URLSearchParams(window.location.search);
-  const paramLink = urlParams.get('link');
+  const paramLink = urlParams.get('url') || urlParams.get('link');
   if (paramLink && linkInput) {
-    linkInput.value = paramLink;
+    linkInput.value = decodeURIComponent(paramLink);
     checkInputFeedback();
-    processLinkFlow();
+    setTimeout(() => {
+      processLinkFlow();
+    }, 150);
   }
 
   // Initial quota display
