@@ -497,13 +497,27 @@ const breadcrumbs = [
     color: #334155 !important;
   }
   :root[data-theme="light"] .btn-plan-select {
-    background: #f1f5f9 !important;
-    border-color: #e2e8f0 !important;
-    color: #0f172a !important;
+    background: #ffffff !important;
+    border: 1.5px solid #059669 !important;
+    color: #047857 !important;
+    font-weight: 800 !important;
+    box-shadow: 0 2px 6px rgba(5, 150, 105, 0.08) !important;
+  }
+  :root[data-theme="light"] .btn-plan-select:hover {
+    background: #059669 !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(5, 150, 105, 0.25) !important;
+    transform: translateY(-1px) !important;
   }
   :root[data-theme="light"] .btn-plan-select.btn-highlight {
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+    border: 1.5px solid #059669 !important;
     color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3) !important;
+  }
+  :root[data-theme="light"] .btn-plan-select.btn-highlight:hover {
+    background: linear-gradient(135deg, #047857 0%, #059669 100%) !important;
+    box-shadow: 0 8px 22px rgba(5, 150, 105, 0.4) !important;
   }
   :root[data-theme="light"] .comparison-section {
     background: #ffffff !important;

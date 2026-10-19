@@ -2,6 +2,7 @@ import { validateSourceUrl, type SupportedProvider } from '../utils/host-allowli
 import { APP_CONFIG } from '../utils/config';
 import { TRANSLATIONS, LOCALES, DEFAULT_LOCALE, type Locale } from '../utils/i18n';
 import { checkDailyQuota, recordLinkUsage } from '../utils/supabase';
+import { escapeHtml } from '../utils/security';
 import './motion';
 
 export interface TeraBoxItem {
@@ -278,31 +279,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Call TeraBox API (Proxy first with fallback to direct xapiverse endpoint)
   async function fetchTeraBoxVideo(url: string): Promise<TeraBoxApiResponse> {
-    // 1. Try local proxy /api/terabox (Vite dev proxy or Cloudflare Pages Function)
-    try {
-      const proxyResp = await fetch('/api/terabox', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url })
-      });
+    // 1. Try local dev proxy /api/terabox/ or Cloudflare Pages Function /api/terabox
+    for (const ep of ['/api/terabox/', '/api/terabox']) {
+      try {
+        const proxyResp = await fetch(ep, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
 
-      if (proxyResp.ok) {
-        const data = await proxyResp.json();
-        if (data && (data.status === 'success' || data.status === 'error')) {
-          return data;
+        if (proxyResp.ok) {
+          const data = await proxyResp.json();
+          if (data && (data.status === 'success' || data.status === 'error')) {
+            return data;
+          }
         }
+      } catch {
+        // Try next endpoint
       }
-    } catch {
-      // Proxy unavailable, proceed to direct endpoint fallback
     }
 
     // 2. Direct xAPIverse API endpoint call (CORS supported on xapiverse.com)
     try {
-      const directResp = await fetch(APP_CONFIG.xapiverse.apiUrl, {
+      const apiKey = APP_CONFIG.xapiverse?.apiKey || 'xapi_e8ad5454c8b1d7f8935b5482fa6aa52d';
+      const apiUrl = APP_CONFIG.xapiverse?.apiUrl || 'https://xapiverse.com/api/terabox';
+      const directResp = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'xAPIverse-Key': APP_CONFIG.xapiverse.apiKey
+          'xAPIverse-Key': apiKey
         },
         body: JSON.stringify({ url })
       });
@@ -415,11 +420,12 @@ document.addEventListener('DOMContentLoaded', () => {
           const pillBtn = document.createElement('button');
           pillBtn.type = 'button';
           pillBtn.className = `quality-pill-btn ${choice.isDefault || idx === 0 ? 'is-active' : ''}`;
+          const safeLabel = escapeHtml(choice.label);
           pillBtn.innerHTML = `
             <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor">
               <polygon points="6 4 19 12 6 20 6 4"></polygon>
             </svg>
-            <span>${choice.label}</span>
+            <span>${safeLabel}</span>
           `;
 
           pillBtn.addEventListener('click', () => {
@@ -486,12 +492,16 @@ document.addEventListener('DOMContentLoaded', () => {
           const itemBtn = document.createElement('button');
           itemBtn.type = 'button';
           itemBtn.className = `playlist-file-item ${item === file ? 'is-active' : ''}`;
+          const safeName = escapeHtml(item.name || 'Video File');
+          const safeMeta = `${escapeHtml(item.size_formatted || '')} ${item.duration ? '· ' + escapeHtml(item.duration) : ''}`;
+          const safeQuality = escapeHtml(item.quality || 'HD');
+
           itemBtn.innerHTML = `
             <div class="playlist-item-info">
-              <span class="playlist-item-name">${index + 1}. ${item.name || 'Video File'}</span>
-              <span class="playlist-item-meta">${item.size_formatted || ''} ${item.duration ? '· ' + item.duration : ''}</span>
+              <span class="playlist-item-name">${index + 1}. ${safeName}</span>
+              <span class="playlist-item-meta">${safeMeta}</span>
             </div>
-            <span class="playlist-item-badge">${item.quality || 'HD'}</span>
+            <span class="playlist-item-badge">${safeQuality}</span>
           `;
 
           itemBtn.addEventListener('click', () => {

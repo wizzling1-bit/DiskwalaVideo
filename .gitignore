@@ -27,6 +27,7 @@ Thumbs.db
 
 # Agent & local metadata
 .agents/
+.claude/
 .codex/
 .impeccable/
 .system_generated/

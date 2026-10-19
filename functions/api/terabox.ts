@@ -53,6 +53,9 @@ export async function onRequestPost(context: RequestContext): Promise<Response> 
     try {
       const formatted = /^https?:\/\//i.test(targetUrl) ? targetUrl : `https://${targetUrl}`;
       parsed = new URL(formatted);
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+        throw new Error('Invalid protocol');
+      }
     } catch {
       return new Response(JSON.stringify({
         status: 'error',

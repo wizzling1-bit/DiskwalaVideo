@@ -103,6 +103,20 @@ export async function onRequest(context: {
   newHeaders.set('Permissions-Policy', 'accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()');
   newHeaders.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
+  const csp = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://checkout.razorpay.com https://cdn.jsdelivr.net",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com data:",
+    "img-src 'self' data: blob: https: http:",
+    "media-src 'self' blob: https: http:",
+    "connect-src 'self' https://fyjeyhrkuuuxxwhjnhov.supabase.co https://xapiverse.com https://challenges.cloudflare.com https://api.razorpay.com https://lumberjack.razorpay.com",
+    "frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com",
+    "object-src 'none'",
+    "base-uri 'self'"
+  ].join('; ');
+  newHeaders.set('Content-Security-Policy', csp);
+
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,

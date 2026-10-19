@@ -12,13 +12,15 @@ interface Props {
   description?: string;
   canonicalUrl?: string;
   noindex?: boolean;
+  includeTurnstile?: boolean;
 }
 
 const {
   title = "TeraWala — Free TeraBox, Diskwala & Flezen Video Downloader & Online Player",
   description = "Free TeraWala online video player and video downloader. Stream HD TeraBox, Diskwala & Flezen video links online, bypass ads, and download MP4 videos with zero app installs.",
   canonicalUrl = "https://terawala.com/",
-  noindex = false
+  noindex = false,
+  includeTurnstile = false
 } = Astro.props;
 
 // Targeted High-Volume SEO Keywords
@@ -232,7 +234,9 @@ const structuredData = {
     <script is:inline src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <!-- Cloudflare Turnstile CAPTCHA (Explicit Render Mode) -->
-    <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+    {includeTurnstile && (
+      <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+    )}
 
     <!-- Structured Data JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

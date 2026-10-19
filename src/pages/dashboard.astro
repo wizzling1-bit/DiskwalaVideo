@@ -203,33 +203,38 @@ const breadcrumbs = [
           </div>
 
           <div class="dash-pricing-grid">
-            {APP_CONFIG.plans.map((p) => (
-              <div class={`dash-plan-box ${p.badge ? 'is-best' : ''}`}>
-                {p.badge && <span class="dash-plan-badge">{p.badge}</span>}
-                <h3 class="dash-plan-title">{p.name}</h3>
-                <div class="dash-plan-price">
-                  <span class="sym">₹</span>
-                  <span class="amt">{p.price}</span>
-                  <span class="per">/ {p.period}</span>
+            {APP_CONFIG.plans.map((p) => {
+              const isPopular = p.badge?.toLowerCase().includes('popular') || p.id === 'plan_pro_monthly';
+              const isBestValue = p.badge?.toLowerCase().includes('best value') || p.id === 'plan_annual_elite';
+              const badgeType = isPopular ? 'badge-popular' : (isBestValue ? 'badge-best' : 'badge-regular');
+              return (
+                <div class={`dash-plan-box ${isPopular ? 'is-popular is-best' : (isBestValue ? 'is-best-value' : '')}`}>
+                  {p.badge && <span class={`dash-plan-badge ${badgeType}`}>{p.badge}</span>}
+                  <h3 class="dash-plan-title">{p.name}</h3>
+                  <div class="dash-plan-price">
+                    <span class="sym">₹</span>
+                    <span class="amt">{p.price}</span>
+                    <span class="per">/ {p.period}</span>
+                  </div>
+                  <p class="dash-plan-desc">{p.description}</p>
+                  <ul class="dash-plan-feats">
+                    {p.features.map(f => (
+                      <li>
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <button 
+                    type="button" 
+                    class={`dash-buy-btn ${isPopular ? 'btn-popular' : ''}`}
+                    data-buy-plan-id={p.id}
+                  >
+                    <span>Activate {p.name}</span>
+                  </button>
                 </div>
-                <p class="dash-plan-desc">{p.description}</p>
-                <ul class="dash-plan-feats">
-                  {p.features.map(f => (
-                    <li>
-                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button 
-                  type="button" 
-                  class={`dash-buy-btn ${p.badge ? 'btn-popular' : ''}`}
-                  data-buy-plan-id={p.id}
-                >
-                  <span>Activate {p.name}</span>
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -238,7 +243,7 @@ const breadcrumbs = [
   </div>
 </BaseLayout>
 
-<style>
+<style is:global>
   .dashboard-wrapper {
     padding: 30px 16px 80px;
     min-height: 80vh;
@@ -660,6 +665,64 @@ const breadcrumbs = [
     border-color: rgba(16, 185, 129, 0.3);
   }
 
+  .table-platform-badge.diskwala {
+    background: rgba(56, 189, 248, 0.15);
+    color: #7dd3fc;
+    border-color: rgba(56, 189, 248, 0.3);
+  }
+
+  .dash-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 750;
+    text-transform: capitalize;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    color: #34d399;
+  }
+
+  .dash-status-pill.is-pending {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.35);
+    color: #fbbf24;
+  }
+
+  .dash-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+    display: inline-block;
+  }
+
+  .btn-tbl-stream {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 750;
+    background: rgba(16, 185, 129, 0.16);
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    color: #34d399;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-tbl-stream:hover {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #10b981;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+    transform: translateY(-1px);
+  }
+
   .empty-history {
     text-align: center;
     padding: 40px 20px;
@@ -685,11 +748,23 @@ const breadcrumbs = [
     line-height: 1.5;
   }
 
-  /* Dash Pricing Grid */
+  /* Dash Pricing Grid (Balanced 4-Column on Desktop) */
   .dash-pricing-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+  }
+
+  @media (max-width: 1100px) {
+    .dash-pricing-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .dash-pricing-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .dash-plan-box {
@@ -701,7 +776,7 @@ const breadcrumbs = [
     flex-direction: column;
     justify-content: space-between;
     position: relative;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   }
 
   .dash-plan-box:hover {
@@ -709,9 +784,15 @@ const breadcrumbs = [
     border-color: rgba(52, 211, 153, 0.35);
   }
 
-  .dash-plan-box.is-best {
+  .dash-plan-box.is-best,
+  .dash-plan-box.is-popular {
     border-color: rgba(16, 185, 129, 0.5);
     background: linear-gradient(180deg, rgba(13, 26, 24, 0.8) 0%, rgba(8, 14, 16, 0.9) 100%);
+  }
+
+  .dash-plan-box.is-best-value {
+    border-color: rgba(245, 158, 11, 0.5);
+    background: linear-gradient(180deg, rgba(30, 24, 14, 0.8) 0%, rgba(14, 12, 8, 0.9) 100%);
   }
 
   .dash-plan-badge {
@@ -722,9 +803,20 @@ const breadcrumbs = [
     color: #ffffff;
     font-size: 10px;
     font-weight: 800;
-    padding: 2px 10px;
+    padding: 3px 12px;
     border-radius: 9999px;
     text-transform: uppercase;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+  }
+
+  .dash-plan-badge.badge-popular {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  }
+
+  .dash-plan-badge.badge-best {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
   }
 
   .dash-plan-title {
@@ -1005,119 +1097,449 @@ const breadcrumbs = [
     letter-spacing: -0.01em;
   }
 
-  /* Light Mode Styling for Dashboard */
+  /* =========================================================================
+     LIGHT MODE STYLING FOR USER DASHBOARD (Crisp, High-Contrast, Agency-Grade)
+     ========================================================================= */
+  :root[data-theme="light"] .dashboard-wrapper {
+    background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 60%), #f4f6f8 !important;
+  }
+
+  /* Profile Hero Card */
   :root[data-theme="light"] .profile-hero-card {
     background: #ffffff !important;
-    border-color: rgba(15, 23, 42, 0.08) !important;
-    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 14px 34px -4px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
   }
+
+  :root[data-theme="light"] .profile-meta-row {
+    border-bottom: 1px solid #f1f5f9 !important;
+  }
+
+  :root[data-theme="light"] .profile-avatar-box {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+    box-shadow: 0 6px 18px rgba(5, 150, 105, 0.25), 0 0 0 3px #ffffff !important;
+    color: #ffffff !important;
+  }
+
   :root[data-theme="light"] .user-display-name {
     color: #0f172a !important;
+    letter-spacing: -0.025em !important;
   }
-  :root[data-theme="light"] .user-email-text {
+
+  :root[data-theme="light"] .user-tier-badge {
+    background: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #475569 !important;
+    font-weight: 750 !important;
+  }
+
+  :root[data-theme="light"] .user-tier-badge.is-vip {
+    background: #ecfdf5 !important;
+    border: 1px solid #a7f3d0 !important;
+    color: #047857 !important;
+    font-weight: 800 !important;
+    box-shadow: 0 1px 4px rgba(5, 150, 105, 0.12) !important;
+  }
+
+  :root[data-theme="light"] .user-admin-badge {
+    background: #fef2f2 !important;
+    border: 1px solid #fecaca !important;
+    color: #dc2626 !important;
+    font-weight: 800 !important;
+  }
+
+  :root[data-theme="light"] .user-profile-plan-banner {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
     color: #475569 !important;
   }
-  :root[data-theme="light"] .user-profile-plan-banner {
+
+  :root[data-theme="light"] .user-profile-plan-banner.is-vip {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+    border: 1px solid #fde68a !important;
+    color: #b45309 !important;
+    font-weight: 800 !important;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.12) !important;
+  }
+
+  :root[data-theme="light"] .user-profile-plan-banner.is-vip svg {
+    fill: #d97706 !important;
+  }
+
+  :root[data-theme="light"] .user-email-text {
+    color: #475569 !important;
+    font-weight: 500 !important;
+  }
+
+  :root[data-theme="light"] .user-member-since {
+    color: #64748b !important;
+  }
+
+  :root[data-theme="light"] .btn-admin-nav {
+    background: #fef2f2 !important;
+    border: 1px solid #fecaca !important;
+    color: #dc2626 !important;
+    font-weight: 750 !important;
+    box-shadow: 0 1px 3px rgba(220, 38, 38, 0.08) !important;
+  }
+
+  :root[data-theme="light"] .btn-admin-nav:hover {
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  :root[data-theme="light"] .btn-signout {
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #334155 !important;
+    font-weight: 650 !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  }
+
+  :root[data-theme="light"] .btn-signout:hover {
     background: #f1f5f9 !important;
+    border-color: #94a3b8 !important;
+    color: #0f172a !important;
+    transform: translateY(-1px) !important;
+  }
+
+  /* 3 Metric Cards */
+  :root[data-theme="light"] .dash-metric-card {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03) !important;
+  }
+
+  :root[data-theme="light"] .dash-metric-card:hover {
     border-color: #cbd5e1 !important;
+    box-shadow: 0 6px 18px -2px rgba(15, 23, 42, 0.06) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  :root[data-theme="light"] .metric-label {
+    color: #64748b !important;
+    font-weight: 750 !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  :root[data-theme="light"] .metric-value {
+    color: #0f172a !important;
+    font-weight: 850 !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  :root[data-theme="light"] .metric-sub {
+    color: #64748b !important;
+    font-weight: 600 !important;
+  }
+
+  :root[data-theme="light"] .metric-hint {
+    color: #64748b !important;
+    font-size: 11.5px !important;
+    line-height: 1.45 !important;
+  }
+
+  :root[data-theme="light"] .quota-progress-track {
+    background: #e2e8f0 !important;
+    border-radius: 9999px !important;
+  }
+
+  :root[data-theme="light"] .quota-progress-fill {
+    background: linear-gradient(90deg, #059669 0%, #10b981 100%) !important;
+  }
+
+  :root[data-theme="light"] .dash-reset-pill-box {
+    background: #fffbeb !important;
+    border: 1px solid #fde68a !important;
+    color: #b45309 !important;
+    font-weight: 700 !important;
+  }
+
+  :root[data-theme="light"] .dash-reset-pill-box strong {
+    color: #92400e !important;
+    font-weight: 800 !important;
+  }
+
+  :root[data-theme="light"] .metric-action-btn,
+  :root[data-theme="light"] .metric-link-btn {
+    background: #059669 !important;
+    border: 1px solid #059669 !important;
+    color: #ffffff !important;
+    font-weight: 750 !important;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.22) !important;
+  }
+
+  :root[data-theme="light"] .metric-action-btn:hover,
+  :root[data-theme="light"] .metric-link-btn:hover {
+    background: #047857 !important;
+    border-color: #047857 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  /* Section Cards (History & Pricing) */
+  :root[data-theme="light"] .dash-section-card {
+    background: #ffffff !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03), 0 14px 34px -4px rgba(15, 23, 42, 0.05) !important;
+  }
+
+  :root[data-theme="light"] .section-card-title {
+    color: #0f172a !important;
+    font-weight: 800 !important;
+  }
+
+  :root[data-theme="light"] .section-card-subtitle {
+    color: #64748b !important;
+  }
+
+  :root[data-theme="light"] .btn-refresh {
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #475569 !important;
+    font-weight: 650 !important;
+  }
+
+  :root[data-theme="light"] .btn-refresh:hover {
+    background: #f1f5f9 !important;
+    border-color: #94a3b8 !important;
+    color: #0f172a !important;
+  }
+
+  /* History Table */
+  :root[data-theme="light"] .history-table th {
+    border-bottom: 2px solid #e2e8f0 !important;
+    color: #475569 !important;
+    background: #f8fafc !important;
+    font-weight: 750 !important;
+    font-size: 11px !important;
+  }
+
+  :root[data-theme="light"] .history-table td {
+    border-bottom: 1px solid #f1f5f9 !important;
     color: #334155 !important;
   }
-  :root[data-theme="light"] .user-profile-plan-banner.is-vip {
-    background: #fef3c7 !important;
-    border-color: #fcd34d !important;
-    color: #b45309 !important;
-    box-shadow: 0 2px 10px rgba(245, 158, 11, 0.15) !important;
+
+  :root[data-theme="light"] .history-table tr:hover td {
+    background: #f8fafc !important;
   }
-  :root[data-theme="light"] .dash-reset-pill-box {
+
+  :root[data-theme="light"] .table-file-title {
+    color: #0f172a !important;
+    font-weight: 650 !important;
+  }
+
+  :root[data-theme="light"] .table-platform-badge {
+    background: #f0f9ff !important;
+    color: #0284c7 !important;
+    border: 1px solid #bae6fd !important;
+  }
+
+  :root[data-theme="light"] .table-platform-badge.terabox {
+    background: #ecfdf5 !important;
+    color: #047857 !important;
+    border: 1px solid #a7f3d0 !important;
+  }
+
+  :root[data-theme="light"] .dash-status-pill {
+    background: #ecfdf5 !important;
+    border: 1px solid #a7f3d0 !important;
+    color: #047857 !important;
+  }
+
+  :root[data-theme="light"] .dash-status-pill.is-pending {
     background: #fffbeb !important;
     border-color: #fde68a !important;
     color: #b45309 !important;
   }
-  :root[data-theme="light"] .dash-reset-pill-box strong {
-    color: #92400e !important;
+
+  :root[data-theme="light"] .btn-tbl-stream {
+    background: #ecfdf5 !important;
+    border: 1px solid #a7f3d0 !important;
+    color: #047857 !important;
   }
-  :root[data-theme="light"] .dash-metric-card {
-    background: #f8fafc !important;
-    border-color: #e2e8f0 !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02) !important;
+
+  :root[data-theme="light"] .btn-tbl-stream:hover {
+    background: #059669 !important;
+    border-color: #059669 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25) !important;
   }
-  :root[data-theme="light"] .metric-label {
+
+  /* Empty History State */
+  :root[data-theme="light"] .empty-history {
     color: #64748b !important;
   }
-  :root[data-theme="light"] .metric-value {
+
+  :root[data-theme="light"] .empty-history svg {
+    color: #94a3b8 !important;
+  }
+
+  :root[data-theme="light"] .empty-history h3 {
     color: #0f172a !important;
   }
-  :root[data-theme="light"] .metric-sub {
-    color: #64748b !important;
-  }
-  :root[data-theme="light"] .metric-hint {
-    color: #64748b !important;
-  }
-  :root[data-theme="light"] .quota-progress-track {
-    background: #e2e8f0 !important;
-  }
-  :root[data-theme="light"] .dash-section-card {
-    background: #ffffff !important;
-    border-color: rgba(15, 23, 42, 0.08) !important;
-    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.05) !important;
-  }
-  :root[data-theme="light"] .section-card-title {
-    color: #0f172a !important;
-  }
-  :root[data-theme="light"] .section-card-subtitle {
-    color: #64748b !important;
-  }
-  :root[data-theme="light"] .history-table th {
-    border-bottom-color: #e2e8f0 !important;
+
+  :root[data-theme="light"] .empty-history p {
     color: #475569 !important;
-    background: #f8fafc !important;
   }
-  :root[data-theme="light"] .history-table td {
-    border-bottom-color: #f1f5f9 !important;
-    color: #334155 !important;
+
+  /* VIP Active Banner */
+  :root[data-theme="light"] .vip-active-banner {
+    background: #ffffff !important;
+    border: 1px solid #a7f3d0 !important;
+    border-left: 4px solid #059669 !important;
+    box-shadow: 0 4px 18px rgba(5, 150, 105, 0.08), 0 1px 3px rgba(15, 23, 42, 0.03) !important;
   }
-  :root[data-theme="light"] .history-table tr:hover td {
-    background: #f8fafc !important;
+
+  :root[data-theme="light"] .vip-banner-icon {
+    background: #fffbeb !important;
+    border: 1px solid #fde68a !important;
   }
-  :root[data-theme="light"] .table-file-title {
+
+  :root[data-theme="light"] .vip-banner-icon svg {
+    fill: #d97706 !important;
+  }
+
+  :root[data-theme="light"] .vip-banner-title {
     color: #0f172a !important;
+    font-weight: 800 !important;
   }
+
+  :root[data-theme="light"] .vip-banner-title span {
+    color: #047857 !important;
+    font-weight: 850 !important;
+  }
+
+  :root[data-theme="light"] .vip-banner-desc {
+    color: #475569 !important;
+  }
+
+  /* VIP Plan Cards */
   :root[data-theme="light"] .dash-plan-box {
     background: #ffffff !important;
-    border-color: #e2e8f0 !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03) !important;
   }
+
+  :root[data-theme="light"] .dash-plan-box:hover {
+    border-color: #059669 !important;
+    box-shadow: 0 16px 36px -4px rgba(5, 150, 105, 0.12), 0 4px 12px rgba(15, 23, 42, 0.04) !important;
+    transform: translateY(-4px) !important;
+  }
+
+  :root[data-theme="light"] .dash-plan-box.is-popular,
   :root[data-theme="light"] .dash-plan-box.is-best {
-    background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%) !important;
-    border-color: rgba(5, 150, 105, 0.4) !important;
+    background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 45%) !important;
+    border: 1.5px solid #059669 !important;
+    box-shadow: 0 8px 30px -4px rgba(5, 150, 105, 0.16), 0 0 0 1px rgba(5, 150, 105, 0.12) !important;
   }
-  :root[data-theme="light"] .dash-plan-title,
+
+  :root[data-theme="light"] .dash-plan-box.is-best-value {
+    background: linear-gradient(180deg, #fffbeb 0%, #ffffff 45%) !important;
+    border: 1.5px solid #d97706 !important;
+    box-shadow: 0 8px 30px -4px rgba(217, 119, 6, 0.16), 0 0 0 1px rgba(217, 119, 6, 0.12) !important;
+  }
+
+  :root[data-theme="light"] .dash-plan-title {
+    color: #0f172a !important;
+    font-weight: 800 !important;
+  }
+
+  :root[data-theme="light"] .dash-plan-price .sym {
+    color: #059669 !important;
+    font-weight: 800 !important;
+  }
+
   :root[data-theme="light"] .dash-plan-price .amt {
     color: #0f172a !important;
+    font-weight: 850 !important;
   }
+
+  :root[data-theme="light"] .dash-plan-price .per {
+    color: #64748b !important;
+    font-weight: 600 !important;
+  }
+
   :root[data-theme="light"] .dash-plan-desc {
     color: #64748b !important;
   }
+
   :root[data-theme="light"] .dash-plan-feats li {
     color: #334155 !important;
+    font-weight: 500 !important;
   }
+
+  :root[data-theme="light"] .dash-plan-badge {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25) !important;
+  }
+
+  :root[data-theme="light"] .dash-plan-badge.badge-best {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25) !important;
+  }
+
+  /* Plan Buttons in Light Mode: Crisp Emerald Outline & Solid Popular Gradient */
   :root[data-theme="light"] .dash-buy-btn {
-    background: #f1f5f9 !important;
-    border-color: #cbd5e1 !important;
+    background: #ffffff !important;
+    border: 1.5px solid #059669 !important;
+    color: #047857 !important;
+    font-weight: 800 !important;
+    box-shadow: 0 2px 6px rgba(5, 150, 105, 0.08) !important;
+  }
+
+  :root[data-theme="light"] .dash-buy-btn:hover {
+    background: #059669 !important;
+    border-color: #059669 !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(5, 150, 105, 0.25) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  :root[data-theme="light"] .dash-buy-btn.btn-popular {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+    border: 1.5px solid #059669 !important;
+    color: #ffffff !important;
+    font-weight: 850 !important;
+    box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3) !important;
+  }
+
+  :root[data-theme="light"] .dash-buy-btn.btn-popular:hover {
+    background: linear-gradient(135deg, #047857 0%, #059669 100%) !important;
+    box-shadow: 0 8px 22px rgba(5, 150, 105, 0.4) !important;
+    transform: translateY(-2px) !important;
+  }
+
+  /* Loading & Unauthorized Cards in Light Mode */
+  :root[data-theme="light"] .dash-loading-card,
+  :root[data-theme="light"] .dash-unauth-card {
+    background: #ffffff !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08) !important;
+  }
+
+  :root[data-theme="light"] .dash-spinner {
+    border-color: rgba(5, 150, 105, 0.15) !important;
+    border-top-color: #059669 !important;
+  }
+
+  :root[data-theme="light"] .unauth-title {
     color: #0f172a !important;
   }
-  :root[data-theme="light"] .vip-active-banner {
-    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%) !important;
-    border-color: #6ee7b7 !important;
+
+  :root[data-theme="light"] .unauth-desc {
+    color: #475569 !important;
   }
-  :root[data-theme="light"] .vip-banner-title {
-    color: #065f46 !important;
-  }
-  :root[data-theme="light"] .vip-banner-title span {
-    color: #047857 !important;
-  }
-  :root[data-theme="light"] .vip-banner-desc {
-    color: #065f46 !important;
+
+  :root[data-theme="light"] .unauth-icon-wrap {
+    background: #ecfdf5 !important;
+    border: 1px solid #a7f3d0 !important;
   }
 </style>
 
@@ -1125,6 +1547,7 @@ const breadcrumbs = [
   import { getCurrentUser, getUserProfile, getSupabase, signOutUser, checkDailyQuota } from '../utils/supabase';
   import { startRazorpayCheckout } from '../utils/razorpay';
   import { APP_CONFIG } from '../utils/config';
+  import { escapeHtml, sanitizeUrl } from '../utils/security';
 
   const loadingEl = document.getElementById('dash-loading');
   const unauthEl = document.getElementById('dash-unauthorized');
@@ -1317,24 +1740,35 @@ const breadcrumbs = [
         historyTbody.innerHTML = '';
         data.forEach((row: any) => {
           const tr = document.createElement('tr');
-          const timeStr = row.created_at ? new Date(row.created_at).toLocaleString() : 'Recent';
+          const timeStr = row.created_at ? escapeHtml(new Date(row.created_at).toLocaleString()) : 'Recent';
           const isTera = (row.provider || '').toLowerCase().includes('tera');
+          const fileName = escapeHtml(row.file_name || 'Processed Video File');
+          const linkUrl = escapeHtml(row.link_url || '');
+          const fileSize = escapeHtml(row.file_size || '');
+          const provider = escapeHtml(row.provider || 'TeraBox');
+          const status = escapeHtml(row.status || 'Success');
+          const isSuccess = (row.status || 'success').toLowerCase() === 'success';
+          const streamUrl = sanitizeUrl(`/?link=${encodeURIComponent(row.link_url || '')}`);
 
           tr.innerHTML = `
             <td>
-              <div class="table-file-title" title="${row.file_name || row.link_url}">${row.file_name || 'Processed Video File'}</div>
-              <div style="font-size: 10px; color: var(--color-text-muted);">${row.file_size || ''}</div>
+              <div class="table-file-title" title="${linkUrl}">${fileName}</div>
+              <div class="table-file-size" style="font-size: 11px; color: var(--color-text-muted); margin-top: 2px;">${fileSize}</div>
             </td>
             <td>
-              <span class="table-platform-badge ${isTera ? 'terabox' : ''}">${row.provider || 'TeraBox'}</span>
+              <span class="table-platform-badge ${isTera ? 'terabox' : 'diskwala'}">${provider}</span>
             </td>
             <td>
-              <span style="color: #34d399; font-weight: 700;">● ${row.status || 'Success'}</span>
+              <span class="dash-status-pill ${isSuccess ? 'is-success' : 'is-pending'}">
+                <span class="dash-status-dot"></span>
+                <span>${status}</span>
+              </span>
             </td>
-            <td style="font-size: 11px;">${timeStr}</td>
+            <td style="font-size: 11px; color: var(--color-text-secondary);">${timeStr}</td>
             <td>
-              <a href="/?link=${encodeURIComponent(row.link_url)}" class="metric-link-btn" style="padding: 4px 10px; margin: 0; font-size: 11px;">
-                Stream
+              <a href="${streamUrl}" class="btn-tbl-stream" title="Watch and Stream Video">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                <span>Stream</span>
               </a>
             </td>
           `;

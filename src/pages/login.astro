@@ -11,6 +11,7 @@ const breadcrumbs = [
 <BaseLayout 
   title="Sign In to TeraWala — Video Downloader & Online Player"
   description="Sign in to your TeraWala account to track link usage, view resolution history, and manage your Premium membership."
+  includeTurnstile={true}
 >
   <div class="auth-page-container">
     <div class="container container-sm">
@@ -307,6 +308,7 @@ const breadcrumbs = [
 <script>
   import { signInWithEmail, getCurrentUser, sendPasswordResetEmail } from '../utils/supabase';
   import { APP_CONFIG } from '../utils/config';
+  import { verifyTurnstileToken } from '../utils/security';
 
   const urlParams = new URLSearchParams(window.location.search);
   const targetUrl = urlParams.get('redirect') || '/dashboard/';
@@ -432,6 +434,17 @@ const breadcrumbs = [
           errBox.textContent = 'Please complete the Cloudflare security verification to sign in.';
           errBox.style.display = 'block';
         }
+        return;
+      }
+
+      // Verify token on server-side
+      const isTokenValid = await verifyTurnstileToken(token);
+      if (!isTokenValid) {
+        if (errBox) {
+          errBox.textContent = 'Cloudflare security challenge verification failed. Please try again.';
+          errBox.style.display = 'block';
+        }
+        try { turnstileObj.reset(loginTurnstileWidgetId); } catch {}
         return;
       }
     }

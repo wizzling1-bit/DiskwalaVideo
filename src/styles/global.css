@@ -995,18 +995,30 @@ body.modal-open {
 }
 
 :root[data-theme="light"] .btn-purchase-plan {
-  background: #f1f5f9 !important;
-  border-color: #cbd5e1 !important;
-  color: #090d16 !important;
+  background: #ffffff !important;
+  border: 1.5px solid #059669 !important;
+  color: #047857 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 2px 6px rgba(5, 150, 105, 0.08) !important;
 }
 
 :root[data-theme="light"] .btn-purchase-plan:hover {
-  background: #e2e8f0 !important;
+  background: #059669 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 18px rgba(5, 150, 105, 0.25) !important;
 }
 
 :root[data-theme="light"] .btn-purchase-plan.btn-popular {
   background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+  border: 1.5px solid #059669 !important;
   color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3) !important;
+}
+
+:root[data-theme="light"] .btn-purchase-plan.btn-popular:hover {
+  background: linear-gradient(135deg, #047857 0%, #059669 100%) !important;
+  box-shadow: 0 8px 22px rgba(5, 150, 105, 0.4) !important;
 }
 
 :root[data-theme="light"] .comparison-table th {
