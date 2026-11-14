@@ -1,5 +1,5 @@
 import { APP_CONFIG } from './config';
-import { getCurrentUser, getUserProfile, activateSubscriptionViaRPC } from './supabase';
+import { getCurrentUser, getUserProfile, getSupabase } from './supabase';
 
 export interface RazorpayPlan {
   id: string;
@@ -39,7 +39,7 @@ export function loadRazorpayScript(): Promise<boolean> {
 }
 
 /**
- * Trigger Razorpay checkout modal for chosen plan
+ * Trigger Razorpay checkout modal for chosen plan with full backend order creation and signature verification
  */
 export async function startRazorpayCheckout(
   plan: RazorpayPlan,
@@ -63,14 +63,60 @@ export async function startRazorpayCheckout(
     return;
   }
 
+  const sb = getSupabase();
+  const sessionRes = await sb.auth.getSession();
+  const token = sessionRes.data.session?.access_token;
+  if (!token) {
+    const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
+    window.location.href = `/login/?redirect=${returnUrl}`;
+    return;
+  }
+
   const profile = await getUserProfile(user.id);
   const userEmail = user.email || '';
   const userName = profile?.full_name || userEmail.split('@')[0];
 
+  // 1. Backend Order Creation: Obtain authentic Razorpay Order ID from server
+  let orderData: any = null;
+  try {
+    const orderRes = await fetch('/api/payment/create-order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ plan_id: plan.id })
+    });
+
+    orderData = await orderRes.json().catch(() => null);
+    if (!orderRes.ok || !orderData?.success || !orderData?.order_id) {
+      const errMsg = orderData?.details || orderData?.error || 'Unable to create payment order.';
+      showPaymentNotificationModal({
+        type: 'error',
+        title: 'Order Initialization Failed',
+        message: errMsg,
+        telegramLink: APP_CONFIG.telegramChannelUrl
+      });
+      callbacks?.onError?.(new Error(errMsg));
+      return;
+    }
+  } catch (netErr: any) {
+    showPaymentNotificationModal({
+      type: 'error',
+      title: 'Connection Error',
+      message: 'Could not connect to payment order service. Please check your network.',
+      telegramLink: APP_CONFIG.telegramChannelUrl
+    });
+    callbacks?.onError?.(netErr);
+    return;
+  }
+
+  // 2. Configure Razorpay Standard Checkout with Server Order ID
   const options = {
-    key: APP_CONFIG.razorpay.keyId,
-    amount: plan.price * 100, // paise (e.g. ₹29 = 2900 paise)
-    currency: 'INR',
+    key: orderData.key_id || APP_CONFIG.razorpay.keyId,
+    order_id: orderData.order_id,
+    amount: orderData.amount, // Verified from server
+    currency: orderData.currency || 'INR',
     name: 'TeraWala VIP Pass',
     description: `${plan.name} (${plan.period}) — Instant HD Unlocking`,
     image: 'https://terawala.com/favicon-32x32.png',
@@ -92,31 +138,39 @@ export async function startRazorpayCheckout(
       }
     },
     handler: async function (response: any) {
+      // 3. Cryptographic Signature & Capture Verification on Backend
       try {
-        // Activate subscription in Supabase
-        await activateSubscriptionViaRPC({
-          userId: user.id,
-          planId: plan.id,
-          planName: plan.name,
-          amount: plan.price,
-          razorpayOrderId: response.razorpay_order_id || `order_${Date.now()}`,
-          razorpayPaymentId: response.razorpay_payment_id,
-          razorpaySignature: response.razorpay_signature || '',
-          days: plan.days || 30
+        const verifyRes = await fetch('/api/payment/verify', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            plan_id: plan.id
+          })
         });
+
+        const verifyData = await verifyRes.json().catch(() => null) as any;
+        if (!verifyRes.ok || !verifyData?.success) {
+          throw new Error(verifyData?.details || verifyData?.error || 'Payment verification rejected by server.');
+        }
 
         // Broadcast event for UI updates
         window.dispatchEvent(new CustomEvent('terawala:subscription-activated', {
           detail: { plan, paymentId: response.razorpay_payment_id }
         }));
 
-        callbacks?.onSuccess?.(response);
+        callbacks?.onSuccess?.(verifyData);
       } catch (err: any) {
-        console.error('Subscription activation failed:', err);
+        console.error('Subscription verification failed:', err);
         showPaymentNotificationModal({
           type: 'warning',
-          title: 'Payment Received — Activation Notice',
-          message: `Payment ID: <strong>${response.razorpay_payment_id}</strong> was received, but automatic sync took longer than expected. Please message our Telegram support to verify your VIP pass immediately.`,
+          title: 'Payment Verification Notice',
+          message: `Payment ID: <strong>${response.razorpay_payment_id}</strong> was received, but server verification returned: ${err?.message || 'Verification pending'}. Please contact support or check your dashboard in a moment.`,
           telegramLink: APP_CONFIG.telegramChannelUrl
         });
         callbacks?.onError?.(err);

@@ -269,6 +269,217 @@ export default defineConfig({
               }
             }
 
+            // Razorpay Payment Endpoints
+            if (normalizedPath.startsWith('/api/payment/')) {
+              const paymentSubPath = normalizedPath.replace(/^\/api\/payment\/?/, '');
+
+              if (req.method === 'OPTIONS') {
+                res.statusCode = 204;
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+                res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-razorpay-signature');
+                res.end();
+                return;
+              }
+
+              if (req.method === 'POST') {
+                let bodyStr = '';
+                req.on('data', (/** @type {any} */ chunk) => { bodyStr += chunk; });
+                req.on('end', async () => {
+                  res.setHeader('Content-Type', 'application/json');
+                  res.setHeader('Access-Control-Allow-Origin', '*');
+
+                  const keyId = process.env.RAZORPAY_KEY_ID || process.env.PUBLIC_RAZORPAY_KEY_ID || 'rzp_live_TzwwtKPEYYEiHK';
+                  const keySecret = process.env.RAZORPAY_KEY_SECRET || 'n37CwlaDEBvgBcF8VM64XsYc';
+                  const supabaseUrl = (process.env.PUBLIC_SUPABASE_URL || 'https://fyjeyhrkuuuxxwhjnhov.supabase.co').replace(/\/+$/, '');
+                  const anonKey = process.env.PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ5amV5aHJrdXV1eHh3aGpuaG92Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMTcxNTAsImV4cCI6MjEwNzc5MzE1MH0.eZIc7JQ9X3niGjNTjGmiztedCqwKpeEWrDFgE9c2VOw';
+
+                  const plans = {
+                    plan_starter_24h: { id: 'plan_starter_24h', name: 'Turbo 24h VIP', price: 9, days: 1 },
+                    plan_pro_monthly: { id: 'plan_pro_monthly', name: 'Pro Monthly VIP', price: 99, days: 30 },
+                    plan_quarterly_3m: { id: 'plan_quarterly_3m', name: 'Ultra Quarterly VIP', price: 249, days: 90 },
+                    plan_unlimited_year: { id: 'plan_unlimited_year', name: 'Elite Annual VIP', price: 999, days: 365 }
+                  };
+
+                  try {
+                    if (paymentSubPath === 'create-order') {
+                      const authHeader = req.headers['authorization'];
+                      const token = authHeader ? authHeader.replace(/^Bearer\s+/i, '').trim() : '';
+                      if (!token) {
+                        res.statusCode = 401;
+                        res.end(JSON.stringify({ success: false, error: 'Unauthorized', details: 'Sign-in required.' }));
+                        return;
+                      }
+
+                      // Verify user with Supabase
+                      const userRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
+                        headers: { 'Authorization': `Bearer ${token}`, 'apikey': anonKey }
+                      });
+                      if (!userRes.ok) {
+                        res.statusCode = 401;
+                        res.end(JSON.stringify({ success: false, error: 'Unauthorized', details: 'Invalid session token.' }));
+                        return;
+                      }
+                      const userData = /** @type {any} */ (await userRes.json());
+                      const parsed = JSON.parse(bodyStr || '{}');
+                      const planId = parsed.plan_id;
+                      const plan = /** @type {any} */ (plans)[planId];
+                      if (!plan) {
+                        res.statusCode = 400;
+                        res.end(JSON.stringify({ success: false, error: 'Invalid Plan', details: 'Unknown plan.' }));
+                        return;
+                      }
+
+                      const basicAuth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
+                      const rzpRes = await fetch('https://api.razorpay.com/v1/orders', {
+                        method: 'POST',
+                        headers: {
+                          'Authorization': `Basic ${basicAuth}`,
+                          'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                          amount: plan.price * 100,
+                          currency: 'INR',
+                          receipt: `rcpt_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+                          notes: {
+                            user_id: userData.id,
+                            user_email: userData.email || '',
+                            plan_id: plan.id,
+                            plan_days: String(plan.days)
+                          }
+                        })
+                      });
+
+                      const rzpOrder = /** @type {any} */ (await rzpRes.json());
+                      if (!rzpRes.ok || !rzpOrder.id) {
+                        res.statusCode = 502;
+                        res.end(JSON.stringify({ success: false, error: 'Gateway Error', details: rzpOrder?.error?.description || 'Failed to create Razorpay order.' }));
+                        return;
+                      }
+
+                      res.statusCode = 200;
+                      res.end(JSON.stringify({
+                        success: true,
+                        order_id: rzpOrder.id,
+                        amount: rzpOrder.amount,
+                        currency: rzpOrder.currency || 'INR',
+                        key_id: keyId,
+                        plan: plan
+                      }));
+                      return;
+                    }
+
+                    if (paymentSubPath === 'verify') {
+                      const authHeader = req.headers['authorization'];
+                      const token = authHeader ? authHeader.replace(/^Bearer\s+/i, '').trim() : '';
+                      if (!token) {
+                        res.statusCode = 401;
+                        res.end(JSON.stringify({ success: false, error: 'Unauthorized', details: 'Sign-in required.' }));
+                        return;
+                      }
+
+                      const userRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
+                        headers: { 'Authorization': `Bearer ${token}`, 'apikey': anonKey }
+                      });
+                      if (!userRes.ok) {
+                        res.statusCode = 401;
+                        res.end(JSON.stringify({ success: false, error: 'Unauthorized', details: 'Invalid session token.' }));
+                        return;
+                      }
+                      const userData = /** @type {any} */ (await userRes.json());
+                      const parsed = JSON.parse(bodyStr || '{}');
+                      const { razorpay_order_id, razorpay_payment_id, razorpay_signature, plan_id } = parsed;
+
+                      if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !plan_id) {
+                        res.statusCode = 400;
+                        res.end(JSON.stringify({ success: false, error: 'Bad Request', details: 'Missing payment verification data.' }));
+                        return;
+                      }
+
+                      const plan = /** @type {any} */ (plans)[plan_id];
+                      if (!plan) {
+                        res.statusCode = 400;
+                        res.end(JSON.stringify({ success: false, error: 'Invalid Plan' }));
+                        return;
+                      }
+
+                      // Cryptographic signature check
+                      const expectedSignature = crypto.createHmac('sha256', keySecret).update(`${razorpay_order_id}|${razorpay_payment_id}`).digest('hex');
+                      const sigBuffer = Buffer.from(razorpay_signature);
+                      const expBuffer = Buffer.from(expectedSignature);
+                      if (sigBuffer.length !== expBuffer.length || !crypto.timingSafeEqual(sigBuffer, expBuffer)) {
+                        res.statusCode = 400;
+                        res.end(JSON.stringify({ success: false, error: 'Signature Mismatch', details: 'Invalid payment signature.' }));
+                        return;
+                      }
+
+                      // Fetch payment from Razorpay
+                      const basicAuth = Buffer.from(`${keyId}:${keySecret}`).toString('base64');
+                      const rzpPayRes = await fetch(`https://api.razorpay.com/v1/payments/${razorpay_payment_id}`, {
+                        headers: { 'Authorization': `Basic ${basicAuth}` }
+                      });
+                      const rzpPayment = /** @type {any} */ (await rzpPayRes.json());
+                      if (!rzpPayRes.ok || (rzpPayment.status !== 'captured' && rzpPayment.status !== 'authorized')) {
+                        res.statusCode = 400;
+                        res.end(JSON.stringify({ success: false, error: 'Payment Incomplete', details: `Payment status: ${rzpPayment?.status}` }));
+                        return;
+                      }
+
+                      // Activate in Supabase via RPC
+                      const rpcRes = await fetch(`${supabaseUrl}/rest/v1/rpc/activate_subscription`, {
+                        method: 'POST',
+                        headers: {
+                          'Authorization': `Bearer ${token}`,
+                          'apikey': anonKey,
+                          'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                          p_user_id: userData.id,
+                          p_plan_id: plan.id,
+                          p_plan_name: plan.name,
+                          p_amount: plan.price,
+                          p_razorpay_order_id: razorpay_order_id,
+                          p_razorpay_payment_id: razorpay_payment_id,
+                          p_razorpay_signature: razorpay_signature,
+                          p_days: plan.days
+                        })
+                      });
+                      const rpcData = /** @type {any} */ (await rpcRes.json().catch(() => null));
+
+                      res.statusCode = 200;
+                      res.end(JSON.stringify({
+                        success: true,
+                        status: 'success',
+                        message: 'Payment verified and VIP subscription activated.',
+                        plan_name: plan.name,
+                        valid_until: rpcData?.valid_until || null
+                      }));
+                      return;
+                    }
+
+                    if (paymentSubPath === 'webhook') {
+                      const sig = req.headers['x-razorpay-signature'];
+                      const whSecret = process.env.RAZORPAY_WEBHOOK_SECRET || 'terawala_whsec_live_2026';
+                      const expectedSig = crypto.createHmac('sha256', whSecret).update(bodyStr).digest('hex');
+                      if (sig !== expectedSig) {
+                        res.statusCode = 400;
+                        res.end(JSON.stringify({ error: 'Invalid webhook signature' }));
+                        return;
+                      }
+                      res.statusCode = 200;
+                      res.end(JSON.stringify({ status: 'ok', received: true }));
+                      return;
+                    }
+                  } catch (err) {
+                    res.statusCode = 500;
+                    res.end(JSON.stringify({ success: false, error: 'Server Error', details: String(err) }));
+                    return;
+                  }
+                });
+                return;
+              }
+            }
+
             // Verify Turnstile dev route
             if ((normalizedPath === '/api/verify-turnstile') && req.method === 'POST') {
               let bodyStr = '';

@@ -100,7 +100,7 @@ export async function onRequest(context: {
   newHeaders.set('X-Content-Type-Options', 'nosniff');
   newHeaders.set('X-Frame-Options', 'SAMEORIGIN');
   newHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  newHeaders.set('Permissions-Policy', 'accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()');
+  newHeaders.set('Permissions-Policy', 'accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(self "https://checkout.razorpay.com" "https://api.razorpay.com"), usb=()');
   newHeaders.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
 
   const csp = [
