@@ -2,7 +2,7 @@
 
 High-performance, modern web application and landing page to check, stream, and download TeraBox & Diskwala video links online. Built with **Astro 5**, **TypeScript**, and modern CSS.
 
-- **Production Domain:** [terawala.com](https://terawala.com/)
+- **Production Domain:** [terawala.in](https://terawala.in/)
 - **Brand:** TeraWala
 
 ---
@@ -56,7 +56,7 @@ npm run build
    - **Build command:** `npm run build`
    - **Build output directory:** `dist`
    - **Environment Variable:** `NODE_VERSION: 20` (or `22`)
-4. Set custom domain: `terawala.com`.
+4. Set custom domain: `terawala.in`.
 5. Click **Save and Deploy**.
 
 ### Option 2: Wrangler CLI

@@ -1,8 +1,18 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "terawala",
+  "main": "src/worker.ts",
   "compatibility_date": "2026-10-09",
+  "workers_dev": true,
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "PUBLIC_SITE_URL": "https://terawala.in",
+    "TERABOXDL_API_URL": "https://api.teraboxdl.site",
+    "PUBLIC_RAZORPAY_KEY_ID": "rzp_live_TzwwtKPEYYEiHK",
+    "RAZORPAY_KEY_ID": "rzp_live_TzwwtKPEYYEiHK",
+    "PUBLIC_SUPABASE_URL": "https://fyjeyhrkuuuxxwhjnhov.supabase.co"
   }
 }

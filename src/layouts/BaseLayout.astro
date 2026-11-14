@@ -18,7 +18,7 @@ interface Props {
 const {
   title = "TeraWala — Free TeraBox, Diskwala & Flezen Video Downloader & Online Player",
   description = "Free TeraWala online video player and video downloader. Stream HD TeraBox, Diskwala & Flezen video links online, bypass ads, and download MP4 videos with zero app installs.",
-  canonicalUrl = "https://terawala.com/",
+  canonicalUrl = "https://terawala.in/",
   noindex = false,
   includeTurnstile = false
 } = Astro.props;
@@ -26,7 +26,7 @@ const {
 // Targeted High-Volume SEO Keywords
 const metaKeywords = [
   "terawala",
-  "terawala.com",
+  "terawala.in",
   "terawala video downloader",
   "terawala downloader",
   "terabox video downloader",
@@ -51,8 +51,8 @@ const structuredData = {
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://terawala.com/#website",
-      "url": "https://terawala.com/",
+      "@id": "https://terawala.in/#website",
+      "url": "https://terawala.in/",
       "name": "TeraWala",
       "alternateName": [
         "TeraWala Video Downloader",
@@ -64,28 +64,28 @@ const structuredData = {
       ],
       "description": description,
       "inLanguage": "en-US",
-      "image": "https://terawala.com/logo.png",
+      "image": "https://terawala.in/logo.png",
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://terawala.com/#tools"
+          "urlTemplate": "https://terawala.in/#tools"
         },
         "query-input": "required name=search_term_string"
       }
     },
     {
       "@type": "Organization",
-      "@id": "https://terawala.com/#organization",
+      "@id": "https://terawala.in/#organization",
       "name": "TeraWala",
-      "url": "https://terawala.com/",
+      "url": "https://terawala.in/",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://terawala.com/logo.png",
+        "url": "https://terawala.in/logo.png",
         "width": 512,
         "height": 512
       },
-      "image": "https://terawala.com/logo.png",
+      "image": "https://terawala.in/logo.png",
       "sameAs": [
         "https://telegram.me/terawala_official",
         "https://telegram.me/DiskWalaa_video_downloader_bot"
@@ -93,8 +93,8 @@ const structuredData = {
     },
     {
       "@type": "WebApplication",
-      "@id": "https://terawala.com/#webapp",
-      "url": "https://terawala.com/",
+      "@id": "https://terawala.in/#webapp",
+      "url": "https://terawala.in/",
       "name": "TeraWala — Terabox & Diskwala Video Downloader & Online Player",
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "All",
@@ -116,7 +116,7 @@ const structuredData = {
     },
     {
       "@type": "HowTo",
-      "@id": "https://terawala.com/#howto",
+      "@id": "https://terawala.in/#howto",
       "name": "How to Use TeraWala to Stream and Download Terabox & Diskwala Videos",
       "description": "Step-by-step instructions to stream or download Terabox and Diskwala videos online without intrusive ads or app installations.",
       "step": [
@@ -130,7 +130,7 @@ const structuredData = {
           "@type": "HowToStep",
           "position": 2,
           "name": "Paste Link into TeraWala",
-          "text": "Paste your link into the TeraWala link input box at the top of terawala.com."
+          "text": "Paste your link into the TeraWala link input box at the top of terawala.in."
         },
         {
           "@type": "HowToStep",
@@ -198,13 +198,13 @@ const structuredData = {
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://terawala.com/og-image.png" />
-    <meta property="og:image:secure_url" content="https://terawala.com/og-image.png" />
+    <meta property="og:image" content="https://terawala.in/og-image.png" />
+    <meta property="og:image:secure_url" content="https://terawala.in/og-image.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="TeraWala — Terabox and Diskwala Video Downloader and Online Player" />
-    <meta property="og:logo" content="https://terawala.com/logo.png" />
+    <meta property="og:logo" content="https://terawala.in/logo.png" />
     <meta property="og:locale" content="en_US" />
 
     <!-- Twitter Cards -->
@@ -212,7 +212,7 @@ const structuredData = {
     <meta name="twitter:url" content={canonicalUrl} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://terawala.com/og-image.png" />
+    <meta name="twitter:image" content="https://terawala.in/og-image.png" />
     <meta name="twitter:image:alt" content="TeraWala — Terabox and Diskwala Video Downloader and Online Player" />
 
     <!-- Favicon & Brand Icons for Google Search & Browsers -->

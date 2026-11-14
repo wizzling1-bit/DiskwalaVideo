@@ -44,4 +44,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://terawala.com/sitemap.xml
+Sitemap: https://terawala.in/sitemap.xml

@@ -296,74 +296,70 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch {}
   }
 
-  // Call Video Resolution API via secure backend endpoint
+  // Call Video Resolution API via centralized canonical endpoint /api/resolve
   async function fetchVideo(url: string, provider: SupportedProvider): Promise<TeraBoxApiResponse> {
-    const endpoints = ['/api/resolve/', '/api/resolve', '/api/diskwala/', '/api/terabox/'];
-    let lastErrorMsg = '';
+    const endpoint = '/api/resolve';
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 35000);
 
-    for (const ep of endpoints) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 35000);
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, provider }),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
 
-        const resp = await fetch(ep, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url, provider }),
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-
-        const contentType = resp.headers.get('content-type') || '';
-        if (contentType.includes('application/json')) {
-          const data = (await resp.json()) as TeraBoxApiResponse;
-          if (data && (data.status === 'success' || data.success === true)) {
-            // Auto-populate data.list from data.video if backend returned singular video schema
-            if ((!data.list || data.list.length === 0) && data.video) {
-              data.list = [{
-                name: data.video.filename || data.video.title || 'Video.mp4',
-                size: data.video.size,
-                size_formatted: data.video.formattedSize,
-                stream_url: data.video.streamUrl,
-                normal_dlink: data.video.downloadUrl,
-                thumbnail: data.video.thumbnail || undefined,
-                duration: data.video.duration,
-                quality: data.video.quality,
-                type: 'video/mp4'
-              }];
-            }
-            return data;
+      const contentType = resp.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        const data = (await resp.json()) as TeraBoxApiResponse;
+        if (data && (data.status === 'success' || data.success === true)) {
+          // Auto-populate data.list from data.video if backend returned singular video schema
+          if ((!data.list || data.list.length === 0) && data.video) {
+            data.list = [{
+              name: data.video.filename || data.video.title || 'Video.mp4',
+              size: data.video.size,
+              size_formatted: data.video.formattedSize,
+              stream_url: data.video.streamUrl,
+              normal_dlink: data.video.downloadUrl,
+              thumbnail: data.video.thumbnail || undefined,
+              duration: data.video.duration,
+              quality: data.video.quality,
+              type: 'video/mp4'
+            }];
           }
-
-          if (data && (data.status === 'error' || data.error || data.details)) {
-            return {
-              status: 'error',
-              error: data.error || 'Resolution Failed',
-              details: data.details || data.message || 'Unable to resolve video from this link.'
-            };
-          }
-        } else {
-          // If server returned non-JSON (e.g. HTML 404 or 502), record and attempt next endpoint
-          lastErrorMsg = `Server returned HTTP ${resp.status} (${resp.statusText || 'Non-JSON'}).`;
-          continue;
+          return data;
         }
-      } catch (err: any) {
-        if (err.name === 'AbortError') {
+
+        if (data && (data.status === 'error' || data.error || data.details)) {
           return {
             status: 'error',
-            error: 'Request Timeout',
-            details: 'Video resolution timed out after 35 seconds. Please try again.'
+            error: data.error || 'Resolution Failed',
+            details: data.details || data.message || 'Unable to resolve video from this link.'
           };
         }
-        lastErrorMsg = err?.message || 'Network connection failed.';
       }
-    }
 
-    return {
-      status: 'error',
-      error: 'Resolution Failed',
-      details: lastErrorMsg || 'Failed to connect to the video resolution service. Please check your network and try again.'
-    };
+      return {
+        status: 'error',
+        error: 'Resolution Failed',
+        details: `Server returned HTTP ${resp.status} (${resp.statusText || 'Non-JSON response'}).`
+      };
+    } catch (err: any) {
+      if (err.name === 'AbortError') {
+        return {
+          status: 'error',
+          error: 'Request Timeout',
+          details: 'Video resolution timed out after 35 seconds. Please try again.'
+        };
+      }
+      return {
+        status: 'error',
+        error: 'Resolution Failed',
+        details: err?.message || 'Failed to connect to the video resolution service. Please check your network and try again.'
+      };
+    }
   }
 
   // Alias for backward compatibility

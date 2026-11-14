@@ -1,12 +1,12 @@
 /**
  * TeraWala — Global Application Configuration
- * Primary Domain: terawala.com
+ * Primary Domain: terawala.in
  * Main Keywords: TeraWala, terabox video downloader, diskwala video downloader, online video player
  */
 
 export const APP_CONFIG = {
   siteName: 'TeraWala — Terabox & Diskwala Video Downloader & Online Video Player',
-  siteUrl: 'https://terawala.com',
+  siteUrl: 'https://terawala.in',
   brandShort: 'TeraWala',
   
   // Official Telegram Community Link (Updated to official)
@@ -142,9 +142,9 @@ export const APP_CONFIG = {
   
   // Video Resolution Backend API Configuration
   videoApi: {
-    endpoint: '/api/resolve/'
+    endpoint: '/api/resolve'
   },
 
   // Contact & Support
-  supportEmail: 'support@terawala.com'
+  supportEmail: 'support@terawala.in'
 };

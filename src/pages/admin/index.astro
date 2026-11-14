@@ -39,7 +39,7 @@ const breadcrumbs = [
         <form id="admin-login-form" class="admin-login-form">
           <div class="admin-field">
             <label for="admin-email">Admin Email</label>
-            <input type="email" id="admin-email" required placeholder="admin@terawala.com" />
+            <input type="email" id="admin-email" required placeholder="admin@terawala.in" />
           </div>
 
           <div class="admin-field">
@@ -3124,27 +3124,22 @@ const breadcrumbs = [
   }
 
   async function fetchTeraBoxMetadata(url: string) {
-    const endpoints = [
-      { url: '/api/resolve', headers: { 'Content-Type': 'application/json' } },
-      { url: '/api/diskwala', headers: { 'Content-Type': 'application/json' } },
-      { url: '/api/terabox', headers: { 'Content-Type': 'application/json' } }
-    ];
-
-    for (const ep of endpoints) {
-      try {
-        const res = await fetch(ep.url, {
-          method: 'POST',
-          headers: ep.headers,
-          body: JSON.stringify({ url })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.status === 'success' && Array.isArray(data.list) && data.list.length > 0) {
-            return extractVideoInfo(data.list[0]);
-          }
+    try {
+      const res = await fetch('/api/resolve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.status === 'success' && Array.isArray(data.list) && data.list.length > 0) {
+          return extractVideoInfo(data.list[0]);
         }
-      } catch {}
-    }
+        if (data?.video) {
+          return extractVideoInfo(data.video);
+        }
+      }
+    } catch {}
 
     return null;
   }

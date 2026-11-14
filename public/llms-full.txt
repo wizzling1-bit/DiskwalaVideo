@@ -1,7 +1,7 @@
 # TeraWala — Complete AI Knowledge Base & Technical Documentation
 
 ## What is TeraWala?
-TeraWala (hosted at https://terawala.com/) is a high-speed, ad-free web application and online utility designed to stream, preview, convert, and download shared video files from Terabox and Diskwala / Flezen cloud lockers.
+TeraWala (hosted at https://terawala.in/) is a high-speed, ad-free web application and online utility designed to stream, preview, convert, and download shared video files from Terabox and Diskwala / Flezen cloud lockers.
 
 ## Key Features & Value Proposition
 1. **Ad-Free In-Browser Playback**: Users can stream videos directly in an HTML5 video player without intrusive popups, banners, or redirects.
@@ -17,7 +17,7 @@ TeraWala (hosted at https://terawala.com/) is a high-speed, ad-free web applicat
 
 ## How to Use TeraWala
 1. Copy the Terabox or Diskwala video link from Telegram, browser, or messaging apps.
-2. Navigate to https://terawala.com/ and paste the URL into the search box.
+2. Navigate to https://terawala.in/ and paste the URL into the search box.
 3. Click "Play & Download" to validate and stream the video or transfer to Telegram bot for high-speed download.
 
 ## Frequently Asked Questions

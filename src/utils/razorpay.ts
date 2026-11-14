@@ -119,7 +119,7 @@ export async function startRazorpayCheckout(
     currency: orderData.currency || 'INR',
     name: 'TeraWala VIP Pass',
     description: `${plan.name} (${plan.period}) — Instant HD Unlocking`,
-    image: 'https://terawala.com/favicon-32x32.png',
+    image: 'https://terawala.in/favicon-32x32.png',
     prefill: {
       name: userName,
       email: userEmail

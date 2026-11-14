@@ -247,7 +247,7 @@ export const TRANSLATIONS: Record<Locale, Record<string, string>> = {
 /**
  * Returns hrefLang tags for canonical and international indexing
  */
-export function getHrefLangTags(path: string, baseUrl = 'https://terawala.com') {
+export function getHrefLangTags(path: string, baseUrl = 'https://terawala.in') {
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   const publishedLocales = Object.values(LOCALES).filter((l) => l.isPublished);
 

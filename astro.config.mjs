@@ -37,7 +37,7 @@ function formatDuration(sec) {
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  site: 'https://terawala.com',
+  site: 'https://terawala.in',
   trailingSlash: 'ignore',
   vite: {
     plugins: [
@@ -47,6 +47,23 @@ export default defineConfig({
           const resolverMiddleware = async (/** @type {any} */ req, /** @type {any} */ res, /** @type {any} */ next) => {
             const pathname = req.url ? req.url.split('?')[0] : '';
             const normalizedPath = pathname.replace(/\/+$/, '');
+
+            if (normalizedPath === '/api/health') {
+              if (req.method === 'OPTIONS') {
+                res.statusCode = 204;
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+                res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+                res.end();
+                return;
+              }
+              res.statusCode = 200;
+              res.setHeader('Content-Type', 'application/json');
+              res.setHeader('Access-Control-Allow-Origin', '*');
+              res.end(JSON.stringify({ success: true, service: 'terawala-api', environment: 'development' }));
+              return;
+            }
+
             const isResolverRoute = ['/api/resolve', '/api/diskwala', '/api/terabox'].includes(normalizedPath);
 
             if (isResolverRoute) {
