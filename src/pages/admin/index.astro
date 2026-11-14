@@ -406,7 +406,7 @@ const breadcrumbs = [
                   </div>
                   <div>
                     <h3 class="upload-module-title">Advanced Bulk TeraBox Importer</h3>
-                    <span class="upload-module-sub">Parallel multi-link engine with xAPIverse auto-resolve</span>
+                    <span class="upload-module-sub">Parallel multi-link engine with auto-resolve</span>
                   </div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -472,7 +472,7 @@ const breadcrumbs = [
                       <div style="display: flex; align-items: flex-start; gap: 8px;">
                         <span style="font-size: 14px; margin-top: -1px;">⚡</span>
                         <div>
-                          <strong style="display: block; font-size: 12px; color: #10D6A0;">Auto-Resolve via xAPIverse</strong>
+                          <strong style="display: block; font-size: 12px; color: #10D6A0;">Auto-Resolve Video Engine</strong>
                           <span style="font-size: 10px; color: var(--color-text-secondary); line-height: 1.3; display: block;">High-speed parallel fetching of real titles, duration, HD posters & size.</span>
                         </div>
                       </div>
@@ -3124,11 +3124,10 @@ const breadcrumbs = [
   }
 
   async function fetchTeraBoxMetadata(url: string) {
-    const key = APP_CONFIG.xapiverse?.apiKey || 'xapi_e8ad5454c8b1d7f8935b5482fa6aa52d';
     const endpoints = [
-      { url: '/api/terabox/', headers: { 'Content-Type': 'application/json' } },
-      { url: '/api/terabox', headers: { 'Content-Type': 'application/json' } },
-      { url: APP_CONFIG.xapiverse?.apiUrl || 'https://xapiverse.com/api/terabox', headers: { 'Content-Type': 'application/json', 'xAPIverse-Key': key } }
+      { url: '/api/resolve', headers: { 'Content-Type': 'application/json' } },
+      { url: '/api/diskwala', headers: { 'Content-Type': 'application/json' } },
+      { url: '/api/terabox', headers: { 'Content-Type': 'application/json' } }
     ];
 
     for (const ep of endpoints) {

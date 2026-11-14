@@ -18,16 +18,34 @@ export interface TeraBoxItem {
   normal_dlink?: string;
   subtitle_url?: string;
   fast_stream_url?: Record<string, string> | string;
+  channel_name?: string;
+}
+
+export interface NormalizedVideo {
+  title?: string;
+  filename?: string;
+  size?: number;
+  formattedSize?: string;
+  thumbnail?: string | null;
+  streamUrl?: string;
+  downloadUrl?: string;
+  duration?: string;
+  quality?: string;
 }
 
 export interface TeraBoxApiResponse {
+  success?: boolean;
   status: 'success' | 'error';
+  provider?: string;
+  video?: NormalizedVideo;
   list?: TeraBoxItem[];
   total_files?: number;
   total_folders?: number | string;
+  total_size?: number | string;
   error?: string;
   details?: string;
   message?: string;
+  credits_remaining?: number;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -82,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultOpenBotBtn = document.getElementById('result-open-bot-btn') as HTMLAnchorElement | null;
 
   let currentUrl = '';
+  let activeProvider: SupportedProvider = 'diskwala';
   let currentFileList: TeraBoxItem[] = [];
   let currentActiveFile: TeraBoxItem | null = null;
   let hlsInstance: any = null;
@@ -277,51 +296,78 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch {}
   }
 
-  // Call TeraBox API (Proxy first with fallback to direct xapiverse endpoint)
-  async function fetchTeraBoxVideo(url: string): Promise<TeraBoxApiResponse> {
-    // 1. Try local dev proxy /api/terabox/ or Cloudflare Pages Function /api/terabox
-    for (const ep of ['/api/terabox/', '/api/terabox']) {
+  // Call Video Resolution API via secure backend endpoint
+  async function fetchVideo(url: string, provider: SupportedProvider): Promise<TeraBoxApiResponse> {
+    const endpoints = ['/api/resolve/', '/api/resolve', '/api/diskwala/', '/api/terabox/'];
+    let lastErrorMsg = '';
+
+    for (const ep of endpoints) {
       try {
-        const proxyResp = await fetch(ep, {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 35000);
+
+        const resp = await fetch(ep, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url })
+          body: JSON.stringify({ url, provider }),
+          signal: controller.signal
         });
+        clearTimeout(timeoutId);
 
-        if (proxyResp.ok) {
-          const data = await proxyResp.json();
-          if (data && (data.status === 'success' || data.status === 'error')) {
+        const contentType = resp.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          const data = (await resp.json()) as TeraBoxApiResponse;
+          if (data && (data.status === 'success' || data.success === true)) {
+            // Auto-populate data.list from data.video if backend returned singular video schema
+            if ((!data.list || data.list.length === 0) && data.video) {
+              data.list = [{
+                name: data.video.filename || data.video.title || 'Video.mp4',
+                size: data.video.size,
+                size_formatted: data.video.formattedSize,
+                stream_url: data.video.streamUrl,
+                normal_dlink: data.video.downloadUrl,
+                thumbnail: data.video.thumbnail || undefined,
+                duration: data.video.duration,
+                quality: data.video.quality,
+                type: 'video/mp4'
+              }];
+            }
             return data;
           }
+
+          if (data && (data.status === 'error' || data.error || data.details)) {
+            return {
+              status: 'error',
+              error: data.error || 'Resolution Failed',
+              details: data.details || data.message || 'Unable to resolve video from this link.'
+            };
+          }
+        } else {
+          // If server returned non-JSON (e.g. HTML 404 or 502), record and attempt next endpoint
+          lastErrorMsg = `Server returned HTTP ${resp.status} (${resp.statusText || 'Non-JSON'}).`;
+          continue;
         }
-      } catch {
-        // Try next endpoint
+      } catch (err: any) {
+        if (err.name === 'AbortError') {
+          return {
+            status: 'error',
+            error: 'Request Timeout',
+            details: 'Video resolution timed out after 35 seconds. Please try again.'
+          };
+        }
+        lastErrorMsg = err?.message || 'Network connection failed.';
       }
     }
 
-    // 2. Direct xAPIverse API endpoint call (CORS supported on xapiverse.com)
-    try {
-      const apiKey = APP_CONFIG.xapiverse?.apiKey || 'xapi_e8ad5454c8b1d7f8935b5482fa6aa52d';
-      const apiUrl = APP_CONFIG.xapiverse?.apiUrl || 'https://xapiverse.com/api/terabox';
-      const directResp = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'xAPIverse-Key': apiKey
-        },
-        body: JSON.stringify({ url })
-      });
-
-      const directData = await directResp.json();
-      return directData;
-    } catch (networkErr: any) {
-      return {
-        status: 'error',
-        error: 'Network Error',
-        details: networkErr?.message || 'Failed to connect to the TeraBox service. Please check your network.'
-      };
-    }
+    return {
+      status: 'error',
+      error: 'Resolution Failed',
+      details: lastErrorMsg || 'Failed to connect to the video resolution service. Please check your network and try again.'
+    };
   }
+
+  // Alias for backward compatibility
+  const fetchTeraBoxVideo = (url: string) => fetchVideo(url, 'terabox');
 
   // Display Active Video in Media Result Card
   function displayActiveVideo(file: TeraBoxItem, allFiles: TeraBoxItem[]) {
@@ -329,13 +375,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Title & Status
     if (resultVideoTitle) {
-      resultVideoTitle.textContent = file.name || 'TeraBox Video';
+      resultVideoTitle.textContent = file.name || (activeProvider === 'diskwala' ? 'Diskwala Video' : 'Video');
     }
     if (resultStatusText) {
       resultStatusText.textContent = 'Video Stream & Direct Download Ready';
     }
     if (resultProviderTag) {
-      resultProviderTag.textContent = 'TeraBox Cloud';
+      if (file.channel_name) {
+        resultProviderTag.textContent = file.channel_name;
+      } else if (activeProvider === 'diskwala') {
+        resultProviderTag.textContent = 'Diskwala Cloud';
+      } else if (activeProvider === 'flezen') {
+        resultProviderTag.textContent = 'Flezen Cloud';
+      } else {
+        resultProviderTag.textContent = 'TeraBox Cloud';
+      }
     }
 
     // 2. Meta Pills
@@ -453,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (directDownloadBtn) {
       const downloadHref = file.normal_dlink || file.stream_url || '#';
       directDownloadBtn.href = downloadHref;
-      directDownloadBtn.setAttribute('download', file.name || 'TeraBox_Video.mp4');
+      directDownloadBtn.setAttribute('download', file.name || (activeProvider === 'diskwala' ? 'Diskwala_Video.mp4' : 'Video.mp4'));
       if (downloadBtnText) {
         downloadBtnText.textContent = `Download MP4 (${file.size_formatted || file.quality || 'HD'})`;
       }
@@ -637,75 +691,57 @@ document.addEventListener('DOMContentLoaded', () => {
         processingStatusRow.style.display = 'none';
       };
 
-      // TERA BOX PROVIDER: Real Working Extraction
-      if (res.provider === 'terabox') {
-        const processingText = processingStatusRow.querySelector('.processing-text') as HTMLElement | null;
-        if (processingText) {
-          processingText.textContent = 'Connecting to TeraBox API & extracting HD video stream...';
-        }
+      // UNIFIED VIDEO EXTRACTION (Diskwala & TeraBox)
+      activeProvider = res.provider || 'diskwala';
+      const processingText = processingStatusRow.querySelector('.processing-text') as HTMLElement | null;
+      if (processingText) {
+        processingText.textContent = res.provider === 'diskwala'
+          ? 'Connecting to Diskwala API & extracting video stream...'
+          : 'Connecting to video API & extracting video stream...';
+      }
 
-        try {
-          const apiResult = await fetchTeraBoxVideo(currentUrl);
+      try {
+        const apiResult = await fetchVideo(currentUrl, res.provider || 'diskwala');
 
-          if (apiResult.status === 'success' && apiResult.list && apiResult.list.length > 0) {
-            resetBtnState();
-            currentFileList = apiResult.list;
-            displayActiveVideo(currentFileList[0], currentFileList);
+        const fileItems: TeraBoxItem[] = (apiResult.list && apiResult.list.length > 0)
+          ? apiResult.list
+          : (apiResult.video ? [{
+              name: apiResult.video.filename || apiResult.video.title || 'Video.mp4',
+              size: apiResult.video.size,
+              size_formatted: apiResult.video.formattedSize,
+              stream_url: apiResult.video.streamUrl,
+              normal_dlink: apiResult.video.downloadUrl,
+              thumbnail: apiResult.video.thumbnail || undefined,
+              duration: apiResult.video.duration,
+              quality: apiResult.video.quality,
+              type: 'video/mp4'
+            }] : []);
 
-            // Record link usage & update quota
-            await recordLinkUsage(
-              currentUrl, 
-              res.provider, 
-              currentFileList[0]?.name, 
-              currentFileList[0]?.size_formatted
-            );
-            updateQuotaDisplay();
-            return;
-          } else {
-            resetBtnState();
-            const errMsg = apiResult.details || apiResult.error || apiResult.message || 'Unable to extract video. The link might be expired or password-protected.';
-            showError(errMsg);
-
-            // Convenient fallback option without force blocking
-            const idMatch = currentUrl.match(/(?:share|v|file|s)\/([a-zA-Z0-9_-]+)/);
-            const fileId = idMatch ? idMatch[1].slice(0, 8) : 'terabox';
-            const botLinkWithParam = `${APP_CONFIG.telegramBotUrl}?start=${encodeURIComponent(fileId)}`;
-            if (readyOpenBotBtn) {
-              readyOpenBotBtn.href = botLinkWithParam;
-            }
-            if (telegramReadyCard) {
-              telegramReadyCard.style.display = 'block';
-              telegramReadyCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-            return;
-          }
-        } catch (err: any) {
+        if ((apiResult.status === 'success' || apiResult.success === true) && fileItems.length > 0) {
           resetBtnState();
-          showError(err?.message || 'Error communicating with TeraBox resolution provider.');
+          currentFileList = fileItems;
+          displayActiveVideo(currentFileList[0], currentFileList);
+
+          // Record link usage & update quota
+          await recordLinkUsage(
+            currentUrl, 
+            res.provider || 'diskwala', 
+            currentFileList[0]?.name, 
+            currentFileList[0]?.size_formatted
+          );
+          updateQuotaDisplay();
+          return;
+        } else {
+          resetBtnState();
+          const errMsg = apiResult.details || apiResult.error || apiResult.message || 'Unable to extract video. The link might be expired, private, or invalid.';
+          showError(errMsg);
+          // Never redirect or show channel fallback on video fetch failure
           return;
         }
-      } else {
-        // DISKWALA / FLEZEN: Direct Telegram Bot Fallback (No force gate popup modal)
-        setTimeout(async () => {
-          resetBtnState();
-
-          const idMatch = currentUrl.match(/(?:share|v|file|s)\/([a-zA-Z0-9_-]+)/);
-          const fileId = idMatch ? idMatch[1].slice(0, 8) : 'shared_link';
-          const botLinkWithParam = `${APP_CONFIG.telegramBotUrl}?start=${encodeURIComponent(fileId)}`;
-
-          if (readyOpenBotBtn) {
-            readyOpenBotBtn.href = botLinkWithParam;
-          }
-
-          if (telegramReadyCard) {
-            telegramReadyCard.style.display = 'block';
-            telegramReadyCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-
-          // Record usage and refresh quota
-          await recordLinkUsage(currentUrl, res.provider || 'diskwala', 'Diskwala Video File', '');
-          updateQuotaDisplay();
-        }, 1000);
+      } catch (err: any) {
+        resetBtnState();
+        showError(err?.message || 'Error communicating with video resolution provider.');
+        return;
       }
     }
   }

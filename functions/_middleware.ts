@@ -32,7 +32,7 @@ export async function onRequest(context: {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, xAPIverse-Key, cf-turnstile-response',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, cf-turnstile-response',
         'Access-Control-Max-Age': '86400',
         'X-Content-Type-Options': 'nosniff',
         'X-Frame-Options': 'SAMEORIGIN',
@@ -49,12 +49,12 @@ export async function onRequest(context: {
       'unknown_client';
 
     // Route specific limits (per 60-second window)
-    const isTeraboxResolver = url.pathname.includes('/terabox');
-    const limit = isTeraboxResolver ? 20 : 40;
+    const isVideoResolver = url.pathname.includes('/terabox') || url.pathname.includes('/resolve') || url.pathname.includes('/diskwala');
+    const limit = isVideoResolver ? 20 : 40;
     const windowMs = 60 * 1000;
     const now = Date.now();
 
-    const rateKey = `${clientIp}:${isTeraboxResolver ? 'resolve' : 'general'}`;
+    const rateKey = `${clientIp}:${isVideoResolver ? 'resolve' : 'general'}`;
     const current = ipRateLimitStore.get(rateKey);
 
     if (ipRateLimitStore.size > MAX_STORE_SIZE) {
@@ -109,8 +109,8 @@ export async function onRequest(context: {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: blob: https: http:",
-    "media-src 'self' blob: https: http:",
-    "connect-src 'self' https://fyjeyhrkuuuxxwhjnhov.supabase.co https://xapiverse.com https://challenges.cloudflare.com https://api.razorpay.com https://lumberjack.razorpay.com",
+    "media-src 'self' blob: https: http: https://*.teraboxdl.site",
+    "connect-src 'self' https://fyjeyhrkuuuxxwhjnhov.supabase.co https://api.teraboxdl.site https://*.teraboxdl.site https://challenges.cloudflare.com https://api.razorpay.com https://lumberjack.razorpay.com",
     "frame-src 'self' https://challenges.cloudflare.com https://api.razorpay.com",
     "object-src 'none'",
     "base-uri 'self'"

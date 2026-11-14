@@ -15,8 +15,7 @@ export interface ValidationResult {
  * Ensures strict security against lookalike domains, non-HTTP(S) schemes, and SSRF attacks.
  */
 export function validateSourceUrl(inputUrl: string): ValidationResult {
-  const trimmed = inputUrl.trim();
-  if (!trimmed) {
+  if (!inputUrl || typeof inputUrl !== 'string') {
     return {
       isValid: false,
       provider: null,
@@ -24,10 +23,26 @@ export function validateSourceUrl(inputUrl: string): ValidationResult {
     };
   }
 
+  // 1. Clean up surrounding quotes, brackets, and whitespace
+  let cleaned = inputUrl.trim().replace(/^["'`<(\[]+|["'`>)\]]+$/g, '');
+  if (!cleaned) {
+    return {
+      isValid: false,
+      provider: null,
+      error: 'Please enter or paste a valid link.'
+    };
+  }
+
+  // 2. Auto-extract URL if user pasted message containing text (e.g. from Telegram/WhatsApp)
+  const urlMatch = cleaned.match(/https?:\/\/[^\s"'`<>]+/i) || cleaned.match(/(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:\/[^\s"'`<>]*)?/i);
+  if (urlMatch) {
+    cleaned = urlMatch[0];
+  }
+
   let parsed: URL;
   try {
     // Add https:// if user omitted protocol for convenience
-    const formatted = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+    const formatted = /^https?:\/\//i.test(cleaned) ? cleaned : `https://${cleaned}`;
     parsed = new URL(formatted);
   } catch {
     return {
@@ -47,47 +62,27 @@ export function validateSourceUrl(inputUrl: string): ValidationResult {
 
   const hostname = parsed.hostname.toLowerCase();
 
-  // Terabox family host check (supports 1024terabox.com, 1024tera, teraboxapp, mirrobox, etc.)
-  const isTerabox = [
-    'terabox.com',
-    'www.terabox.com',
-    'teraboxapp.com',
-    'www.teraboxapp.com',
-    'terabox.app',
-    '1024tera.com',
-    'www.1024tera.com',
-    '1024terabox.com',
-    'www.1024terabox.com',
-    'terasharelink.com',
-    'www.terasharelink.com',
-    'freeterabox.com',
-    'www.freeterabox.com',
-    'mirrobox.com',
-    'www.mirrobox.com',
-    'nephobox.com',
-    'www.nephobox.com',
-    '4funbox.com',
-    'www.4funbox.com',
-    'terabox.link',
-    'www.terabox.link',
-    'teraboxshare.com',
-    'www.teraboxshare.com',
-    'tibabox.com',
-    'www.tibabox.com'
-  ].includes(hostname) || (
+  // Diskwala family host check (supports diskwala.com, playdiskwala.in, diskwala.in, diskwalaa.com, etc.)
+  const isDiskwala = hostname.includes('diskwala') || hostname.includes('diskwalaa');
+
+  // Terabox family host check (supports 1024terabox.com, 1024tera, teraboxapp, dubox, mirrobox, etc.)
+  const isTerabox = (
     hostname.includes('terabox') ||
     hostname.includes('1024tera') ||
+    hostname.includes('dubox') ||
     hostname.includes('mirrobox') ||
     hostname.includes('nephobox') ||
     hostname.includes('4funbox') ||
+    hostname.includes('momerybox') ||
     hostname.includes('freeterabox') ||
     hostname.includes('terasharelink') ||
+    hostname.includes('terafileshare') ||
+    hostname.includes('teradrive') ||
     hostname.includes('tibabox')
   );
 
-  // Diskwala & Flezen host checks
-  const isDiskwala = hostname === 'diskwala.com' || hostname === 'www.diskwala.com';
-  const isFlezen = hostname === 'flezen.com' || hostname === 'www.flezen.com';
+  // Flezen host check
+  const isFlezen = hostname.includes('flezen');
 
   if (!isTerabox && !isDiskwala && !isFlezen) {
     return {

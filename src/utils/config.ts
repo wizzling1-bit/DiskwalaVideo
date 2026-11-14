@@ -140,10 +140,9 @@ export const APP_CONFIG = {
     siteKey: (typeof import.meta !== 'undefined' && import.meta.env?.PUBLIC_TURNSTILE_SITE_KEY) || (typeof process !== 'undefined' && process.env?.PUBLIC_TURNSTILE_SITE_KEY) || '1x00000000000000000000AA'
   },
   
-  // TeraBox API Configuration (xAPIverse)
-  xapiverse: {
-    apiUrl: 'https://xapiverse.com/api/terabox',
-    apiKey: (typeof import.meta !== 'undefined' && (import.meta.env?.XAPIVERSE_KEY || import.meta.env?.PUBLIC_XAPIVERSE_KEY)) || (typeof process !== 'undefined' && (process.env?.XAPIVERSE_KEY || process.env?.PUBLIC_XAPIVERSE_KEY)) || 'xapi_e8ad5454c8b1d7f8935b5482fa6aa52d'
+  // Video Resolution Backend API Configuration
+  videoApi: {
+    endpoint: '/api/resolve/'
   },
 
   // Contact & Support

@@ -1,56 +1,278 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+
+// Load local .env into process.env for Vite dev middleware
+if (fs.existsSync('.env')) {
+  const envContent = fs.readFileSync('.env', 'utf-8');
+  for (const line of envContent.split('\n')) {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith('#')) {
+      const eqIdx = trimmed.indexOf('=');
+      if (eqIdx !== -1) {
+        const k = trimmed.slice(0, eqIdx).trim();
+        const v = trimmed.slice(eqIdx + 1).trim();
+        if (!process.env[k]) {
+          process.env[k] = v;
+        }
+      }
+    }
+  }
+}
+
+/** @param {any} sec */
+function formatDuration(sec) {
+  const s = Number(sec);
+  if (!s || isNaN(s) || s <= 0) return '';
+  const hrs = Math.floor(s / 3600);
+  const mins = Math.floor((s % 3600) / 60);
+  const secs = Math.floor(s % 60);
+  if (hrs > 0) {
+    return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
 
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
   site: 'https://terawala.com',
-  trailingSlash: 'always',
+  trailingSlash: 'ignore',
   vite: {
     plugins: [
       {
-        name: 'xapiverse-dev-proxy',
+        name: 'video-resolver-dev-proxy',
         configureServer(server) {
-          server.middlewares.use(async (req, res, next) => {
+          const resolverMiddleware = async (/** @type {any} */ req, /** @type {any} */ res, /** @type {any} */ next) => {
             const pathname = req.url ? req.url.split('?')[0] : '';
-            if ((pathname === '/api/terabox' || pathname === '/api/terabox/') && req.method === 'POST') {
-              let bodyStr = '';
-              req.on('data', chunk => { bodyStr += chunk; });
-              req.on('end', async () => {
-                try {
-                  const upstream = await fetch('https://xapiverse.com/api/terabox', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'xAPIverse-Key': 'xapi_e8ad5454c8b1d7f8935b5482fa6aa52d'
-                    },
-                    body: bodyStr
-                  });
-                  const jsonText = await upstream.text();
-                  res.statusCode = upstream.status;
-                  res.setHeader('Content-Type', 'application/json');
-                  res.setHeader('Access-Control-Allow-Origin', '*');
-                  res.end(jsonText);
-                } catch (err) {
-                  res.statusCode = 502;
-                  res.setHeader('Content-Type', 'application/json');
-                  const msg = err instanceof Error ? err.message : String(err);
-                  res.end(JSON.stringify({ status: 'error', error: 'Upstream Error', details: msg }));
-                }
-              });
-              return;
+            const normalizedPath = pathname.replace(/\/+$/, '');
+            const isResolverRoute = ['/api/resolve', '/api/diskwala', '/api/terabox'].includes(normalizedPath);
+
+            if (isResolverRoute) {
+              if (req.method === 'OPTIONS') {
+                res.statusCode = 204;
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+                res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, cf-turnstile-response');
+                res.setHeader('Access-Control-Max-Age', '86400');
+                res.end();
+                return;
+              }
+
+              if (req.method === 'POST') {
+                let bodyStr = '';
+                req.on('data', (/** @type {any} */ chunk) => { bodyStr += chunk; });
+                req.on('end', async () => {
+                  try {
+                    const parsedBody = JSON.parse(bodyStr || '{}');
+                    const targetUrl = (parsedBody.url || '').trim();
+
+                    if (!targetUrl) {
+                      res.statusCode = 400;
+                      res.setHeader('Content-Type', 'application/json');
+                      res.setHeader('Access-Control-Allow-Origin', '*');
+                      res.end(JSON.stringify({ success: false, status: 'error', error: 'Bad Request', details: 'Missing URL in payload.' }));
+                      return;
+                    }
+
+                    const isDiskwala = /diskwala/i.test(targetUrl);
+                    const apiKey = process.env.TERABOXDL_API_KEY || process.env.DISKWALA_API_KEY || 'tbx_j5FEgvZ9LgIe0dL8gdNStpHhk-shEik2L0fM4-LtR2Q';
+                    const apiSecret = process.env.TERABOXDL_API_SECRET || process.env.DISKWALA_API_SECRET || '77QTRbqibeEh0ECMWbnQa9G9YGaEydLPq0kf5O4uxtqZTIHS39mP_6W1pPvuZ5v-';
+                    const apiBaseUrl = (process.env.TERABOXDL_API_URL || 'https://api.teraboxdl.site').replace(/\/+$/, '');
+
+                    res.setHeader('Content-Type', 'application/json');
+                    res.setHeader('Access-Control-Allow-Origin', '*');
+
+                    if (isDiskwala) {
+                      const upstreamEndpoint = `${apiBaseUrl}/v1/diskwala/extract`;
+                      const upstream = await fetch(upstreamEndpoint, {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'X-API-Key': apiKey
+                        },
+                        body: JSON.stringify({ url: targetUrl })
+                      });
+
+                      let upstreamData = null;
+                      try {
+                        upstreamData = await upstream.json();
+                      } catch {
+                        upstreamData = null;
+                      }
+
+                      if (!upstream.ok || !upstreamData || upstreamData.error) {
+                        res.statusCode = upstream.status >= 400 && upstream.status < 600 ? upstream.status : 502;
+                        res.end(JSON.stringify({
+                          success: false,
+                          status: 'error',
+                          error: upstreamData?.error || 'Diskwala Extraction Failed',
+                          details: upstreamData?.details || upstreamData?.message || upstreamData?.error || 'Unable to extract Diskwala video.'
+                        }));
+                        return;
+                      }
+
+                      const fileItem = {
+                        name: upstreamData.file_name || 'Diskwala Video.mp4',
+                        title: upstreamData.file_name || 'Diskwala Video.mp4',
+                        filename: upstreamData.file_name || 'Diskwala Video.mp4',
+                        size: upstreamData.size,
+                        size_formatted: upstreamData.size_formatted || '',
+                        formattedSize: upstreamData.size_formatted || '',
+                        stream_url: upstreamData.stream_url || upstreamData.download_url || '',
+                        streamUrl: upstreamData.stream_url || upstreamData.download_url || '',
+                        normal_dlink: upstreamData.download_url || upstreamData.stream_url || '',
+                        downloadUrl: upstreamData.download_url || upstreamData.stream_url || '',
+                        thumbnail: upstreamData.thumbnail || null,
+                        duration: upstreamData.duration || '',
+                        quality: upstreamData.quality || 'HD',
+                        channel_name: upstreamData.channel_name || upstreamData.channel || upstreamData.author || 'Diskwala Cloud',
+                        type: 'video/mp4'
+                      };
+
+                      const normalizedVideo = {
+                        title: fileItem.name,
+                        filename: fileItem.name,
+                        size: fileItem.size,
+                        formattedSize: fileItem.size_formatted,
+                        thumbnail: fileItem.thumbnail,
+                        streamUrl: fileItem.stream_url,
+                        downloadUrl: fileItem.normal_dlink,
+                        duration: fileItem.duration,
+                        quality: fileItem.quality
+                      };
+
+                      res.statusCode = 200;
+                      res.end(JSON.stringify({
+                        success: true,
+                        status: 'success',
+                        provider: 'diskwala',
+                        video: normalizedVideo,
+                        list: [fileItem],
+                        total_files: 1,
+                        credits_remaining: upstreamData.credits_remaining
+                      }));
+                      return;
+                    } else {
+                      // TeraBox Extraction via HMAC-signed /v1/api
+                      const upstreamEndpoint = `${apiBaseUrl}/v1/api`;
+                      const bodyObj = { url: targetUrl, dir_path: "", page: 1 };
+                      const bodyStr = JSON.stringify(bodyObj);
+                      const timestamp = Math.floor(Date.now() / 1000).toString();
+                      const stringToSign = `POST/v1/api${timestamp}${bodyStr}`;
+                      const hmac = crypto.createHmac('sha256', apiSecret);
+                      hmac.update(stringToSign);
+                      const signature = hmac.digest('hex');
+
+                      const upstream = await fetch(upstreamEndpoint, {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'X-API-Key': apiKey,
+                          'X-Timestamp': timestamp,
+                          'X-Signature': signature
+                        },
+                        body: bodyStr
+                      });
+
+                      let upstreamData = null;
+                      try {
+                        upstreamData = await upstream.json();
+                      } catch {
+                        upstreamData = null;
+                      }
+
+                      if (!upstream.ok || !upstreamData || upstreamData.error || (typeof upstreamData.errno === 'number' && upstreamData.errno !== 0)) {
+                        res.statusCode = upstream.status >= 400 && upstream.status < 600 ? upstream.status : 502;
+                        const errorMsg = upstreamData?.error || 'TeraBox Resolution Failed';
+                        const errorDetails = upstreamData?.details || upstreamData?.errmsg || upstreamData?.message || upstreamData?.error || (
+                          upstreamData?.errno === -6 ? 'Authentication error or link expired on TeraBox.' :
+                          upstreamData?.errno === -1 ? 'This TeraBox link was not found or has been removed.' :
+                          'Unable to extract video from TeraBox. Please check if the link is active.'
+                        );
+                        res.end(JSON.stringify({
+                          success: false,
+                          status: 'error',
+                          error: errorMsg,
+                          details: errorDetails
+                        }));
+                        return;
+                      }
+
+                      const rawList = Array.isArray(upstreamData.list) && upstreamData.list.length > 0
+                        ? upstreamData.list
+                        : [upstreamData];
+
+                      const mappedList = rawList.map((/** @type {any} */ item) => {
+                        const fileName = item.server_filename || item.name || item.path?.split('/').pop() || upstreamData.title?.split('/').pop() || 'TeraBox Video.mp4';
+                        const sizeFormatted = item.formatted_size || (item.size ? `${(item.size / (1024 * 1024)).toFixed(1)} MB` : '');
+                        const thumb = item.thumbs?.url3 || item.thumbs?.url2 || item.thumbs?.url1 || item.thumbnail || item.thumbs?.icon || null;
+                        const dur = formatDuration(item.duration);
+                        const qualityLabel = item.quality ? `${item.quality}p HD` : 'HD Quality';
+
+                        return {
+                          name: fileName,
+                          title: fileName,
+                          filename: fileName,
+                          size: item.size,
+                          size_formatted: sizeFormatted,
+                          formattedSize: sizeFormatted,
+                          stream_url: item.stream_url || item.direct_link || '',
+                          streamUrl: item.stream_url || item.direct_link || '',
+                          normal_dlink: item.direct_link || item.download_url || item.dlink || item.stream_url || '',
+                          downloadUrl: item.direct_link || item.download_url || item.dlink || item.stream_url || '',
+                          thumbnail: thumb,
+                          duration: dur,
+                          quality: qualityLabel,
+                          channel_name: 'TeraBox Cloud',
+                          fast_stream_url: item.stream_url || null,
+                          type: 'video/mp4'
+                        };
+                      });
+
+                      const primaryVideo = mappedList[0];
+                      const normalizedVideo = {
+                        title: primaryVideo.name,
+                        filename: primaryVideo.name,
+                        size: primaryVideo.size,
+                        formattedSize: primaryVideo.size_formatted,
+                        thumbnail: primaryVideo.thumbnail || null,
+                        streamUrl: primaryVideo.stream_url,
+                        downloadUrl: primaryVideo.normal_dlink,
+                        duration: primaryVideo.duration,
+                        quality: primaryVideo.quality
+                      };
+
+                      res.statusCode = 200;
+                      res.end(JSON.stringify({
+                        success: true,
+                        status: 'success',
+                        provider: 'terabox',
+                        video: normalizedVideo,
+                        list: mappedList,
+                        total_files: mappedList.length,
+                        total_size: upstreamData.total_size,
+                        credits_remaining: upstreamData.credits_remaining
+                      }));
+                      return;
+                    }
+                  } catch (err) {
+                    res.statusCode = 502;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.setHeader('Access-Control-Allow-Origin', '*');
+                    const msg = err instanceof Error ? err.message : String(err);
+                    res.end(JSON.stringify({ success: false, status: 'error', error: 'Upstream Error', details: msg }));
+                  }
+                });
+                return;
+              }
             }
-            if ((pathname === '/api/terabox' || pathname === '/api/terabox/') && req.method === 'OPTIONS') {
-              res.statusCode = 204;
-              res.setHeader('Access-Control-Allow-Origin', '*');
-              res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-              res.setHeader('Access-Control-Allow-Headers', 'Content-Type, xAPIverse-Key, Authorization');
-              res.end();
-              return;
-            }
-            if ((pathname === '/api/verify-turnstile' || pathname === '/api/verify-turnstile/') && req.method === 'POST') {
+
+            // Verify Turnstile dev route
+            if ((normalizedPath === '/api/verify-turnstile') && req.method === 'POST') {
               let bodyStr = '';
-              req.on('data', chunk => { bodyStr += chunk; });
+              req.on('data', (/** @type {any} */ chunk) => { bodyStr += chunk; });
               req.on('end', async () => {
                 try {
                   const parsed = JSON.parse(bodyStr || '{}');
@@ -62,7 +284,6 @@ export default defineConfig({
                     return;
                   }
 
-                  // Verify with Cloudflare siteverify endpoint or accept test tokens
                   const formData = new FormData();
                   formData.append('secret', process.env.TURNSTILE_SECRET_KEY || '1x0000000000000000000000000000000AA');
                   formData.append('response', token);
@@ -71,11 +292,11 @@ export default defineConfig({
                     method: 'POST',
                     body: formData
                   });
-                  const cfData = await cfResp.json();
+                  const cfData = /** @type {any} */ (await cfResp.json());
                   res.statusCode = 200;
                   res.setHeader('Content-Type', 'application/json');
                   res.end(JSON.stringify({ status: 'success', valid: !!cfData.success }));
-                } catch (e) {
+                } catch {
                   res.statusCode = 200;
                   res.setHeader('Content-Type', 'application/json');
                   res.end(JSON.stringify({ status: 'success', valid: true, note: 'Dev bypass on network exception' }));
@@ -83,7 +304,8 @@ export default defineConfig({
               });
               return;
             }
-            if ((pathname === '/api/verify-turnstile' || pathname === '/api/verify-turnstile/') && req.method === 'OPTIONS') {
+
+            if ((normalizedPath === '/api/verify-turnstile') && req.method === 'OPTIONS') {
               res.statusCode = 204;
               res.setHeader('Access-Control-Allow-Origin', '*');
               res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -91,8 +313,20 @@ export default defineConfig({
               res.end();
               return;
             }
+
             next();
-          });
+          };
+
+          // Unshift to the front of the Connect middleware stack so it intercepts
+          // /api/resolve and /api/resolve/ before Astro's trailingSlash router middleware.
+          if (Array.isArray(server.middlewares.stack)) {
+            server.middlewares.stack.unshift({
+              route: '',
+              handle: resolverMiddleware
+            });
+          } else {
+            server.middlewares.use(resolverMiddleware);
+          }
         }
       }
     ]
